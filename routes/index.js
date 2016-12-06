@@ -19,6 +19,6 @@ router.post('/login',   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/',
     failureFlash: 'Invalid Username or Password..!'
-  }));
+}));
 
 module.exports = router;

@@ -1,6 +1,18 @@
-<link rel='stylesheet' href='/stylesheets/signup.css' />
-<div class="container-fluid">
+<link rel='stylesheet' href='/stylesheets/dashboard.css' />
+
+<div ng-app="spartapps" ng-controller="mainController">
+<div>
+	{{> navbar}}
+</div>
+
+<div ng-include="dashBody">
 	
-    <h1>Welcome to {{title}}</h1>
+    <h1>Welcome to {{title}} -- {{ userName }}</h1>
     
 </div>
+
+</div>
+
+
+<script type="text/javascript" src="/javascripts/angular.min.js"></script>
+<script type="text/javascript" src="/javascripts/mainController.js"></script>
