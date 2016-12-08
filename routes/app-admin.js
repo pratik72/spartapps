@@ -30,7 +30,20 @@ router.post('/orgcreate', restrict , function(req, res, next) {
 			return res.render('Admin', { error : error });
 		}
 		console.log("Data Entered Successfully");
-  		res.redirect('index', { title: 'Hello Admin' });
+  		res.redirect('/');
+	});
+});
+
+//Get All Organization
+router.post('/getAllOrgList', restrict , function(req, res, next) {
+	var allOrg = {};
+	orgService.findOrgs( allOrg, function(error , orgs){
+		if(error){
+			console.log("Data Not Retrived" , error);
+			return res.render('Admin', { error : error });
+		}
+		console.log("orgs" , orgs);
+  		res.send(orgs);
 	});
 });
 

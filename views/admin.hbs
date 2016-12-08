@@ -22,7 +22,8 @@
     </div>
     <div class="form-group">
       <label for="organization">Organization:</label>
-      <input type="text" class="form-control" id="organization" name="organization">
+      <!-- <input type="text" class="form-control" id="organization" name="organization"> -->
+      <select ng-options="item as item.orgName for item in AllOrgsData track by item.id" ng-model="organization" id="organization" name="organization"></select>
     </div>
     <div class="form-group">
       <label for="role">User Role:</label>
@@ -91,3 +92,4 @@
 
 <script type="text/javascript" src="/javascripts/angular.min.js"></script>
 <script type="text/javascript" src="/javascripts/adminController.js"></script>
+<script type="text/javascript" src="/javascripts/commonServices.js"></script>

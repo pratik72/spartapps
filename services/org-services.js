@@ -28,8 +28,12 @@ exports.addOrganization = function(orgData , callback){
 	})
 };
 
-exports.findOrg = function(orgid, callback){
-	Organization.findOne({ _id : orgid } , function(error, org){
+exports.findOrgs = function(orgid, callback){
+	var orgIdParam = orgid;
+	if(orgIdParam.length > 2){
+		orgIdParam = { _id : orgid }
+	}
+	Organization.find( orgIdParam , function(error, org){
 		console.log("findOrg" , error)
 		callback(error , org)
 	})
