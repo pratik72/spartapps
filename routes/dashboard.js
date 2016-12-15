@@ -19,4 +19,9 @@ router.get('/logout',  function(req, res, next) {
 	res.redirect('/');
 });
 
+router.post('/userDetails', restrict , function(req, res, next) {
+	console.log(" req.user " ,  req.user)
+	res.send( req.user );
+});
+
 module.exports = router;

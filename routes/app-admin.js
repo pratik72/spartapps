@@ -10,14 +10,14 @@ router.get('/', restrict , function(req, res, next) {
 });
 
 router.post('/signup', restrict , function(req, res, next) {
-	console.log(req.body)
 	userService.addUser(req.body , function(error){
 		if(error){
 			console.log("Data Not Entered" , error);
-			return res.render('Admin', { error : error });
+			res.status(400);
+			return res.send(error);
 		}
 		console.log("Data Entered Successfully");
-  		res.render('index', { title: 'Hello Admin' });
+  		return res.send({ OK : "User Entered Successfully" });
 	});
 });
 

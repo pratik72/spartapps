@@ -7,6 +7,7 @@ exports.addUser = function(userData , callback){
 		lastName : userData.lastName,
 		email : userData.email.toLowerCase(),
 		organization : userData.organization,
+		orgId : userData.orgId,
 		password : userData.password,
 		role : userData.role,
 		subscriptionId : '1'//userData.subscriptionId
