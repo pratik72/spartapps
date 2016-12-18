@@ -3,3 +3,22 @@ body, html {
     font-family: 'Open Sans Condensed', sans-serif;
     font-size: 18px;
 }
+
+.modal label{
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.modal .row div{
+	padding: 0px;
+	margin-left: 40px;
+}
+
+.col-md-2 {
+    width: 13.666667%;
+}
+
+.modal-dialog{
+	width: 99%;
+    margin: 0.5%;
+}

@@ -8,17 +8,25 @@ app.controller('mainController', ['common' , '$scope',function(common , $scope) 
 		"Data Entry Ops" : "YY00"
 	}
 
-	$scope.dashBody = "dashboard.html"
+	//Init Templates
+	$scope.dashBody = "dashboard.html";
+	$scope.supplier_Model = "supplierModel.html";
+
+
+	//Init all Scopes
 	$scope.userDetails = "";
 	$scope.permissions = {
 		"CreateSupplier" : "" ,
 		"CreateInvoiceReq" : "",
 		"ApprvInvoiceReq" : "",
 		"ApprvFinanceReq" : ""
-	}
-	//To get Current User Details
+	};
+	$scope.supplierFormData = APP_CONSTANT.SUPPLIER_JSON;
+
+
+	//Init To get Current User Details on load
 	common.asynCall({
-		url: PATH_NAME + "/userDetails",
+		url: PATH_NAME + APP_CONSTANT.GET_CURRENT_USR,
 		method: 'post'
 	}).then( function(resVal){
 		$scope.userDetails= resVal.data;
@@ -33,10 +41,14 @@ app.controller('mainController', ['common' , '$scope',function(common , $scope) 
 				tmpIndex++;
 			};
 		}
-
-		console.log("$scope.permissions" , $scope.permissions)
     }, function(error){
     	console.log(error);
     });
+
+
+	//Init All events
+    $scope.openSupplier = function(){
+    	$("#myModal").modal('show');
+    }
 
 }]);

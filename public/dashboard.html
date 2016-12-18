@@ -1,10 +1,15 @@
 <div class="container">
   <div class="row">
-  	<button class="btn btn-default">Create Supplier</button>
+  	<button class="btn btn-default" ng-click="openSupplier()">Create Supplier</button>
   	<button class="btn btn-default" ng-if="permissions.CreateInvoiceReq">Create Invoice</button>
   </div>
 
   <div class="row">
   	table goes to here...
   </div>
+</div>
+
+
+<div ng-include="supplier_Model">
+    
 </div>
