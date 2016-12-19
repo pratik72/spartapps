@@ -4,6 +4,7 @@ var APP_CONSTANT = {
 	GET_ORG_LIST: '/getAllOrgList',
 	SUBMIT_USERDATA: '/signup',
 	GET_CURRENT_USR: '/userDetails',
+	CREATE_SUPPLIER : '/createSupplier',
 	SUPPLIER_JSON : {
 		"supplier_name_address": {
 		    "supplier_name": "",
@@ -74,5 +75,13 @@ var APP_CONSTANT = {
 		    "vendor_profile": "",
 		    "other_doc": []
 		}
+	},
+	USER_JSON : {
+		"firstName" : "",
+		"lastName" : "",
+		"email" : "",
+		"password" : "",
+		"organization" : "",
+		"role" : ""
 	}
 }

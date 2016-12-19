@@ -24,4 +24,11 @@ router.post('/userDetails', restrict , function(req, res, next) {
 	res.send( req.user );
 });
 
+//createSupplier
+router.post('/createSupplier', restrict , function(req, res, next) {
+	var bodyObject = req.body;
+	console.log("==req.body== " ,  bodyObject )
+	res.json(  bodyObject);
+});
+
 module.exports = router;

@@ -5,12 +5,12 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 	var adminRights = {
 		"Finance Head" : "Y0YY",
 		"Regional Head" : "Y0Y0",
-		"Data Entry Ops" : "YY00";
+		"Data Entry Ops" : "YY00"
 	}
 
 	var userDetails = null;
 	$scope.isUserform = true;
-	$scope.userForm = [];
+	$scope.userForm = APP_CONSTANT.USER_JSON;
 	$scope.orgModel = "";
 
 	//This function returns all organizations

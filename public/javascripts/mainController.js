@@ -51,4 +51,25 @@ app.controller('mainController', ['common' , '$scope',function(common , $scope) 
     	$("#myModal").modal('show');
     }
 
+
+    //Submit supplier form data
+    $scope.supplierCreate = function(){
+    	console.log( "$scope.supplierFormData " , $scope.supplierFormData);
+    	var tmpData = [];
+
+    	for (var key in $scope.supplierFormData) {
+    		tmpData[key] = JSON.stringify( $scope.supplierFormData[key])
+    	};
+    	common.asynCall({
+			url: PATH_NAME+ APP_CONSTANT.CREATE_SUPPLIER,
+			method:'post',
+			param:  tmpData
+		}).then( function(resVal){
+			console.log("Create User==" , resVal)
+			
+	    }, function(error){
+	    	console.log(error);
+	    });
+    }
+
 }]);
