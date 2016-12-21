@@ -5,6 +5,12 @@ var APP_CONSTANT = {
 	SUBMIT_USERDATA: '/signup',
 	GET_CURRENT_USR: '/userDetails',
 	CREATE_SUPPLIER : '/createSupplier',
+	TEMPLATES : {
+		supplier : "supplier-template.html",
+		invoice : "invoice-template.html",
+		supplierModel : "supplierModel.html",
+		ajaxloader : "ajax-loader.html"
+	},
 	SUPPLIER_JSON : {
 		"supplier_name_address": {
 		    "supplier_name": "",

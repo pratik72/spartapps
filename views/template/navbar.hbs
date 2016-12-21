@@ -11,16 +11,16 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <p class="navbar-brand"> Welcome</p> 
+        <li><a href="javascript:void(0)">Welcome</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ userName }} <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/app-admin" target="_new">Create User</a></li>
-            <li><a href="javascript:void(0)" ng-click="openCreateOrg()">Create Organization</a></li>
+            <li><a href="/app-admin" target="_new">Admin</a></li>
             <li><a href="/dashboard/logout">Logout</a></li>
           </ul>
         </li>
-        <li class="active"><a href="#">Home</a></li>
+        <li ng-class="{ 'active': dashBody.indexOf('invoice') > -1 }"><a href="#" ng-click="changeDashBody('invoice')">Invoices</a></li>
+        <li ng-class="{ 'active': dashBody.indexOf('supplier') > -1 }"><a href="#" ng-click="changeDashBody('supplier')">Suppliers</a></li>
       </ul>
       
     </div><!--/.nav-collapse -->

@@ -2,15 +2,18 @@ var app = angular.module('spartapps', []);
 
 app.controller('mainController', ['common' , '$scope',function(common , $scope) {
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
+	var allTemplates = APP_CONSTANT.TEMPLATES;
 	var adminRights = {
 		"Finance Head" : "Y0YY",
 		"Regional Head" : "Y0Y0",
 		"Data Entry Ops" : "YY00"
 	}
 
+	common.init( $scope );
+
 	//Init Templates
-	$scope.dashBody = "dashboard.html";
-	$scope.supplier_Model = "supplierModel.html";
+	$scope.dashBody = allTemplates.invoice;//supplier template display on load
+	$scope.supplier_Model = allTemplates.supplierModel;
 
 
 	//Init all Scopes
@@ -54,9 +57,8 @@ app.controller('mainController', ['common' , '$scope',function(common , $scope) 
 
     //Submit supplier form data
     $scope.supplierCreate = function(){
-    	console.log( "$scope.supplierFormData " , $scope.supplierFormData);
+    	common.showLoader();
     	var tmpData = [];
-
     	for (var key in $scope.supplierFormData) {
     		tmpData[key] = JSON.stringify( $scope.supplierFormData[key])
     	};
@@ -66,10 +68,15 @@ app.controller('mainController', ['common' , '$scope',function(common , $scope) 
 			param:  tmpData
 		}).then( function(resVal){
 			console.log("Create User==" , resVal)
-			
+			$("#myModal").hide();
+			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);
 	    });
+    }
+
+    $scope.changeDashBody = function(templateName){
+		$scope.dashBody = allTemplates[ templateName ];
     }
 
 }]);

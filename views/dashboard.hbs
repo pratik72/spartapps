@@ -1,6 +1,10 @@
 <link rel='stylesheet' href='/stylesheets/dashboard.css' />
 
 <div ng-app="spartapps" ng-controller="mainController">
+<div ng-include="ajaxloader">
+    
+</div>
+
 <div>
 	{{> navbar}}
 </div>
@@ -10,6 +14,7 @@
 </div>
 
 </div>
+
 
 
 <script type="text/javascript" src="/javascripts/appConstants.js"></script>

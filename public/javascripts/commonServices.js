@@ -1,4 +1,15 @@
-app.service('common',[ '$http',  function($http) {
+app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
+
+	var objAjaxLoader = null;
+
+	this.init = function(scope){
+		scope.ajaxloader = APP_CONSTANT.TEMPLATES.ajaxloader;
+
+		$timeout(function(){
+			objAjaxLoader = $('#ajaxLoader');
+			objAjaxLoader.hide();
+		} , 150);
+	}
 
 	this.asynCall = function(_subData){
 	    return $http({
@@ -13,5 +24,13 @@ app.service('common',[ '$http',  function($http) {
 			},
 	        data: _subData.param
 	    })
+	}
+
+	this.showLoader = function(){
+		objAjaxLoader.show();
+	}
+
+	this.hideLoader = function(){
+		objAjaxLoader.hide();
 	}
 }]);
