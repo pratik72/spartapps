@@ -5,10 +5,14 @@ var APP_CONSTANT = {
 	SUBMIT_USERDATA: '/signup',
 	GET_CURRENT_USR: '/userDetails',
 	CREATE_SUPPLIER : '/createSupplier',
+	CREATE_INVOICE : '/createInvoice',
+	GET_SUPPLIERS : '/getSupplierDetails',
+	GET_INVOICES : '/getInvoicesDetails',
 	TEMPLATES : {
 		supplier : "supplier-template.html",
 		invoice : "invoice-template.html",
 		supplierModel : "supplierModel.html",
+		invoiceModel : "invoiceModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
 	SUPPLIER_JSON : {
@@ -89,5 +93,20 @@ var APP_CONSTANT = {
 		"password" : "",
 		"organization" : "",
 		"role" : ""
+	},
+	INVOICE_JSON : {
+		supplier_name : "",
+		PO_number : "",
+		bill_number : "",
+		Product_Nature : "",
+		HSN_Code : "",
+		Quantity : "",
+		Rate : "",
+		Payment_due_date : "",
+		doc_attachment: {
+		    invoice: "",
+		    PO: "",
+		    other_doc: ""
+		}
 	}
 }

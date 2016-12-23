@@ -1,0 +1,94 @@
+<!-- Modal -->
+<div id="myInvoiceModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Invoice</h4>
+      </div>
+      <form name="supplierForm" ng-submit="InvoiceCreate()">
+        <div class="modal-body">
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <td>Name of Supplier</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="supplier_name" ng-model="invoiceFormData.supplier_name">
+                  </td>
+                </tr>
+                <tr>
+                  <td>PO No</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="address1" ng-model="invoiceFormData.PO_number">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Bill No</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="address2" ng-model="invoiceFormData.bill_number">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Nature of Product</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="address3" ng-model="invoiceFormData.Product_Nature">
+                  </td>
+                </tr>
+                <tr>
+                  <td>HSN Code</td>
+                  <td>
+                    <input type="text" class="form-control" name="area" ng-model="invoiceFormData.HSN_Code">
+                  </td>
+                  <td>Quantity</td>
+                  <td>
+                    <input type="text" class="form-control" name="city" ng-model="invoiceFormData.Quantity">
+                  </td>
+                </tr>
+                 <tr>
+                  <td>Rate</td>
+                  <td>
+                    <input type="text" class="form-control" name="district" ng-model="invoiceFormData.Rate">
+                  </td>
+                  <td>Payment Due Date</td>
+                  <td>
+                    <input type="text" class="form-control" name="state" ng-model="invoiceFormData.Payment_due_date">
+                  </td>
+                </tr>
+                 
+                <tr>
+                  <th colspan="4">Documents to be attached</th>
+                </tr>
+                <tr>
+                  <td>Invoice</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="invoice_attachment" ng-model="invoiceFormData.doc_attachment.invoice">
+                  </td>
+                </tr>
+                <tr>
+                  <td>PO</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="PO_attachment" ng-model="invoiceFormData.doc_attachment.PO">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Other Documents</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="other_doc" ng-model="invoiceFormData.doc_attachment.other_doc">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

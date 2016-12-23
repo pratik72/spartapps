@@ -84,7 +84,7 @@ exports.addSupplier = function(suppData , callback){
 };
 
 exports.findSupplier = function(supp_id, callback){
-	var suppIdParam = supp_id;
+	var suppIdParam = supp_id || {};
 	if(suppIdParam.length > 2){
 		suppIdParam = { _id : supp_id }
 	}

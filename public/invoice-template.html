@@ -3,13 +3,36 @@
   	<div class="row">
   		<button class="btn btn-default" ng-click="openInvoice()">Create Invoice</button>
   	</div>
-
+  	<br>
 	<div class="row">
-		Invoice table goes to here...
+		<table class="table table-bordered">
+			<thead>
+			  <tr>
+			    <th>No.</th>
+			    <th>Supplier Name</th>
+			    <th>PO No.</th>
+			    <th>Bill No.</th>
+			    <th>Nature of Product</th>
+			    <th>Quantity</th>
+			    <th>Rate</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr ng-repeat="invoiceData in invoiceList track by $index">
+			    <td>{{$index}}</td>
+			    <td>{{invoiceData.supplier_name}}</td>
+			    <td>{{invoiceData.PO_number}}</td>
+			    <td>{{invoiceData.bill_number}}</td>
+			    <td>{{invoiceData.Product_Nature}}</td>
+			    <td>{{invoiceData.Quantity}}</td>
+			    <td>{{invoiceData.Rate}}</td>
+			  </tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 
 
-<div ng-include="supplier_Model">
+<div ng-include="invoice_Model">
     
 </div>

@@ -6,7 +6,7 @@
   	<br/>
 
 	<div class="row">
-		  <table class="table table-bordered">
+	  	<table class="table table-bordered">
 			<thead>
 			  <tr>
 			    <th>No.</th>
@@ -15,22 +15,13 @@
 			  </tr>
 			</thead>
 			<tbody>
-			  <tr>
-			    <td>John</td>
-			    <td>Doe</td>
-			    <td>john@example.com</td>
-			  </tr>
-			  <tr>
-			    <td>Mary</td>
-			    <td>Moe</td>
-			    <td>mary@example.com</td>
-			  </tr>
-			  <tr>
-			    <td>July</td>
-			    <td>Dooley</td>
-			    <td>july@example.com</td>
+			  <tr ng-repeat="suppData in supplierList track by $index">
+			    <td>{{$index}}</td>
+			    <td>{{suppData.supplier_name_address.supplier_name}}</td>
+			    <td>{{suppData.contact_person.email}}</td>
 			  </tr>
 			</tbody>
+		</table>
 	</div>
 </div>
 
