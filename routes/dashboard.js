@@ -47,6 +47,7 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 		for (var i in bodyObject) {
 			bodyObject[i] = JSON.parse(bodyObject[i])
 		};
+		bodyObject["createdBy"] = req.user._id;
 		supplierService.addSupplier(bodyObject , function(error){
 			if(error){
 				console.log("Supplier Not Created" , error);
@@ -81,6 +82,9 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 		for (var i in bodyObject) {
 			bodyObject[i] = JSON.parse(bodyObject[i])
 		};
+
+		bodyObject["createdBy"] = req.user._id;
+
 		InvoiceService.addInvoice(bodyObject , function(error){
 			if(error){
 				console.log("Invoice Not Created" , error);

@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var invoiceSchema = new Schema({
+	createdBy : String,
 	supplier_name : String,
 	PO_number : String,
 	bill_number : String,

@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var supplierSchema = new Schema({
+	createdBy : String,
 	supplier_name_address: {
 	    supplier_name: String,
 	    address1: String,

@@ -16,7 +16,7 @@
 			</thead>
 			<tbody>
 			  <tr ng-repeat="suppData in supplierList track by $index">
-			    <td>{{$index}}</td>
+			    <td>{{$index+1}}</td>
 			    <td>{{suppData.supplier_name_address.supplier_name}}</td>
 			    <td>{{suppData.contact_person.email}}</td>
 			  </tr>

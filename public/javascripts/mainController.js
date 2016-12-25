@@ -71,7 +71,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			param:  tmpData
 		}).then( function(resVal){
 			console.log("Create supplier==" , resVal)
-			$("#mySuppModal").hide();
+			$("#mySuppModal").modal('hide');
 			$scope.changeDashBody("supplier");
 			common.hideLoader();
 	    }, function(error){
@@ -92,7 +92,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			param:  tmpData
 		}).then( function(resVal){
 			console.log("Create Invoice==" , resVal)
-			$("#myInvoiceModal").hide();
+			$("#myInvoiceModal").modal('hide');
 			$scope.changeDashBody("invoice");
 			common.hideLoader();
 	    }, function(error){

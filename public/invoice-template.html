@@ -19,7 +19,7 @@
 			</thead>
 			<tbody>
 			  <tr ng-repeat="invoiceData in invoiceList track by $index">
-			    <td>{{$index}}</td>
+			    <td>{{$index+1}}</td>
 			    <td>{{invoiceData.supplier_name}}</td>
 			    <td>{{invoiceData.PO_number}}</td>
 			    <td>{{invoiceData.bill_number}}</td>

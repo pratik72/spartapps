@@ -3,6 +3,7 @@ var Invoice = require('../models/invoice').invoice;
 exports.addInvoice = function(invoiceData , callback){
 	console.log("==== Invoice data ====" , invoiceData)
 	var newInvoice = new Invoice({
+		createdBy : invoiceData.createdBy,
 		supplier_name : invoiceData.supplier_name,
 		PO_number : invoiceData.PO_number,
 		bill_number : invoiceData.bill_number,
