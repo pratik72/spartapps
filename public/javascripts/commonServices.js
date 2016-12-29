@@ -15,13 +15,16 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 	    return $http({
 	        method: _subData.method,
 	        url: _subData.url,
-	        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-			transformRequest: function(obj) {
+	        headers: { 'Content-Type': undefined },
+            //transformRequest: angular.identity,
+
+	        //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			/*transformRequest: function(obj) {
 			    var str = [];
 			    for(var p in obj)
 			    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
 			    return str.join("&");
-			},
+			},*/
 	        data: _subData.param
 	    })
 	}

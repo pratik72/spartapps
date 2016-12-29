@@ -1,8 +1,8 @@
 var Supplier = require('../models/supplier').supplier;
 
 exports.addSupplier = function(suppData , callback){
-	console.log("==== supplier data ====" , suppData)
 	var newSupplier = new Supplier({
+		orgId : suppData.orgId,
 		createdBy : suppData.createdBy,
 		supplier_name_address: {
 		    supplier_name: suppData.supplier_name_address.supplier_name,
@@ -90,7 +90,6 @@ exports.findSupplier = function(supp_id, callback){
 		suppIdParam = { _id : supp_id }
 	}
 	Supplier.find( suppIdParam , function(error, org){
-		console.log("findSupplier" , error)
 		callback(error , org)
 	})
 }

@@ -23,7 +23,6 @@ exports.addUser = function(userData , callback){
 
 exports.findUser = function(email, callback){
 	User.findOne({email : email.toLowerCase()} , function(error, user){
-		console.log("findUser" , error)
 		callback(error , user)
 	})
 }

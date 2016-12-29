@@ -8,7 +8,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Supplier</h4>
       </div>
-      <form name="supplierForm" ng-submit="supplierCreate()">
+      <form name="supplierForm" ng-submit="supplierCreate()" enctype="multipart/form-data">
         <div class="modal-body">
             <table class="table table-bordered">
               <thead>
@@ -300,37 +300,45 @@
                 <tr>
                   <td>Statutory Registration Certificates</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="statutory_registration_certificates" ng-model="supplierFormData.doc_attachment.statutory_registration_certificates">
+                    <!-- <input type="text" class="form-control" name="statutory_registration_certificates" ng-model="supplierFormData.doc_attachment.statutory_registration_certificates"> -->
+                    <input class="form-control" type="file" name="statutory_registration_certificates" onchange="angular.element(this).scope().setFiles(this , 'statutory_registration_certificates')">
                   </td>
                 </tr>
                 <tr>
                   <td>Cancelled Cheque</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="cancelled_cheque" ng-model="supplierFormData.doc_attachment.cancelled_cheque">
+                    <!-- <input type="text" class="form-control" name="cancelled_cheque" ng-model="supplierFormData.doc_attachment.cancelled_cheque"> -->
+
+                    <input class="form-control" type="file" name="cancelled_cheque" onchange="angular.element(this).scope().setFiles(this , 'cancelled_cheque')">
                   </td>
                 </tr>
                 <tr>
                   <td>Quotation</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="quotation" ng-model="supplierFormData.doc_attachment.quotation">
+                    <!-- <input type="text" class="form-control" name="quotation" ng-model="supplierFormData.doc_attachment.quotation"> -->
+                    <input class="form-control" type="file" name="quotation" onchange="angular.element(this).scope().setFiles(this , 'quotation')">
                   </td>
                 </tr>
                 <tr>
                   <td>Agreements if any</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="agreements" ng-model="supplierFormData.doc_attachment.agreements">
+                    <!-- <input type="text" class="form-control" name="agreements" ng-model="supplierFormData.doc_attachment.agreements"> -->
+                    <input class="form-control" type="file" name="agreements" onchange="angular.element(this).scope().setFiles(this , 'agreements')">
                   </td>
                 </tr>
                 <tr>
                   <td>Vendor Profile</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="vendor_profile" ng-model="supplierFormData.doc_attachment.vendor_profile">
+                    <!-- <input type="text" class="form-control" name="vendor_profile" ng-model="supplierFormData.doc_attachment.vendor_profile"> -->
+                    <input class="form-control" type="file" name="vendor_profile" onchange="angular.element(this).scope().setFiles(this , 'vendor_profile')">
                   </td>
                 </tr>
                 <tr>
                   <td>Other Documents</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="other_doc" ng-model="supplierFormData.doc_attachment.other_doc">
+                    <!-- <input type="text" class="form-control" name="other_doc" ng-model="supplierFormData.doc_attachment.other_doc"> -->
+
+                    <input class="form-control" type="file" name="other_doc" onchange="angular.element(this).scope().setFiles(this , 'other_doc')">
                   </td>
                 </tr>
               </tbody>

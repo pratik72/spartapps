@@ -61,10 +61,23 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     //Submit supplier form data
     $scope.supplierCreate = function(){
     	common.showLoader();
-    	var tmpData = [];
+
+    	var tmpData = new FormData();
     	for (var key in $scope.supplierFormData) {
-    		tmpData[key] = JSON.stringify( $scope.supplierFormData[key])
+    		if(typeof $scope.supplierFormData[key] == "object"){
+    			tmpData.append( key , JSON.stringify($scope.supplierFormData[key]) );
+    		}else{
+    			tmpData.append( key , $scope.supplierFormData[key] );
+    		}
     	};
+
+    	tmpData.append( "statutory_registration_certificates" , $scope.statutory_registration_certificates );
+    	tmpData.append( "cancelled_cheque" , $scope.cancelled_cheque );
+    	tmpData.append( "quotation" , $scope.quotation );
+    	tmpData.append( "agreements" , $scope.agreements );
+    	tmpData.append( "vendor_profile" , $scope.vendor_profile );
+    	tmpData.append( "other_doc" , $scope.other_doc );
+
     	common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.CREATE_SUPPLIER,
 			method:'post',
@@ -82,10 +95,17 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     //Submit Invoice form data
     $scope.InvoiceCreate = function(){
     	common.showLoader();
-    	var tmpData = [];
+    	//invoice_attachment
+
+    	var tmpData = new FormData();
     	for (var key in $scope.invoiceFormData) {
-    		tmpData[key] = JSON.stringify( $scope.invoiceFormData[key])
+    		tmpData.append( key , $scope.invoiceFormData[key] );
     	};
+
+    	tmpData.append( "invoice" , $scope.invoice );
+    	tmpData.append( "PO" , $scope.PO );
+    	tmpData.append( "other_doc" , $scope.other_doc );
+    	
     	common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.CREATE_INVOICE,
 			method:'post',
@@ -146,4 +166,8 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	//Init Templates
     $scope.changeDashBody("invoice");
 
+
+    $scope.setFiles = function(element , str){
+    	$scope[str] = element.files[0]
+    }
 }]);

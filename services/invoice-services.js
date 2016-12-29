@@ -1,8 +1,8 @@
 var Invoice = require('../models/invoice').invoice;
 
 exports.addInvoice = function(invoiceData , callback){
-	console.log("==== Invoice data ====" , invoiceData)
 	var newInvoice = new Invoice({
+		orgId : invoiceData.orgId,
 		createdBy : invoiceData.createdBy,
 		supplier_name : invoiceData.supplier_name,
 		PO_number : invoiceData.PO_number,
@@ -34,7 +34,6 @@ exports.findInvoice = function(inv_id, callback){
 		invIdParam = { _id : inv_id }
 	}
 	Invoice.find( invIdParam , function(error, org){
-		console.log("findInvoice" , error)
 		callback(error , org)
 	})
 }

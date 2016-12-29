@@ -3,6 +3,7 @@ var passport = require('passport');
 var restrict = require('../auth/restrict');
 var supplierService = require('../services/supplier-services');
 var InvoiceService = require('../services/invoice-services');
+var uploadService = require('../services/upload-services');
 
 var router = express.Router();
 
@@ -22,20 +23,17 @@ router.get('/logout',  function(req, res, next) {
 });
 
 router.post('/userDetails', restrict , function(req, res, next) {
-	console.log(" req.user " ,  req.user)
 	res.send( req.user );
 });
 
 //getSupplier
 router.post('/getSupplierDetails', restrict , function(req, res, next) {
-	console.log(" getSupplierDetails " ,  req.body);
 	
 	supplierService.findSupplier( req.body, function(error , suppData){
 		if(error){
 			console.log("Supplier Not Retrived" , error);
 			return res.json(error);
 		}
-		console.log("suppData" , suppData);
   		res.json(suppData);
 	});
 });
@@ -44,19 +42,37 @@ router.post('/getSupplierDetails', restrict , function(req, res, next) {
 router.post('/createSupplier', restrict , function(req, res, next) {
 	var bodyObject = req.body;
 	if (bodyObject) {
-		for (var i in bodyObject) {
-			bodyObject[i] = JSON.parse(bodyObject[i])
-		};
-		bodyObject["createdBy"] = req.user._id;
-		supplierService.addSupplier(bodyObject , function(error){
-			if(error){
-				console.log("Supplier Not Created" , error);
-				res.status(400);
-				return res.json(error);
+
+		uploadService.uploadFiles(req, res, null , function(uplErr){
+
+			if(uplErr){
+				res.json({error : "File not Uploaded..!"});	
 			}
-			console.log("Data Entered Successfully");
-	  		return res.json({ OK : "User Entered Successfully" });
+
+			bodyObject = req.body;
+
+			for (var i in bodyObject) {
+				if(typeof bodyObject[i] == 'string' && bodyObject[i] != "undefined"){
+					bodyObject[i] = JSON.parse(bodyObject[i]);
+				}
+			};
+
+			bodyObject = mergeSupplierUploadData(req.files , bodyObject);
+
+			bodyObject["createdBy"] = req.user._id;
+			bodyObject["orgId"] = req.user.orgId;
+			
+			supplierService.addSupplier(bodyObject , function(error){
+				if(error){
+					console.log("Supplier Not Created" , error);
+					res.status(400);
+					return res.json(error);
+				}
+				console.log("Data Entered Successfully");
+		  		return res.json({ OK : "User Entered Successfully" });
+			});
 		});
+
 	}else{
 		res.json({ error : "Invalid data..!!" });
 	}
@@ -64,39 +80,87 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 
 
 router.post('/getInvoicesDetails', restrict , function(req, res, next) {
-	console.log(" getInvoicesDetails " ,  req.body);
 	
 	InvoiceService.findInvoice( req.body, function(error , invData){
 		if(error){
 			console.log("Invoice Not Retrived" , error);
 			return res.json(error);
 		}
-		console.log("suppData" , invData);
   		res.json(invData);
 	});
 });
 
 router.post('/createInvoice', restrict , function(req, res, next) {
 	var bodyObject = req.body;
+	//uploadFiles
 	if (bodyObject) {
-		for (var i in bodyObject) {
-			bodyObject[i] = JSON.parse(bodyObject[i])
-		};
 
-		bodyObject["createdBy"] = req.user._id;
+		console.log("bodyObject" , bodyObject)
 
-		InvoiceService.addInvoice(bodyObject , function(error){
-			if(error){
-				console.log("Invoice Not Created" , error);
-				res.status(400);
-				return res.json(error);
+		uploadService.uploadFiles(req, res, null , function(uplErr){
+			
+			if(uplErr){
+				res.json({error : "File not Uploaded..!"});	
 			}
-			console.log("Data Entered Successfully");
-	  		return res.json({ OK : "Invoice Created Successfully" });
+
+			var tmpInvData = mergeInvoiceUploadData(req.files , req.body)
+
+			tmpInvData["createdBy"] = req.user._id;
+			tmpInvData["orgId"] = req.user.orgId;
+			
+			InvoiceService.addInvoice( tmpInvData , function(error){
+				if(error){
+					console.log("Invoice Not Created" , error);
+					res.status(400);
+					return res.json(error);
+				}
+				console.log("Data Entered Successfully");
+		  		return res.json({ OK : "Invoice Created Successfully" });
+			});
 		});
 	}else{
 		res.json({ error : "Invalid data..!!" });
 	}
 });
+
+
+function mergeInvoiceUploadData(files , tmpObj){
+	
+	tmpObj.doc_attachment = {};
+	tmpObj.doc_attachment.invoice = files[0] ? files[0].filename : "";
+	tmpObj.doc_attachment.PO = files[1] ? files[1].filename : "";
+	tmpObj.doc_attachment.other_doc = files[2] ? files[2].filename : "";
+
+	var allAttachParam = [ "invoice" , "PO" , "other_doc"];
+	for (var k = 0; k < allAttachParam.length; k++) {
+		tmpObj.doc_attachment[ allAttachParam[k] ] = "";
+		for (var i = 0; i < files.length; i++) {
+			if(files[i].fieldname == allAttachParam[k] ){
+				tmpObj.doc_attachment[ allAttachParam[k] ] = files[i] ? files[i].filename : "";
+			}
+		};
+	};
+
+	return tmpObj;
+}
+
+function mergeSupplierUploadData(files , tmpObj){
+	
+	tmpObj.doc_attachment = {};
+	
+	var allAttachParam = [ "statutory_registration_certificates" , "cancelled_cheque" , "quotation" , "agreements" , "vendor_profile" , "other_doc"];
+
+	for (var k = 0; k < allAttachParam.length; k++) {
+		tmpObj.doc_attachment[ allAttachParam[k] ] = "";
+		for (var i = 0; i < files.length; i++) {
+			if(files[i].fieldname == allAttachParam[k] ){
+				tmpObj.doc_attachment[ allAttachParam[k] ] = files[i] ? files[i].filename : "";
+			}
+		};
+	};
+
+	console.log("tmpObj " , tmpObj)
+	return tmpObj;
+}
 
 module.exports = router;

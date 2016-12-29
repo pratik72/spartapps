@@ -8,7 +8,7 @@ var userSchema = new Schema({
 	email : {type:String, required: 'Please enter your email'},
 	password : {type:String, required: 'Please enter your password.'},
 	organization : {type:String, required: 'Please enter your organization.'},
-	orgId : String,
+	orgId : Schema.Types.ObjectId,
 	role : {type:String, required: 'Please enter your role.'},
 	join_date : {type: Date, default: Date.now},
 	subscriptionId : String
