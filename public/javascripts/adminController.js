@@ -8,6 +8,8 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 		"Data Entry Ops" : "YY00"
 	}
 
+	$scope.AllUserRoles = APP_CONSTANT.USER_ROLES
+
 	var userDetails = null;
 	$scope.isUserform = true;
 	$scope.userForm = APP_CONSTANT.USER_JSON;
@@ -24,7 +26,8 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
     });
 
     $scope.submitSignUp = function(){
-    	common.asynCall({
+    	console.log($scope.userForm)
+    	/*common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.SUBMIT_USERDATA,
 			method:'post',
 			param: $scope.userForm
@@ -41,7 +44,7 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 	    	}
 
 	    	alert( valMsg );
-	    });
+	    });*/
     }
 
     //This function used to update userForm data for organization
@@ -51,6 +54,14 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 	    	var orgName = $scope.orgModel.orgName;
 	    	$scope.userForm.organization = orgName;
 	    	$scope.userForm.orgId = orgId;	
+    	}    	
+    }
+
+    //This function used to update userForm data for roles
+    $scope.roleUpdate = function(){
+    	if($scope.userRole){
+	    	var roleName = $scope.userRole.name;
+	    	$scope.userForm.role = roleName;
     	}    	
     }
 }]);

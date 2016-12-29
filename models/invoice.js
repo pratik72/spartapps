@@ -4,7 +4,9 @@ var Schema = mongoose.Schema;
 
 var invoiceSchema = new Schema({
 	orgId : Schema.Types.ObjectId,
-	createdBy : Schema.Types.ObjectId,
+	user_id : Schema.Types.ObjectId,
+	orgName : String,
+	userName : String,
 	supplier_name : String,
 	PO_number : String,
 	bill_number : String,
@@ -12,6 +14,7 @@ var invoiceSchema = new Schema({
 	HSN_Code : String,
 	Quantity : String,
 	Rate : String,
+	create_date : {type: Date, default: Date.now},
 	Payment_due_date : String,
 	doc_attachment: {
 	    invoice: String,

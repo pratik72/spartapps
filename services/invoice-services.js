@@ -3,7 +3,9 @@ var Invoice = require('../models/invoice').invoice;
 exports.addInvoice = function(invoiceData , callback){
 	var newInvoice = new Invoice({
 		orgId : invoiceData.orgId,
-		createdBy : invoiceData.createdBy,
+		user_id : invoiceData.user_id,
+		orgName : invoiceData.orgName,
+		userName : invoiceData.userName,
 		supplier_name : invoiceData.supplier_name,
 		PO_number : invoiceData.PO_number,
 		bill_number : invoiceData.bill_number,

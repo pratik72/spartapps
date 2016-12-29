@@ -58,9 +58,8 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 			};
 
 			bodyObject = mergeSupplierUploadData(req.files , bodyObject);
+			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
-			bodyObject["createdBy"] = req.user._id;
-			bodyObject["orgId"] = req.user.orgId;
 			
 			supplierService.addSupplier(bodyObject , function(error){
 				if(error){
@@ -95,8 +94,6 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 	//uploadFiles
 	if (bodyObject) {
 
-		console.log("bodyObject" , bodyObject)
-
 		uploadService.uploadFiles(req, res, null , function(uplErr){
 			
 			if(uplErr){
@@ -105,8 +102,7 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 
 			var tmpInvData = mergeInvoiceUploadData(req.files , req.body)
 
-			tmpInvData["createdBy"] = req.user._id;
-			tmpInvData["orgId"] = req.user.orgId;
+			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
 			
 			InvoiceService.addInvoice( tmpInvData , function(error){
 				if(error){
@@ -159,8 +155,16 @@ function mergeSupplierUploadData(files , tmpObj){
 		};
 	};
 
-	console.log("tmpObj " , tmpObj)
 	return tmpObj;
+}
+
+function mergeUserDetailsData( mobjData , user){
+	mobjData["user_id"] = user._id;
+	mobjData["userName"] = user.firstName + " "+ user.lastName;
+	mobjData["orgId"] = user.orgId;
+	mobjData["orgName"] = user.organization;
+
+	return mobjData;
 }
 
 module.exports = router;

@@ -108,5 +108,10 @@ var APP_CONSTANT = {
 		    PO: "",
 		    other_doc: ""
 		}
-	}
+	},
+	USER_ROLES : [
+		{ name : "Finance Head"},
+		{ name : "Regional Head"},
+		{ name : "Data Entry Ops"}
+	]
 }

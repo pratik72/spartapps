@@ -22,14 +22,16 @@
     </div>
     <div class="form-group">
       <label for="organization">Organization:</label>
-      <!-- <input type="text" class="form-control" id="organization" name="organization"> -->
-      <select ng-options="item as item.orgName for item in AllOrgsData" ng-model="orgModel" id="organization" name="organization" required ng-change="orgUpdate()" class="form-control">
+      <select ng-options="item as item.orgName for item in AllOrgsData" ng-model="orgModel" name="organization" required ng-change="orgUpdate()" class="form-control">
         <option value="">--select organization--</option>
       </select>
     </div>
     <div class="form-group">
       <label for="role">User Role:</label>
-      <input type="text" class="form-control" id="role" name="role" ng-model="userForm.role" required>
+      <!-- <input type="text" class="form-control" id="role" name="role" ng-model="userForm.role" required> -->
+      <select ng-options="item as item.name for item in AllUserRoles" ng-model="userRole" name="role" required ng-change="roleUpdate()" class="form-control">
+        <option value="">--select organization--</option>
+      </select>
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>

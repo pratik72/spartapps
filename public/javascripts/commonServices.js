@@ -36,4 +36,13 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 	this.hideLoader = function(){
 		objAjaxLoader.hide();
 	}
+
+	this.formatDate = function(date , format){
+		var parseDates = new Date(date);
+		switch(format){
+			case "dd/mm/yyyy" :
+				return parseDates.getDate() + "/" + (parseDates.getMonth()+1) + '/'+ parseDates.getFullYear();
+				break;
+		}
+	}
 }]);

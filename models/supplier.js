@@ -4,7 +4,10 @@ var Schema = mongoose.Schema;
 
 var supplierSchema = new Schema({
 	orgId : Schema.Types.ObjectId,
-	createdBy : Schema.Types.ObjectId,
+	user_id : Schema.Types.ObjectId,
+	orgName : String,
+	userName : String,
+	create_date : {type: Date, default: Date.now},
 	supplier_name_address: {
 	    supplier_name: String,
 	    address1: String,

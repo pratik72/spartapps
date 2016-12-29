@@ -3,7 +3,9 @@ var Supplier = require('../models/supplier').supplier;
 exports.addSupplier = function(suppData , callback){
 	var newSupplier = new Supplier({
 		orgId : suppData.orgId,
-		createdBy : suppData.createdBy,
+		user_id : suppData.user_id,
+		orgName : suppData.orgName,
+		userName : suppData.userName,
 		supplier_name_address: {
 		    supplier_name: suppData.supplier_name_address.supplier_name,
 		    address1: suppData.supplier_name_address.address1,

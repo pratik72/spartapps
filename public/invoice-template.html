@@ -12,7 +12,8 @@
 			    <th>Supplier Name</th>
 			    <th>PO No.</th>
 			    <th>Bill No.</th>
-			    <th>Nature of Product</th>
+			    <th>User</th>
+			    <th>Date</th>
 			    <th>Quantity</th>
 			    <th>Rate</th>
 			  </tr>
@@ -23,7 +24,8 @@
 			    <td>{{invoiceData.supplier_name}}</td>
 			    <td>{{invoiceData.PO_number}}</td>
 			    <td>{{invoiceData.bill_number}}</td>
-			    <td>{{invoiceData.Product_Nature}}</td>
+			    <td>{{invoiceData.userName}}</td>
+			    <td>{{invoiceData.create_date | date:'dd/MM/yyyy' }}</td>
 			    <td>{{invoiceData.Quantity}}</td>
 			    <td>{{invoiceData.Rate}}</td>
 			  </tr>
