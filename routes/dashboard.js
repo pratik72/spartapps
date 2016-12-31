@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var ObjectId = require('mongoose').Types.ObjectId;
 var restrict = require('../auth/restrict');
 var supplierService = require('../services/supplier-services');
 var InvoiceService = require('../services/invoice-services');
@@ -29,7 +30,8 @@ router.post('/userDetails', restrict , function(req, res, next) {
 //getSupplier
 router.post('/getSupplierDetails', restrict , function(req, res, next) {
 	
-	supplierService.findSupplier( req.body, function(error , suppData){
+	var userOrgId = req.user.orgId;
+	supplierService.findSupplier( { orgId : new ObjectId(userOrgId) }, function(error , suppData){
 		if(error){
 			console.log("Supplier Not Retrived" , error);
 			return res.json(error);
@@ -50,17 +52,9 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 			}
 
 			bodyObject = req.body;
-
-			for (var i in bodyObject) {
-				if(typeof bodyObject[i] == 'string' && bodyObject[i] != "undefined"){
-					bodyObject[i] = JSON.parse(bodyObject[i]);
-				}
-			};
-
-			bodyObject = mergeSupplierUploadData(req.files , bodyObject);
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject);
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
-			
 			supplierService.addSupplier(bodyObject , function(error){
 				if(error){
 					console.log("Supplier Not Created" , error);
@@ -80,7 +74,8 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 
 router.post('/getInvoicesDetails', restrict , function(req, res, next) {
 	
-	InvoiceService.findInvoice( req.body, function(error , invData){
+	var userOrgId = req.user.orgId;
+	InvoiceService.findInvoice( { orgId : new ObjectId(userOrgId) }, function(error , invData){
 		if(error){
 			console.log("Invoice Not Retrived" , error);
 			return res.json(error);
@@ -93,15 +88,12 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 	var bodyObject = req.body;
 	//uploadFiles
 	if (bodyObject) {
-
 		uploadService.uploadFiles(req, res, null , function(uplErr){
-			
 			if(uplErr){
 				res.json({error : "File not Uploaded..!"});	
 			}
 
-			var tmpInvData = mergeInvoiceUploadData(req.files , req.body)
-
+			var tmpInvData = mergeInvoiceUploadData(req.files , req.body);
 			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
 			
 			InvoiceService.addInvoice( tmpInvData , function(error){
@@ -140,8 +132,15 @@ function mergeInvoiceUploadData(files , tmpObj){
 	return tmpObj;
 }
 
-function mergeSupplierUploadData(files , tmpObj){
+function mergeSupplierUploadStatusData(files , tmpObj){
+
+	for (var i in tmpObj) {
+		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined"){
+			tmpObj[i] = JSON.parse(tmpObj[i]);
+		}
+	};
 	
+	tmpObj["sa_status"] = "pending";
 	tmpObj.doc_attachment = {};
 	
 	var allAttachParam = [ "statutory_registration_certificates" , "cancelled_cheque" , "quotation" , "agreements" , "vendor_profile" , "other_doc"];

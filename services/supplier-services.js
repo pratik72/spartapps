@@ -6,6 +6,7 @@ exports.addSupplier = function(suppData , callback){
 		user_id : suppData.user_id,
 		orgName : suppData.orgName,
 		userName : suppData.userName,
+		sa_status : suppData.sa_status,
 		supplier_name_address: {
 		    supplier_name: suppData.supplier_name_address.supplier_name,
 		    address1: suppData.supplier_name_address.address1,
@@ -88,9 +89,9 @@ exports.addSupplier = function(suppData , callback){
 
 exports.findSupplier = function(supp_id, callback){
 	var suppIdParam = supp_id || {};
-	if(suppIdParam.length > 2){
+	/*if(suppIdParam.length > 2){
 		suppIdParam = { _id : supp_id }
-	}
+	}*/
 	Supplier.find( suppIdParam , function(error, org){
 		callback(error , org)
 	})

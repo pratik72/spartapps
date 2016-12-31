@@ -27,10 +27,16 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 
     $scope.submitSignUp = function(){
     	console.log($scope.userForm)
-    	/*common.asynCall({
+
+    	var tmpData = new FormData();
+    	for (var key in $scope.userForm) {
+    		tmpData.append( key , $scope.userForm[key] );
+    	};
+    	
+    	common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.SUBMIT_USERDATA,
 			method:'post',
-			param: $scope.userForm
+			param: tmpData
 		}).then( function(resVal){
 			console.log("Create User==" , resVal)
 			if(resVal.data && resVal.data.OK){
@@ -44,7 +50,7 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 	    	}
 
 	    	alert( valMsg );
-	    });*/
+	    });
     }
 
     //This function used to update userForm data for organization

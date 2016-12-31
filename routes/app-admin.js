@@ -3,22 +3,36 @@ var restrict = require('../auth/restrict')
 var router = express.Router();
 var userService = require('../services/user-services');
 var orgService = require('../services/org-services');
+var uploadService = require('../services/upload-services');
 
 /* GET home page. */
 router.get('/', restrict , function(req, res, next) {
-  res.render('Admin', { title: 'Admin Portal' });
+	var vm = {
+		title : 'Admin',
+		userName : req.user ? req.user.firstName : 'User'
+	}
+  res.render('Admin', vm);
 });
 
 router.post('/signup', restrict , function(req, res, next) {
-	userService.addUser(req.body , function(error){
-		if(error){
-			console.log("Data Not Entered" , error);
-			res.status(400);
-			return res.send(error);
+	console.log(req.body)
+
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+			
+		if(uplErr){
+			res.json({error : "File not Uploaded..!"});	
 		}
-		console.log("Data Entered Successfully");
-  		return res.send({ OK : "User Entered Successfully" });
-	});
+
+		userService.addUser(req.body , function(error){
+			if(error){
+				console.log("Data Not Entered" , error);
+				res.status(400);
+				return res.send(error);
+			}
+			console.log("Data Entered Successfully");
+	  		return res.send({ OK : "User Entered Successfully" });
+		});
+	})
 });
 
 //orgcreate

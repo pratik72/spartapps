@@ -1,8 +1,16 @@
 <link rel='stylesheet' href='/stylesheets/signup.css' />
-<div class="container-fluid" ng-app="spartapps" ng-controller="adminController">
+<div ng-app="spartapps" ng-controller="adminController">
+
+  <div ng-include="ajaxloader">
+    
+  </div>
+
+  <div>
+    {{> admin_nav }}
+  </div>
   <button ng-show="isUserform" ng-click="isUserform = !isUserform">Add Organization</button>
   <button ng-show="!isUserform" ng-click="isUserform = !isUserform">Add User</button>
-	<form name="signupForm"  ng-show="isUserform" ng-submit="submitSignUp()">
+	<form name="signupForm"  ng-show="isUserform" ng-submit="submitSignUp()" class="container-fluid">
     {{error}}
     <div class="form-group">
       <label for="firstName">First Name:</label>

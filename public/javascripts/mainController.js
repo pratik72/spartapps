@@ -4,9 +4,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
 	var allTemplates = APP_CONSTANT.TEMPLATES;
 	var adminRights = {
-		"Finance Head" : "Y0YY",
-		"Regional Head" : "Y0Y0",
-		"Data Entry Ops" : "YY00"
+		"Finance Head" : "Y0YY0",
+		"Regional Head" : "Y0Y01",
+		"Data Entry Ops" : "YY000"
 	}
 
 	common.init( $scope );
@@ -20,12 +20,14 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		"CreateSupplier" : "" ,
 		"CreateInvoiceReq" : "",
 		"ApprvInvoiceReq" : "",
-		"ApprvFinanceReq" : ""
+		"ApprvFinanceReq" : "",
+		"ApprvSupplierReq" : ""
 	};
 	
 	//Init Form data of madel
 	$scope.supplierFormData = APP_CONSTANT.SUPPLIER_JSON;
 	$scope.invoiceFormData = APP_CONSTANT.INVOICE_JSON;
+	$scope.isReadOnly = false;
 
 	//Init To get Current User Details on load
 	common.asynCall({
@@ -50,7 +52,12 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
 
 	//Init All events
-    $scope.openSupplier = function(){
+    $scope.openSupplier = function(suppDatas){
+    	$scope.isReadOnly = false;
+    	if(suppDatas){
+    		$scope.isReadOnly = true;
+    		$scope.supplierFormData = suppDatas;
+    	}    	
     	$("#mySuppModal").modal('show');
     }
 
@@ -85,6 +92,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		}).then( function(resVal){
 			console.log("Create supplier==" , resVal)
 			$("#mySuppModal").modal('hide');
+			resetSupplierModel();
 			$scope.changeDashBody("supplier");
 			common.hideLoader();
 	    }, function(error){
@@ -113,6 +121,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		}).then( function(resVal){
 			console.log("Create Invoice==" , resVal)
 			$("#myInvoiceModal").modal('hide');
+			resetInvoiceModel();
 			$scope.changeDashBody("invoice");
 			common.hideLoader();
 	    }, function(error){
@@ -169,5 +178,42 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
     $scope.setFiles = function(element , str){
     	$scope[str] = element.files[0]
+    }
+
+    function resetSupplierModel(modelScope){
+    	var tmpModelScope = modelScope || $scope.supplierFormData;
+    	for (var key in tmpModelScope) {
+    		if(typeof tmpModelScope[key] == "object"){
+    			resetSupplierModel( tmpModelScope[key] )
+    		}else{
+    			tmpModelScope[key] = "";
+    		}
+    	};
+
+    	if(!modelScope){
+	    	$scope.statutory_registration_certificates = "";
+	    	$scope.cancelled_cheque = "";
+	    	$scope.quotation = "";
+	    	$scope.agreements = "";
+	    	$scope.vendor_profile = "";
+	    	$scope.other_doc = "";
+    	}
+    }
+
+    function resetInvoiceModel(modelScope){
+    	var tmpModelScope = modelScope || $scope.invoiceFormData;
+    	for (var key in tmpModelScope) {
+    		if(typeof tmpModelScope[key] == "object"){
+    			resetInvoiceModel( tmpModelScope[key] )
+    		}else{
+    			tmpModelScope[key] = "";
+    		}
+    	};
+
+    	if(!modelScope){
+	    	$scope.invoice = "";
+	    	$scope.PO = "";
+	    	$scope.other_doc = "";
+    	}
     }
 }]);

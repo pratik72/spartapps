@@ -32,9 +32,9 @@ exports.addInvoice = function(invoiceData , callback){
 
 exports.findInvoice = function(inv_id, callback){
 	var invIdParam = inv_id || {};
-	if(invIdParam.length > 2){
+	/*if(invIdParam.length > 2){
 		invIdParam = { _id : inv_id }
-	}
+	}*/
 	Invoice.find( invIdParam , function(error, org){
 		callback(error , org)
 	})

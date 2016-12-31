@@ -16,7 +16,7 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 	        method: _subData.method,
 	        url: _subData.url,
 	        headers: { 'Content-Type': undefined },
-            //transformRequest: angular.identity,
+            transformRequest: angular.identity,
 
 	        //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 			/*transformRequest: function(obj) {
