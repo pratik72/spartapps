@@ -52,6 +52,7 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 			}
 
 			bodyObject = req.body;
+
 			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject);
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
@@ -135,7 +136,7 @@ function mergeInvoiceUploadData(files , tmpObj){
 function mergeSupplierUploadStatusData(files , tmpObj){
 
 	for (var i in tmpObj) {
-		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined"){
+		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
 			tmpObj[i] = JSON.parse(tmpObj[i]);
 		}
 	};

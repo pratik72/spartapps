@@ -53,15 +53,17 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
 	//Init All events
     $scope.openSupplier = function(suppDatas){
+    	resetSupplierModel();
     	$scope.isReadOnly = false;
     	if(suppDatas){
     		$scope.isReadOnly = true;
-    		$scope.supplierFormData = suppDatas;
+    		$scope.supplierFormData = angular.copy(suppDatas);
     	}    	
     	$("#mySuppModal").modal('show');
     }
 
     $scope.openInvoice = function(){
+    	resetInvoiceModel();
     	$("#myInvoiceModal").modal('show');
     }
 
@@ -92,7 +94,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		}).then( function(resVal){
 			console.log("Create supplier==" , resVal)
 			$("#mySuppModal").modal('hide');
-			resetSupplierModel();
 			$scope.changeDashBody("supplier");
 			common.hideLoader();
 	    }, function(error){
@@ -121,7 +122,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		}).then( function(resVal){
 			console.log("Create Invoice==" , resVal)
 			$("#myInvoiceModal").modal('hide');
-			resetInvoiceModel();
 			$scope.changeDashBody("invoice");
 			common.hideLoader();
 	    }, function(error){
