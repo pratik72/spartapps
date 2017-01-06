@@ -11,8 +11,16 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
 	common.init( $scope );
 
+	$scope.statusForm = {
+		updatedStatus : "",
+		status_desc : ""
+	};
+
 	$scope.supplier_Model = allTemplates.supplierModel;
+	$scope.status_Model = allTemplates.statusModel;
 	$scope.invoice_Model = allTemplates.invoiceModel;
+
+	$scope.initStatusData = APP_CONSTANT.STATUS_MODEL_JSON;
 
 	//Init all Scopes
 	$scope.userDetails = "";
@@ -65,6 +73,40 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     $scope.openInvoice = function(){
     	resetInvoiceModel();
     	$("#myInvoiceModal").modal('show');
+    }
+
+    $scope.openStatusModel = function(action , row , fieldSet){
+    	$scope.initStatusData.action = action;
+    	$scope.initStatusData.row = row;
+    	$scope.initStatusData.fieldSet = fieldSet;
+
+    	$scope.statusForm.updatedStatus = "";
+    	$scope.statusForm.status_desc = "";
+    	$("#statusModal").modal('show');
+    }
+
+    $scope.statusChangeSubmit = function(){
+    	common.showLoader();
+
+    	var tempStatus = $scope.initStatusData;
+    	var actUrl = PATH_NAME+ APP_CONSTANT.STATUS_CHANGE_URL +'?action='+tempStatus.action;
+    	var tmpData = new FormData();    	
+    	tmpData.append( tempStatus.fieldSet[0] , $scope.statusForm.updatedStatus );
+    	tmpData.append( tempStatus.fieldSet[1] , $scope.statusForm.status_desc );
+    	tmpData.append( "rowId" , tempStatus.row._id );
+
+    	common.asynCall({
+			url: actUrl,
+			method:'post',
+			param:  tmpData
+		}).then( function(resVal){
+			console.log("Status Change==" , resVal)
+			$("#statusModal").modal('hide');
+			$scope.changeDashBody("supplier");
+			common.hideLoader();
+	    }, function(error){
+	    	console.log(error);
+	    });
     }
 
     //Submit supplier form data
