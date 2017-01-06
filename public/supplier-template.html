@@ -37,7 +37,9 @@
 			    	<p class="text-muted">{{suppData.create_date | date:'dd/MM/yyyy' }}</p>
 			    </td>
 			    <td>
-			    	<p class="text-danger">{{suppData.sa_status}}</p>
+			    	<a href="#" ng-click="openStatusModel('supplier' , suppData ,['sa_status','sa_desc'])">
+			    		<span class="text-danger">{{suppData.sa_status}}</span>
+			    	</a>
 			    </td>
 
 			  </tr>
@@ -48,5 +50,9 @@
 
 
 <div ng-include="supplier_Model">
+    
+</div>
+
+<div ng-include="status_Model">
     
 </div>

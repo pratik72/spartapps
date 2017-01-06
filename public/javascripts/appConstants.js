@@ -6,16 +6,20 @@ var APP_CONSTANT = {
 	GET_CURRENT_USR: '/userDetails',
 	CREATE_SUPPLIER : '/createSupplier',
 	CREATE_INVOICE : '/createInvoice',
+	STATUS_CHANGE_URL : '/statusChanges',
 	GET_SUPPLIERS : '/getSupplierDetails',
 	GET_INVOICES : '/getInvoicesDetails',
 	TEMPLATES : {
 		supplier : "supplier-template.html",
+		statusModel : "status-change.html",
 		invoice : "invoice-template.html",
 		supplierModel : "supplierModel.html",
 		invoiceModel : "invoiceModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
 	SUPPLIER_JSON : {
+		sa_status : "",
+		sa_desc : "",
 		"supplier_name_address": {
 		    "supplier_name": "",
 		    "address1": "",
@@ -93,6 +97,11 @@ var APP_CONSTANT = {
 		"password" : "",
 		"organization" : "",
 		"role" : ""
+	},
+	STATUS_MODEL_JSON : {
+		action : "",
+		row : "",
+		fieldSet : "",
 	},
 	INVOICE_JSON : {
 		supplier_name : "",

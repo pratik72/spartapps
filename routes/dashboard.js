@@ -27,6 +27,21 @@ router.post('/userDetails', restrict , function(req, res, next) {
 	res.send( req.user );
 });
 
+router.post('/statusChanges' , restrict , function(req, res, next){
+	
+
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+
+		if(uplErr){
+			res.json({error : "File not Uploaded..!"});	
+		}
+
+		changeActionStatus(req , res , function(msg){
+			res.json(msg)
+		});
+	});
+});
+
 //getSupplier
 router.post('/getSupplierDetails', restrict , function(req, res, next) {
 	
@@ -165,6 +180,31 @@ function mergeUserDetailsData( mobjData , user){
 	mobjData["orgName"] = user.organization;
 
 	return mobjData;
+}
+
+function changeActionStatus(req , res , callback){
+	var query = req.query.action && req.query.action.toLowerCase();
+	if(!req.query.action ){
+		return callback({error : "Action required..!"})
+	}else if(req.query.action == 'supplier'){
+		var rowId = req.body.rowId;
+		rowId = rowId ? new ObjectId(rowId) : {};
+
+		var rowQuery = { _id : rowId };
+		delete req.body.rowId;
+		var rowData = req.body;
+		supplierService.updateSupplier(rowQuery , rowData , function(error , data){
+			if(error){
+				return callback({error : error});
+			}
+			return callback({ ok : data})
+		});
+	}else if(req.query.action == 'invoice'){
+		
+	}else{
+		return callback({error : "Wrong action...!"})
+	}
+
 }
 
 module.exports = router;

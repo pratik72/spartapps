@@ -7,6 +7,7 @@ var supplierSchema = new Schema({
 	user_id : Schema.Types.ObjectId,
 	orgName : String,
 	sa_status : String,
+	sa_desc : String,
 	userName : String,
 	create_date : {type: Date, default: Date.now},
 	supplier_name_address: {

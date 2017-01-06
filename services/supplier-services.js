@@ -7,6 +7,7 @@ exports.addSupplier = function(suppData , callback){
 		orgName : suppData.orgName,
 		userName : suppData.userName,
 		sa_status : suppData.sa_status,
+		sa_desc : suppData.sa_desc,
 		supplier_name_address: {
 		    supplier_name: suppData.supplier_name_address.supplier_name,
 		    address1: suppData.supplier_name_address.address1,
@@ -95,4 +96,18 @@ exports.findSupplier = function(supp_id, callback){
 	Supplier.find( suppIdParam , function(error, org){
 		callback(error , org)
 	})
+}
+
+exports.updateSupplier = function(supp_query, updateData ,callback){
+	var query = supp_query || {};
+	console.log("query"  ,query)
+	console.log("updateData"  ,updateData)
+	if(!updateData){
+		return callback({error : "Update Data not Provided"} , null);
+	}
+
+	Supplier.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+	    if (err) return callback({ error: err } , null);
+	    callback(null , doc)
+	});
 }

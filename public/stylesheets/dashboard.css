@@ -16,7 +16,7 @@ body, html {
     width: 13.666667%;
 }
 
-.modal-dialog{
+.modal-lg .modal-dialog{
 	width: 99%;
     margin: 0.5%;
 }
