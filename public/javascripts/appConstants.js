@@ -18,8 +18,12 @@ var APP_CONSTANT = {
 		ajaxloader : "ajax-loader.html"
 	},
 	SUPPLIER_JSON : {
-		sa_status : "",
-		sa_desc : "",
+		sa_status : {
+			status:"",
+			status_description : "",
+			status_changedBy: "",
+			status_changeDate : "",
+		},
 		"supplier_name_address": {
 		    "supplier_name": "",
 		    "address1": "",

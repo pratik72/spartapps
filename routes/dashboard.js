@@ -192,7 +192,12 @@ function changeActionStatus(req , res , callback){
 
 		var rowQuery = { _id : rowId };
 		delete req.body.rowId;
-		var rowData = req.body;
+		var rowData = req.body && req.body.status;
+		if (!rowData) return callback({error : "Bad data structure..!"});
+		rowData = {
+			sa_status : JSON.parse( rowData )
+		};
+
 		supplierService.updateSupplier(rowQuery , rowData , function(error , data){
 			if(error){
 				return callback({error : error});

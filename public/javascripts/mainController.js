@@ -76,13 +76,18 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     $scope.openStatusModel = function(action , row , fieldSet){
-    	$scope.initStatusData.action = action;
-    	$scope.initStatusData.row = row;
-    	$scope.initStatusData.fieldSet = fieldSet;
+    	if($scope.permissions.ApprvSupplierReq){
+    		$scope.initStatusData.action = action;
+	    	$scope.initStatusData.row = row;
+	    	$scope.initStatusData.fieldSet = APP_CONSTANT.SUPPLIER_JSON.sa_status;
 
-    	$scope.statusForm.updatedStatus = "";
-    	$scope.statusForm.status_desc = "";
-    	$("#statusModal").modal('show');
+	    	$scope.statusForm.updatedStatus = "";
+	    	$scope.statusForm.status_desc = "";
+	    	$("#statusModal").modal('show');
+    	}else{
+    		alert("You dont have permission to change Status")
+    	}
+    	
     }
 
     $scope.statusChangeSubmit = function(){
@@ -90,15 +95,21 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
     	var tempStatus = $scope.initStatusData;
     	var actUrl = PATH_NAME+ APP_CONSTANT.STATUS_CHANGE_URL +'?action='+tempStatus.action;
-    	var tmpData = new FormData();    	
-    	tmpData.append( tempStatus.fieldSet[0] , $scope.statusForm.updatedStatus );
-    	tmpData.append( tempStatus.fieldSet[1] , $scope.statusForm.status_desc );
-    	tmpData.append( "rowId" , tempStatus.row._id );
+    	var tmpArray = {};
+
+    	tempStatus.fieldSet.status = $scope.statusForm.updatedStatus;
+    	tempStatus.fieldSet.status_description = $scope.statusForm.status_desc;
+    	tempStatus.fieldSet.status_changedBy = $scope.userDetails._id;
+    	tempStatus.fieldSet.status_changeDate = new Date();
+    	
+    	var tmpFormData = new FormData();    	
+    	tmpFormData.append( "status" , JSON.stringify(tempStatus.fieldSet) );
+    	tmpFormData.append( "rowId" , tempStatus.row._id );
 
     	common.asynCall({
 			url: actUrl,
 			method:'post',
-			param:  tmpData
+			param:  tmpFormData
 		}).then( function(resVal){
 			console.log("Status Change==" , resVal)
 			$("#statusModal").modal('hide');

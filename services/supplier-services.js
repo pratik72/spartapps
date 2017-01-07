@@ -6,8 +6,12 @@ exports.addSupplier = function(suppData , callback){
 		user_id : suppData.user_id,
 		orgName : suppData.orgName,
 		userName : suppData.userName,
-		sa_status : suppData.sa_status,
-		sa_desc : suppData.sa_desc,
+		sa_status : {
+			status: suppData.sa_status.status,
+			status_description : suppData.sa_status.status_description,
+			status_changedBy: suppData.sa_status.status_changedBy,
+			status_changeDate : suppData.sa_status.status_changeDate
+		},
 		supplier_name_address: {
 		    supplier_name: suppData.supplier_name_address.supplier_name,
 		    address1: suppData.supplier_name_address.address1,
