@@ -5,7 +5,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	var allTemplates = APP_CONSTANT.TEMPLATES;
 	var adminRights = {
 		"Finance Head" : "Y0YY0",
-		"Regional Head" : "Y0Y01",
+		"Regional Head" : "Y0Y0Y",
 		"Data Entry Ops" : "YY000"
 	}
 

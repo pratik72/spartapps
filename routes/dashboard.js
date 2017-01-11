@@ -156,7 +156,7 @@ function mergeSupplierUploadStatusData(files , tmpObj){
 		}
 	};
 	
-	tmpObj["sa_status"] = "pending";
+	tmpObj["sa_status"].status = "pending";
 	tmpObj.doc_attachment = {};
 	
 	var allAttachParam = [ "statutory_registration_certificates" , "cancelled_cheque" , "quotation" , "agreements" , "vendor_profile" , "other_doc"];
