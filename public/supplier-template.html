@@ -37,9 +37,10 @@
 			    	<p class="text-muted">{{suppData.create_date | date:'dd/MM/yyyy' }}</p>
 			    </td>
 			    <td>
-			    	<a href="#" ng-click="openStatusModel('supplier' , suppData)">
+			    	<a ng-hide="suppData.sa_status.status_changedBy && suppData.sa_status.status_changeDate" href="#" ng-click="openStatusModel('supplier' , suppData)">
 			    		<span class="text-danger">{{suppData.sa_status.status}}</span>
 			    	</a>
+			    	<span ng-show="suppData.sa_status.status_changedBy && suppData.sa_status.status_changeDate" class="text-success">{{suppData.sa_status.status}}</span>
 			    </td>
 
 			  </tr>
