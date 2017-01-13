@@ -84,3 +84,15 @@
         position: absolute;
     }
 }
+
+.card-header .btn.pull-right{
+        margin-top: -36px;
+}
+
+.modal .modal-dialog {
+    margin-top: 10px;
+}
+
+.modal-dialog.modal-lg{
+    width: 99%;
+}

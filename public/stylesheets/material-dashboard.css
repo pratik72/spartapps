@@ -1,38 +1,3 @@
-/*! =========================================================
- *
- Material Dashboard - V1.1.0
-*
-* =========================================================
-*
-* Copyright 2016 Creative Tim (http://www.creative-tim.com/product/material-dashboard)
- *
- *                       _oo0oo_
- *                      o8888888o
- *                      88" . "88
- *                      (| -_- |)
- *                      0\  =  /0
- *                    ___/`---'\___
- *                  .' \|     |// '.
- *                 / \|||  :  |||// \
- *                / _||||| -:- |||||- \
- *               |   | \  -  /// |   |
- *               | \_|  ''\---/''  |_/ |
- *               \  .-\__  '-'  ___/-. /
- *             ___'. .'  /--.--\  `. .'___
- *          ."" '<  `.___\_<|>_/___.' >' "".
- *         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
- *         \  \ `_.   \_ __\ /__ _/   .-` /  /
- *     =====`-.____`.___ \_____/___.-`___.-'=====
- *                       `=---='
- *
- *     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *
- *               Buddha Bless:  "No Bugs"
- *
- * ========================================================= */
-/* ANIMATION */
-/* SHADOWS */
-/* Shadows (from mdl http://www.getmdl.io/) */
 .noUi-target,
 .noUi-target * {
   -webkit-touch-callout: none;
@@ -623,6 +588,7 @@ h2.title {
   box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
 }
 .sidebar[data-color="green"] .nav li.active a,
+#navbar li.active a,
 .off-canvas-sidebar[data-color="green"] .nav li.active a {
   background-color: #4caf50;
   box-shadow: 0 12px 20px -10px rgba(76, 175, 80, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(76, 175, 80, 0.2);
@@ -983,6 +949,8 @@ h2.title {
 .navbar .navbar-nav > li > a.btn.btn-success:hover {
   box-shadow: 0 14px 26px -12px rgba(76, 175, 80, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(76, 175, 80, 0.2);
 }
+
+
 .btn.btn-success.disabled, .btn.btn-success.disabled:hover, .btn.btn-success.disabled:focus, .btn.btn-success.disabled.focus, .btn.btn-success.disabled:active, .btn.btn-success.disabled.active, .btn.btn-success:disabled, .btn.btn-success:disabled:hover, .btn.btn-success:disabled:focus, .btn.btn-success:disabled.focus, .btn.btn-success:disabled:active, .btn.btn-success:disabled.active, .btn.btn-success[disabled], .btn.btn-success[disabled]:hover, .btn.btn-success[disabled]:focus, .btn.btn-success[disabled].focus, .btn.btn-success[disabled]:active, .btn.btn-success[disabled].active, fieldset[disabled] .btn.btn-success, fieldset[disabled] .btn.btn-success:hover, fieldset[disabled] .btn.btn-success:focus, fieldset[disabled] .btn.btn-success.focus, fieldset[disabled] .btn.btn-success:active, fieldset[disabled] .btn.btn-success.active,
 .navbar .navbar-nav > li > a.btn.btn-success.disabled,
 .navbar .navbar-nav > li > a.btn.btn-success.disabled:hover,

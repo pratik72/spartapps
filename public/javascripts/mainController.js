@@ -71,7 +71,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     $scope.openInvoice = function(){
+    	SupplierTemplateLoadData()
     	resetInvoiceModel();
+    	console.log($scope.supplierList)
     	$("#myInvoiceModal").modal('show');
     }
 
@@ -157,6 +159,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     //Submit Invoice form data
     $scope.InvoiceCreate = function(){
     	common.showLoader();
+
     	//invoice_attachment
 
     	var tmpData = new FormData();

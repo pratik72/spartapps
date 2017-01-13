@@ -15,7 +15,11 @@
                 <tr>
                   <td>Name of Supplier</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="supplier_name" ng-model="invoiceFormData.supplier_name">
+                    <!-- <input type="text" class="form-control" name="supplier_name" ng-model="invoiceFormData.supplier_name"> -->
+
+                    <select ng-options="y.supplier_name_address.supplier_name for (x, y) in supplierList" ng-model="invoiceFormData.supplier_name" name="supplier_name" required ng-change="orgUpdate()" class="form-control">
+                      <option value="">--select supplier--</option>
+                    </select>
                   </td>
                 </tr>
                 <tr>
@@ -84,7 +88,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-default">Submit</button>
+          <button type="submit" class="btn btn-success">Submit</button>
         </div>
 
       </form>
