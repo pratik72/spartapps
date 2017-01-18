@@ -4,10 +4,21 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
 	var allTemplates = APP_CONSTANT.TEMPLATES;
 	var adminRights = {
+		"CEO" : "YYYYY",
+		"CFO" : "YYYYY",
+		"COO" : "YYYYY",
+		"Admin" : "YYYYY",
 		"Finance Head" : "Y0YY0",
 		"Regional Head" : "Y0Y0Y",
+		"Centre Head" : "Y0Y0Y",
+		"Finance Controller" : "Y0Y0Y",
+		"Account Manager" : "Y0Y0Y",
+		"National Head" : "Y0Y0Y",
 		"Data Entry Ops" : "YY000"
 	}
+
+	$scope.orgDivision = ["Marketing","HR","Design","Procurement","Real Estate","Fianance"]
+	$scope.orgLocation = ["HR BR","Electonic city","white field","Brigade"]
 
 	common.init( $scope );
 
@@ -66,15 +77,29 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	if(suppDatas){
     		$scope.isReadOnly = true;
     		$scope.supplierFormData = angular.copy(suppDatas);
+			$scope.divisonModel = $scope.supplierFormData.vendor_selection.division;
+			$scope.locationModel = $scope.supplierFormData.budgets_and_approvals.location;
     	}    	
     	$("#mySuppModal").modal('show');
     }
 
-    $scope.openInvoice = function(){
-    	SupplierTemplateLoadData()
-    	resetInvoiceModel();
-    	console.log($scope.supplierList)
-    	$("#myInvoiceModal").modal('show');
+    $scope.openInvoice = function(invData){
+    	SupplierTemplateLoadData(function(){
+    		$scope.isReadOnly = false;
+	    	resetInvoiceModel();
+	    	if(invData){
+	    		$scope.isReadOnly = true;
+	    		$scope.invoiceFormData = angular.copy(invData);
+
+	    		var tmpObj = $scope.supplierList.filter(function(obj){
+	    			return obj._id == $scope.invoiceFormData.supplierId;
+	    		})
+	    		console.log($scope.invoiceFormData , tmpObj)
+
+	    		$scope.suppModel = tmpObj[0]
+	    	}
+	    	$("#myInvoiceModal").modal('show');	
+    	})
     }
 
     $scope.openStatusModel = function(action , row , fieldSet){
@@ -156,6 +181,28 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+    $scope.suppModel = "";
+    $scope.suppChngUpdate = function(e){
+    	if(e.suppModel){
+			var supplierName = e.suppModel.supplier_name_address.supplier_name;
+			var supplierId = e.suppModel._id;
+    		$scope.invoiceFormData.supplier_name = supplierName;
+    		$scope.invoiceFormData.supplierId = supplierId;
+    	}
+    }
+
+    $scope.divisonChngUpdate = function(e){
+    	if(e.divisonModel){
+			$scope.supplierFormData.vendor_selection.division = e.divisonModel;
+    	}
+    }
+
+    $scope.locationChngUpdate = function(e){
+    	if(e.locationModel){
+			$scope.supplierFormData.budgets_and_approvals.location = e.locationModel;
+    	}
+    }
+
     //Submit Invoice form data
     $scope.InvoiceCreate = function(){
     	common.showLoader();
@@ -199,7 +246,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     $scope.supplierList = [];
-    function SupplierTemplateLoadData(){
+    function SupplierTemplateLoadData(callback){
     	common.showLoader();
     	common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.GET_SUPPLIERS,
@@ -207,6 +254,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		}).then( function(resVal){
 			console.log("Get supplier==" , resVal)
 			$scope.supplierList = resVal.data
+			if(callback){
+				callback();
+			}
 			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);

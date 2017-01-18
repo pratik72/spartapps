@@ -17,7 +17,7 @@
                   <td colspan="3">
                     <!-- <input type="text" class="form-control" name="supplier_name" ng-model="invoiceFormData.supplier_name"> -->
 
-                    <select ng-options="y.supplier_name_address.supplier_name for (x, y) in supplierList" ng-model="invoiceFormData.supplier_name" name="supplier_name" required ng-change="orgUpdate()" class="form-control">
+                    <select ng-options="item as item.supplier_name_address.supplier_name for item in supplierList" ng-model="suppModel" required ng-change="suppChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select supplier--</option>
                     </select>
                   </td>
@@ -25,39 +25,39 @@
                 <tr>
                   <td>PO No</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="address1" ng-model="invoiceFormData.PO_number">
+                    <input type="text" class="form-control" name="address1" ng-model="invoiceFormData.PO_number" placeholder="Enter PO number" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                 <tr>
                   <td>Bill No</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="address2" ng-model="invoiceFormData.bill_number">
+                    <input type="text" class="form-control" name="address2" ng-model="invoiceFormData.bill_number" placeholder="Enter Bill number" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                 <tr>
                   <td>Nature of Product</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="address3" ng-model="invoiceFormData.Product_Nature">
+                    <input type="text" class="form-control" name="address3" ng-model="invoiceFormData.Product_Nature" placeholder="Enter Nature of product" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                 <tr>
                   <td>HSN Code</td>
                   <td>
-                    <input type="text" class="form-control" name="area" ng-model="invoiceFormData.HSN_Code">
+                    <input type="text" class="form-control" name="area" ng-model="invoiceFormData.HSN_Code" placeholder="Enter HSN code" ng-disabled="isReadOnly">
                   </td>
                   <td>Quantity</td>
                   <td>
-                    <input type="text" class="form-control" name="city" ng-model="invoiceFormData.Quantity">
+                    <input type="text" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                  <tr>
                   <td>Rate</td>
                   <td>
-                    <input type="text" class="form-control" name="district" ng-model="invoiceFormData.Rate">
+                    <input type="text" class="form-control" name="district" ng-model="invoiceFormData.Rate" placeholder="Rate" ng-disabled="isReadOnly">
                   </td>
                   <td>Payment Due Date</td>
                   <td>
-                    <input type="text" class="form-control" name="state" ng-model="invoiceFormData.Payment_due_date">
+                    <input type="text" class="form-control" name="state" ng-model="invoiceFormData.Payment_due_date" placeholder="Enter due date" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                  
@@ -67,19 +67,25 @@
                 <tr>
                   <td>Invoice</td>
                   <td colspan="3">
-                    <input class="form-control" type="file" name="invoice_attachment" onchange="angular.element(this).scope().setFiles(this , 'invoice')">
+                    <input class="form-control" type="file" name="invoice_attachment" onchange="angular.element(this).scope().setFiles(this , 'invoice')" ng-hide="isReadOnly">
+
+                    <a ng-href="/upload/{{invoiceFormData.doc_attachment.invoice}}" ng-show="isReadOnly" target="_blank">{{invoiceFormData.doc_attachment.invoice}}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>PO</td>
                   <td colspan="3">
-                    <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'PO')">
+                    <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'PO')" ng-hide="isReadOnly">
+
+                    <a ng-href="/upload/{{invoiceFormData.doc_attachment.PO}}" ng-show="isReadOnly" target="_blank">{{invoiceFormData.doc_attachment.PO}}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Other Documents</td>
                   <td colspan="3">
-                    <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'other_doc')">
+                    <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'other_doc')" ng-hide="isReadOnly">
+
+                    <a ng-href="/upload/{{invoiceFormData.doc_attachment.other_doc}}" ng-show="isReadOnly" target="_blank">{{invoiceFormData.doc_attachment.other_doc}}</a>
                   </td>
                 </tr>
               </tbody>

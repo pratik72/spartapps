@@ -7,6 +7,7 @@ exports.addInvoice = function(invoiceData , callback){
 		orgName : invoiceData.orgName,
 		userName : invoiceData.userName,
 		supplier_name : invoiceData.supplier_name,
+		supplierId : invoiceData.supplierId,
 		PO_number : invoiceData.PO_number,
 		bill_number : invoiceData.bill_number,
 		Product_Nature : invoiceData.Product_Nature,

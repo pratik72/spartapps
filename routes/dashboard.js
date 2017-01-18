@@ -112,6 +112,7 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 			var tmpInvData = mergeInvoiceUploadData(req.files , req.body);
 			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
 			
+			//return res.json(tmpInvData);
 			InvoiceService.addInvoice( tmpInvData , function(error){
 				if(error){
 					console.log("Invoice Not Created" , error);

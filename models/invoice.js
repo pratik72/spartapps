@@ -8,6 +8,7 @@ var invoiceSchema = new Schema({
 	orgName : String,
 	userName : String,
 	supplier_name : String,
+	supplierId : Schema.Types.ObjectId,
 	PO_number : String,
 	bill_number : String,
 	Product_Nature : String,

@@ -123,8 +123,15 @@ var APP_CONSTANT = {
 		}
 	},
 	USER_ROLES : [
-		{ name : "Finance Head"},
+		{ name : "CEO"},
+		{ name : "CFO"},
+		{ name : "COO"},
+		{ name : "Admin"},
 		{ name : "Regional Head"},
-		{ name : "Data Entry Ops"}
+		{ name : "Centre Head"},
+		{ name : "Finance Controller"},
+		{ name : "Account Manager"},
+		{ name : "Data Entry Operator"},
+		{ name : "National Head"},
 	]
 }
