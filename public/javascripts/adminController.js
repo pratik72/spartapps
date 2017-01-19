@@ -41,6 +41,7 @@ app.controller('adminController', ['common' , '$scope',function(common , $scope)
 			console.log("Create User==" , resVal)
 			if(resVal.data && resVal.data.OK){
 				alert("Hurrey... \n\n"+resVal.data.OK);
+				$scope.userForm = APP_CONSTANT.USER_JSON;
 			}
 	    }, function(error){
 	    	var servError = error.data.errors;

@@ -19,7 +19,7 @@
 </div> -->
 
 
-<br/><br/><br/>
+<br/>
     <div class="section section-full-screen section-signup" style="background-image: url('assets/img/city.jpg'); background-size: cover; background-position: top center; min-height: 700px;">
         <div class="container">
           <div class="row">
@@ -35,7 +35,12 @@
                                 <div class="card-header" data-background-color="green">
                                     <h4 class="title">login Page</h4>
                                    
-                                </div>                   
+                                </div>
+
+                                {{#if error}}
+                                  <div class="error">{{error}}</div>
+                                  <br/>
+                                {{/if}}           
                     <div class="card-content">
                     <div class="input-group">
                       <span class="input-group-addon">

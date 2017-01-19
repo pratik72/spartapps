@@ -27,3 +27,9 @@ exports.findUser = function(email, callback){
 		callback(error , user)
 	})
 }
+
+exports.findAllUsers = function(searchQuery, callback){
+	User.find( searchQuery , function(error, user){
+		callback(error , user)
+	})
+}

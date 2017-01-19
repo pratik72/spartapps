@@ -4,6 +4,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var restrict = require('../auth/restrict');
 var supplierService = require('../services/supplier-services');
 var InvoiceService = require('../services/invoice-services');
+var userService = require('../services/user-services');
 var uploadService = require('../services/upload-services');
 
 var router = express.Router();
@@ -26,6 +27,19 @@ router.get('/logout',  function(req, res, next) {
 router.post('/userDetails', restrict , function(req, res, next) {
 	res.send( req.user );
 });
+
+
+router.post('/distUserDetails', restrict , function(req, res, next) {
+	var serach = { orgId : req.user.orgId }
+	userService.findAllUsers( serach, function(error , result){
+		if(error){
+			console.log("User Not Retrived" , error);
+			return res.json(error);
+		}
+  		res.json(result);
+	});
+});
+
 
 router.post('/statusChanges' , restrict , function(req, res, next){
 	

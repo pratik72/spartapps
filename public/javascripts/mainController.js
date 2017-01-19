@@ -69,6 +69,16 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	console.log(error);
     });
 
+	//distUserDetails
+
+	common.asynCall({
+		url: PATH_NAME + "/distUserDetails",
+		method: 'post'
+	}).then( function(resVal){
+		console.log( "distUserDetails", resVal)
+    }, function(error){
+    	console.log(error);
+    });
 
 	//Init All events
     $scope.openSupplier = function(suppDatas){

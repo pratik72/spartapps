@@ -237,10 +237,6 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Selected by</td>
-                  <td>
-                    <input type="text" class="form-control" name="selected_by" ng-model="supplierFormData.vendor_selection.selected_by" ng-disabled="isReadOnly" placeholder="Enter selected by">
-                  </td>
                   <td>Division</td>
                   <td>
                     <!-- <input type="text" class="form-control" name="division" ng-model="supplierFormData.vendor_selection.division" ng-disabled="isReadOnly" placeholder="Enter Division"> -->
@@ -248,6 +244,10 @@
                     <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select divison--</option>
                     </select>
+                  </td>
+                  <td>Selected by</td>
+                  <td>
+                    <input type="text" class="form-control" name="selected_by" ng-model="supplierFormData.vendor_selection.selected_by" ng-disabled="isReadOnly" placeholder="Enter selected by">
                   </td>
                 </tr>
                 <tr>
