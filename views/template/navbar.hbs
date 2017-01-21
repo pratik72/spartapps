@@ -19,6 +19,16 @@
             <li><a href="/dashboard/logout">Logout</a></li>
           </ul>
         </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <i class="material-icons">notifications</i>
+            <span class="notification" ng-bind="notifications.length"></span>
+            <p class="hidden-lg hidden-md">Notifications</p>
+          <div class="ripple-container"></div></a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="nots in notifications"><a href="#" ng-bind="nots.title"></a></li>
+          </ul>
+        </li>
         <li ng-class="{ 'active': dashBody.indexOf('invoice') > -1 }"><a href="#" ng-click="changeDashBody('invoice')">Payment Intimation</a></li>
         <li ng-class="{ 'active': dashBody.indexOf('supplier') > -1 }"><a href="#" ng-click="changeDashBody('supplier')">PO</a></li>
       </ul>

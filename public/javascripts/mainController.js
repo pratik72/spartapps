@@ -69,16 +69,34 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	console.log(error);
     });
 
+	//notificationDetails
+	$scope.notifications = [];
+	common.asynCall({
+		url: PATH_NAME + "/notifictionDetails",
+		method: 'post'
+	}).then( function(resVal){
+		console.log( "notifications", resVal)
+		$scope.notifications = resVal.data;
+    }, function(error){
+    	console.log(error);
+    });
+	
 	//distUserDetails
-
+	$scope.notifyUser = [];
 	common.asynCall({
 		url: PATH_NAME + "/distUserDetails",
 		method: 'post'
 	}).then( function(resVal){
 		console.log( "distUserDetails", resVal)
+		$scope.notifyUser = resVal.data;
     }, function(error){
     	console.log(error);
     });
+
+    $scope.selectedByChngUpdate = function(obj){
+    	console.log(obj.selectedByUser)
+    	$scope.supplierFormData.vendor_selection.selected_by = obj.selectedByUser._id || "";
+    }
 
 	//Init All events
     $scope.openSupplier = function(suppDatas){

@@ -7,6 +7,7 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 
 		$timeout(function(){
 			objAjaxLoader = $('#ajaxLoader');
+			console.log("objAjaxLoader" , objAjaxLoader)
 			objAjaxLoader.hide();
 		} , 150);
 	}
@@ -30,10 +31,12 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 	}
 
 	this.showLoader = function(){
+		//objAjaxLoader = $('#ajaxLoader');
 		objAjaxLoader.show();
 	}
 
 	this.hideLoader = function(){
+		objAjaxLoader = $('#ajaxLoader');
 		objAjaxLoader.hide();
 	}
 

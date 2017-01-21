@@ -83,12 +83,12 @@ exports.addSupplier = function(suppData , callback){
 		}
 	});
 
-	newSupplier.save(function (err, product, numAffected) {
+	newSupplier.save(function (err, result, numAffected) {
 		if(err){
 			console.log("newSupplier" , err)
 			return callback(err)
 		}
-		callback(null);
+		callback(null , result);
 	})
 };
 

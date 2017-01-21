@@ -6,6 +6,7 @@ var supplierService = require('../services/supplier-services');
 var InvoiceService = require('../services/invoice-services');
 var userService = require('../services/user-services');
 var uploadService = require('../services/upload-services');
+var notify = require('../controls/notify-user');
 
 var router = express.Router();
 
@@ -43,7 +44,6 @@ router.post('/distUserDetails', restrict , function(req, res, next) {
 
 router.post('/statusChanges' , restrict , function(req, res, next){
 	
-
 	uploadService.uploadFiles(req, res, null , function(uplErr){
 
 		if(uplErr){
@@ -85,20 +85,46 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject);
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
-			supplierService.addSupplier(bodyObject , function(error){
+			supplierService.addSupplier(bodyObject , function(error , result){
 				if(error){
 					console.log("Supplier Not Created" , error);
 					res.status(400);
 					return res.json(error);
 				}
-				console.log("Data Entered Successfully");
-		  		return res.json({ OK : "User Entered Successfully" });
+
+				//console.log("Data Entered Successfully" , result);
+				notify.notifyUser( "supplier" , result , function(error , nots_data){
+
+					if(error){
+						return res.json( { error : "Notification Not added "+error});
+					}
+		  			return res.json({ OK : "User Entered Successfully" });
+				});
 			});
 		});
 
 	}else{
 		res.json({ error : "Invalid data..!!" });
 	}
+});
+
+
+router.post('/notifictionDetails', restrict , function(req, res, next) {
+	
+	var userOrgId = req.user.orgId;
+	var userId = req.user._id;
+	var searchQuery = { 
+		orgId : new ObjectId(userOrgId),
+		sendTo : new ObjectId(userId),
+		isVieved : false
+	}
+	notify.getNotifications( searchQuery , function(error , notifData){
+		if(error){
+			console.log("Notification Not Retrived" , error);
+			return res.json(error);
+		}
+  		res.json(notifData);
+	});
 });
 
 

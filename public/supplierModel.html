@@ -247,7 +247,11 @@
                   </td>
                   <td>Selected by</td>
                   <td>
-                    <input type="text" class="form-control" name="selected_by" ng-model="supplierFormData.vendor_selection.selected_by" ng-disabled="isReadOnly" placeholder="Enter selected by">
+                    <!-- <input type="text" class="form-control" name="selected_by" ng-model="supplierFormData.vendor_selection.selected_by" ng-disabled="isReadOnly" placeholder="Enter selected by"> -->
+
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select User--</option>
+                    </select>
                   </td>
                 </tr>
                 <tr>
