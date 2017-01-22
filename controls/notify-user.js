@@ -45,6 +45,7 @@ function supplierNoticeDataChanges(data, next){
 			isVieved : false,
 			viewDate : "",
 			tabArea : "supplier",
+			refKey : data._id,
 			title : "PO Approval Request from " + data.userName,
 			description : "You have Pending PO Approval Request from" + data.userName + ', against PO001.'
 		}

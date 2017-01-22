@@ -5,6 +5,7 @@ var notifySchema = new Schema({
 	sendTo : Schema.Types.ObjectId, 
 	orgId : Schema.Types.ObjectId,
 	sendBy : Schema.Types.ObjectId,
+	refKey : Schema.Types.ObjectId,
 	isVieved : Boolean,
 	viewDate : Date,
 	tabArea : String,

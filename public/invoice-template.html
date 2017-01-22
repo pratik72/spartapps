@@ -24,30 +24,30 @@
                         <tbody>
                             <tr ng-repeat="invoiceData in invoiceList track by $index">
 							    <td>
-							    	<span class="text-muted">{{$index+1}}</span>
+							    	<span class="text-muted">{% $index+1 %}</span>
 							    </td>
 							    <td>
 							    	<a href="#" ng-click="openInvoice(invoiceData)">
-							    		<span class="text-muted">{{invoiceData.supplier_name}}</span>
+							    		<span class="text-muted">{% invoiceData.supplier_name %}</span>
 							    	</a>
 							    </td>
 							    <td>
-							    	<span class="text-muted">{{invoiceData.PO_number}}</span>
+							    	<span class="text-muted">{% invoiceData.PO_number %}</span>
 							    </td>
 							    <td>
-							    	<p class="text-muted">{{invoiceData.bill_number}}</p>
+							    	<p class="text-muted">{% invoiceData.bill_number %}</p>
 							    </td>
 							    <td>
-							    	<p class="text-muted">{{invoiceData.userName}}</p>
+							    	<p class="text-muted">{% invoiceData.userName %}</p>
 							    </td>
 							    <td>
-							    	<p class="text-muted">{{invoiceData.create_date | date:'dd/MM/yyyy' }}</p>
+							    	<p class="text-muted">{% invoiceData.create_date | date:'dd/MM/yyyy' %}</p>
 							    </td>
 							    <td>
-							    	<p class="text-muted">{{invoiceData.Quantity}}</p>
+							    	<p class="text-muted">{% invoiceData.Quantity %}</p>
 							    </td>
 							    <td>
-							    	<p class="text-muted">{{invoiceData.Rate}}</p>
+							    	<p class="text-muted">{% invoiceData.Rate %}</p>
 							    </td>
 							</tr>
                         </tbody>

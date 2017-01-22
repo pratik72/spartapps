@@ -7,6 +7,11 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Supplier</h4>
+        <div class="pull-right" ng-if="supplierFormData.sa_status.status == 'pending'">
+          <button class="btn btn-default" ng-click="openStatusModel('supplier' , supplierFormData , 'Accept')">Approve</button>
+          <button class="btn btn-danger" ng-click="openStatusModel('supplier' , supplierFormData , 'Decline')">Decline</button>
+        </div>
+        <hr/>
       </div>
       <form name="supplierForm" ng-submit="supplierCreate()" enctype="multipart/form-data">
         <div class="modal-body">
@@ -313,42 +318,42 @@
                   <td>Statutory Registration Certificates</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="statutory_registration_certificates" onchange="angular.element(this).scope().setFiles(this , 'statutory_registration_certificates')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{{supplierFormData.doc_attachment.statutory_registration_certificates}}" ng-show="isReadOnly" target="_blank">{{supplierFormData.doc_attachment.statutory_registration_certificates}}</a>
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.statutory_registration_certificates %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.statutory_registration_certificates %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Cancelled Cheque</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="cancelled_cheque" onchange="angular.element(this).scope().setFiles(this , 'cancelled_cheque')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{{supplierFormData.doc_attachment.cancelled_cheque}}" ng-show="isReadOnly" target="_blank">{{supplierFormData.doc_attachment.cancelled_cheque}}</a>
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.cancelled_cheque %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.cancelled_cheque %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Quotation</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="quotation" onchange="angular.element(this).scope().setFiles(this , 'quotation')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{{supplierFormData.doc_attachment.quotation}}" ng-show="isReadOnly" target="_blank">{{supplierFormData.doc_attachment.quotation}}</a>
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.quotation %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.quotation %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Agreements if any</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="agreements" onchange="angular.element(this).scope().setFiles(this , 'agreements')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{{supplierFormData.doc_attachment.agreements}}" ng-show="isReadOnly" target="_blank">{{supplierFormData.doc_attachment.agreements}}</a>
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.agreements %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.agreements %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Vendor Profile</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="vendor_profile" onchange="angular.element(this).scope().setFiles(this , 'vendor_profile')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{{supplierFormData.doc_attachment.vendor_profile}}" ng-show="isReadOnly" target="_blank">{{supplierFormData.doc_attachment.vendor_profile}}</a>
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.vendor_profile %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.vendor_profile %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Other Documents</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="other_doc" onchange="angular.element(this).scope().setFiles(this , 'other_doc')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{{supplierFormData.doc_attachment.other_doc}}" ng-show="isReadOnly" target="_blank">{{supplierFormData.doc_attachment.other_doc}}</a>
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.other_doc %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.other_doc %}</a>
                   </td>
                 </tr>
               </tbody>

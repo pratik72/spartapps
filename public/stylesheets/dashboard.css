@@ -36,3 +36,17 @@ img.ajax-loader-img {
     left: 40%;
     width: 5%;
 }
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+.modal-title{
+    display: inline;
+}
+
+.pull-right{
+    margin-right: 60px;
+    margin-top: -15px;
+}

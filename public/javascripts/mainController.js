@@ -1,5 +1,10 @@
 var app = angular.module('spartapps', []);
 
+app.config(function($interpolateProvider) {
+	$interpolateProvider.startSymbol("{%");
+	return $interpolateProvider.endSymbol("%}");
+});
+
 app.controller('mainController', ['common' , '$scope' , '$timeout',function(common , $scope , $timeout) {
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
 	var allTemplates = APP_CONSTANT.TEMPLATES;
@@ -98,6 +103,25 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	$scope.supplierFormData.vendor_selection.selected_by = obj.selectedByUser._id || "";
     }
 
+    $scope.openNotification = function(notData){
+    	var tabs = notData.tabArea;
+    	console.log(notData);
+    	$scope.changeDashBody( tabs , function(){
+	    	var thisSupp = $scope.supplierList.filter(function(a){
+	    		return a._id == notData.refKey; 
+	    	});
+
+	    	if(thisSupp.length > 0){
+	    		$scope.openSupplier(thisSupp[0]);
+	    		markNotificationAsView(notData);
+	    	}else{
+	    		alert("Notification reference not found..!")
+	    	}
+    	});
+    	
+    	//$scope.openSupplier();
+    }
+
 	//Init All events
     $scope.openSupplier = function(suppDatas){
     	resetSupplierModel();
@@ -130,19 +154,31 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	})
     }
 
-    $scope.openStatusModel = function(action , row , fieldSet){
+    $scope.openStatusModel = function(action , row , statusVal){
     	if($scope.permissions.ApprvSupplierReq){
     		$scope.initStatusData.action = action;
 	    	$scope.initStatusData.row = row;
 	    	$scope.initStatusData.fieldSet = APP_CONSTANT.SUPPLIER_JSON.sa_status;
 
-	    	$scope.statusForm.updatedStatus = "";
+	    	$scope.statusForm.updatedStatus = statusVal || "";
 	    	$scope.statusForm.status_desc = "";
 	    	$("#statusModal").modal('show');
     	}else{
     		alert("You dont have permission to change Status")
     	}
-    	
+    }
+
+    function markNotificationAsView(notsData){
+    	//TODO : marknotification view changes
+    	/*common.asynCall({
+			url: PATH_NAME + "/distUserDetails",
+			method: 'post'
+		}).then( function(resVal){
+			console.log( "distUserDetails", resVal)
+			$scope.notifyUser = resVal.data;
+	    }, function(error){
+	    	console.log(error);
+	    });*/
     }
 
     $scope.statusChangeSubmit = function(){
@@ -260,14 +296,14 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
-    $scope.changeDashBody = function(templateName){
+    $scope.changeDashBody = function(templateName , callback){
 		$scope.dashBody = allTemplates[ templateName ];
 
 		$timeout(function(){
 			if( templateName.indexOf('supplier') > -1 ){
-				SupplierTemplateLoadData();	
+				SupplierTemplateLoadData( callback );	
 			}else if( templateName.indexOf('invoice') > -1 ){
-				InvoiceTemplateLoadData();
+				InvoiceTemplateLoadData( callback );
 			}
 			
 		} , 300);
