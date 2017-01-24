@@ -75,16 +75,20 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     });
 
 	//notificationDetails
-	$scope.notifications = [];
-	common.asynCall({
-		url: PATH_NAME + "/notifictionDetails",
-		method: 'post'
-	}).then( function(resVal){
-		console.log( "notifications", resVal)
-		$scope.notifications = resVal.data;
-    }, function(error){
-    	console.log(error);
-    });
+	getNotifications();
+
+    function getNotifications(){
+    	$scope.notifications = [];
+		common.asynCall({
+			url: PATH_NAME + "/notifictionDetails",
+			method: 'post'
+		}).then( function(resVal){
+			console.log( "notifications", resVal)
+			$scope.notifications = resVal.data;
+	    }, function(error){
+	    	console.log(error);
+	    });	
+    }
 	
 	//distUserDetails
 	$scope.notifyUser = [];
@@ -169,16 +173,30 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     function markNotificationAsView(notsData){
-    	//TODO : marknotification view changes
-    	/*common.asynCall({
-			url: PATH_NAME + "/distUserDetails",
-			method: 'post'
+    	var sendKeys = new FormData();    	
+    	sendKeys.append( "primKey" , notsData._id );
+    	
+    	common.asynCall({
+			url: PATH_NAME + "/markNotificationAsViewed",
+			method: 'post',
+			param : sendKeys
 		}).then( function(resVal){
-			console.log( "distUserDetails", resVal)
-			$scope.notifyUser = resVal.data;
+			console.log( "markNotificationAsViewed", resVal);
+			var retData = resVal.data;
+
+			for (var i = 0; i < $scope.notifications.length; i++) {
+				if($scope.notifications[i]._id == retData._id && retData.isViewed){
+					delete $scope.notifications[i];
+				}
+			};
+
+			/*$scope.notifications = $scope.notifications.filter(function(arg){
+				return arg.isViewed == false;
+			});*/
+			
 	    }, function(error){
 	    	console.log(error);
-	    });*/
+	    });
     }
 
     $scope.statusChangeSubmit = function(){

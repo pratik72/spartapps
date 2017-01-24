@@ -23,6 +23,15 @@ exports.getNotifications = function(data , callback){
 	})
 }
 
+exports.setNotificationsViewed = function(query , updateData , callback){
+	Notify.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+		console.log("err" , err);
+		console.log("doc" , doc);
+	    if (err) return callback({ error: err } , null);
+	    callback(null , doc)
+	});
+}
+
 function tabSpecificNotification( tabs , data ,callback){
 
 	switch(tabs) {
@@ -42,7 +51,7 @@ function supplierNoticeDataChanges(data, next){
 			sendTo : data.vendor_selection.selected_by, 
 			orgId : data.orgId,
 			sendBy : data.user_id,
-			isVieved : false,
+			isViewed : false,
 			viewDate : "",
 			tabArea : "supplier",
 			refKey : data._id,

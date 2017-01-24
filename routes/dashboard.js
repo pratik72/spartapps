@@ -116,7 +116,7 @@ router.post('/notifictionDetails', restrict , function(req, res, next) {
 	var searchQuery = { 
 		orgId : new ObjectId(userOrgId),
 		sendTo : new ObjectId(userId),
-		isVieved : false
+		isViewed : false
 	}
 	notify.getNotifications( searchQuery , function(error , notifData){
 		if(error){
@@ -124,6 +124,30 @@ router.post('/notifictionDetails', restrict , function(req, res, next) {
 			return res.json(error);
 		}
   		res.json(notifData);
+	});
+});
+
+router.post('/markNotificationAsViewed', restrict , function(req, res, next) {
+
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+		if(uplErr){
+			res.json({error : "File not Uploaded..!"});	
+		}
+
+		var uniqID = req.body.primKey;
+		var searchQuery = {
+			_id : new ObjectId(uniqID),
+		}
+
+		var setValue = { isViewed : true };
+		notify.setNotificationsViewed( searchQuery , setValue , function(error , notifData){
+			if(error){
+				console.log("Notification Not Retrived" , error);
+				return res.json(error);
+			}
+	  		res.json(notifData);
+		});
+		
 	});
 });
 
