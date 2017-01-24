@@ -4,6 +4,7 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 
 	this.init = function(scope){
 		scope.ajaxloader = APP_CONSTANT.TEMPLATES.ajaxloader;
+		scope.status_Model = APP_CONSTANT.TEMPLATES.statusModel;
 
 		$timeout(function(){
 			objAjaxLoader = $('#ajaxLoader');

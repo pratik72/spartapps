@@ -139,13 +139,16 @@ router.post('/markNotificationAsViewed', restrict , function(req, res, next) {
 			_id : new ObjectId(uniqID),
 		}
 
-		var setValue = { isViewed : true };
-		notify.setNotificationsViewed( searchQuery , setValue , function(error , notifData){
+		var setValue = { 
+			isViewed : true,
+			viewDate : new Date()
+		};
+		notify.setNotificationsViewed( searchQuery , setValue , function(error , nData){
 			if(error){
 				console.log("Notification Not Retrived" , error);
 				return res.json(error);
 			}
-	  		res.json(notifData);
+	  		res.json(nData);
 		});
 		
 	});
@@ -199,6 +202,9 @@ function mergeInvoiceUploadData(files , tmpObj){
 	tmpObj.doc_attachment.invoice = files[0] ? files[0].filename : "";
 	tmpObj.doc_attachment.PO = files[1] ? files[1].filename : "";
 	tmpObj.doc_attachment.other_doc = files[2] ? files[2].filename : "";
+
+	tmpObj["iv_status"] = JSON.parse( tmpObj["iv_status"] );
+	tmpObj["iv_status"].status = "pending";
 
 	var allAttachParam = [ "invoice" , "PO" , "other_doc"];
 	for (var k = 0; k < allAttachParam.length; k++) {
@@ -270,7 +276,23 @@ function changeActionStatus(req , res , callback){
 			return callback({ ok : data})
 		});
 	}else if(req.query.action == 'invoice'){
-		
+		var rowId = req.body.rowId;
+		rowId = rowId ? new ObjectId(rowId) : {};
+
+		var rowQuery = { _id : rowId };
+		delete req.body.rowId;
+		var rowData = req.body && req.body.status;
+		if (!rowData) return callback({error : "Bad data structure..!"});
+		rowData = {
+			iv_status : JSON.parse( rowData )
+		};
+
+		InvoiceService.updateInvoice(rowQuery , rowData , function(error , data){
+			if(error){
+				return callback({error : error});
+			}
+			return callback({ ok : data})
+		});
 	}else{
 		return callback({error : "Wrong action...!"})
 	}

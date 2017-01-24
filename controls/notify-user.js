@@ -24,7 +24,7 @@ exports.getNotifications = function(data , callback){
 }
 
 exports.setNotificationsViewed = function(query , updateData , callback){
-	Notify.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+	Notify.findOneAndUpdate(query, updateData, {new: true} , function(err, doc){
 		console.log("err" , err);
 		console.log("doc" , doc);
 	    if (err) return callback({ error: err } , null);

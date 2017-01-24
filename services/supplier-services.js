@@ -104,8 +104,6 @@ exports.findSupplier = function(supp_id, callback){
 
 exports.updateSupplier = function(supp_query, updateData ,callback){
 	var query = supp_query || {};
-	console.log("query"  ,query)
-	console.log("updateData"  ,updateData)
 	if(!updateData){
 		return callback({error : "Update Data not Provided"} , null);
 	}

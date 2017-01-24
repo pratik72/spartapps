@@ -21,6 +21,12 @@ var invoiceSchema = new Schema({
 	    invoice: String,
 	    PO: String,
 	    other_doc: String
+	},
+	iv_status : {
+		status: String,
+		status_description : String,
+		status_changedBy: String,
+		status_changeDate : String
 	}
 });
 

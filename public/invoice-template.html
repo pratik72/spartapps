@@ -17,7 +17,7 @@
 						    <th>Bill No.</th>
 						    <th>User</th>
 						    <th>Date</th>
-						    <th>Quantity</th>
+						    <th>Status</th>
 						    <th>Rate</th>
 						  </tr>
 						</thead>
@@ -44,7 +44,10 @@
 							    	<p class="text-muted">{% invoiceData.create_date | date:'dd/MM/yyyy' %}</p>
 							    </td>
 							    <td>
-							    	<p class="text-muted">{% invoiceData.Quantity %}</p>
+							    	<a ng-hide="invoiceData.iv_status.status_changedBy && invoiceData.iv_status.status_changeDate" href="#" ng-click="openStatusModel('invoice' , invoiceData)">
+							    		<span class="text-danger">{% invoiceData.iv_status.status %}</span>
+							    	</a>
+							    	<span ng-show="invoiceData.iv_status.status_changedBy && invoiceData.iv_status.status_changeDate" class="text-success">{% invoiceData.iv_status.status %}</span>
 							    </td>
 							    <td>
 							    	<p class="text-muted">{% invoiceData.Rate %}</p>

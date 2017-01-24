@@ -120,6 +120,12 @@ var APP_CONSTANT = {
 		    invoice: "",
 		    PO: "",
 		    other_doc: ""
+		},
+		iv_status : {
+			status: "",
+			status_description : "",
+			status_changedBy: "",
+			status_changeDate : ""
 		}
 	},
 	USER_ROLES : [

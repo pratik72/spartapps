@@ -33,7 +33,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	};
 
 	$scope.supplier_Model = allTemplates.supplierModel;
-	$scope.status_Model = allTemplates.statusModel;
+	
 	$scope.invoice_Model = allTemplates.invoiceModel;
 
 	$scope.initStatusData = APP_CONSTANT.STATUS_MODEL_JSON;
@@ -83,7 +83,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			url: PATH_NAME + "/notifictionDetails",
 			method: 'post'
 		}).then( function(resVal){
-			console.log( "notifications", resVal)
 			$scope.notifications = resVal.data;
 	    }, function(error){
 	    	console.log(error);
@@ -96,20 +95,17 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		url: PATH_NAME + "/distUserDetails",
 		method: 'post'
 	}).then( function(resVal){
-		console.log( "distUserDetails", resVal)
 		$scope.notifyUser = resVal.data;
     }, function(error){
     	console.log(error);
     });
 
     $scope.selectedByChngUpdate = function(obj){
-    	console.log(obj.selectedByUser)
     	$scope.supplierFormData.vendor_selection.selected_by = obj.selectedByUser._id || "";
     }
 
     $scope.openNotification = function(notData){
     	var tabs = notData.tabArea;
-    	console.log(notData);
     	$scope.changeDashBody( tabs , function(){
 	    	var thisSupp = $scope.supplierList.filter(function(a){
 	    		return a._id == notData.refKey; 
@@ -139,18 +135,22 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	$("#mySuppModal").modal('show');
     }
 
+    $scope.supplierForInvoice = [];
     $scope.openInvoice = function(invData){
     	SupplierTemplateLoadData(function(){
     		$scope.isReadOnly = false;
 	    	resetInvoiceModel();
+	    	$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
+	    		return obj.sa_status.status == "Accept";
+	    	});
 	    	if(invData){
 	    		$scope.isReadOnly = true;
+
 	    		$scope.invoiceFormData = angular.copy(invData);
 
 	    		var tmpObj = $scope.supplierList.filter(function(obj){
 	    			return obj._id == $scope.invoiceFormData.supplierId;
 	    		})
-	    		console.log($scope.invoiceFormData , tmpObj)
 
 	    		$scope.suppModel = tmpObj[0]
 	    	}
@@ -181,19 +181,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			method: 'post',
 			param : sendKeys
 		}).then( function(resVal){
-			console.log( "markNotificationAsViewed", resVal);
-			var retData = resVal.data;
-
-			for (var i = 0; i < $scope.notifications.length; i++) {
-				if($scope.notifications[i]._id == retData._id && retData.isViewed){
-					delete $scope.notifications[i];
-				}
-			};
-
-			/*$scope.notifications = $scope.notifications.filter(function(arg){
-				return arg.isViewed == false;
-			});*/
-			
+			getNotifications();			
 	    }, function(error){
 	    	console.log(error);
 	    });
@@ -220,9 +208,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			method:'post',
 			param:  tmpFormData
 		}).then( function(resVal){
-			console.log("Status Change==" , resVal)
 			$("#statusModal").modal('hide');
-			$scope.changeDashBody("supplier");
+			$("#mySuppModal").modal('hide');
+			$scope.changeDashBody( tempStatus.action );
 			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);
@@ -254,7 +242,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			method:'post',
 			param:  tmpData
 		}).then( function(resVal){
-			console.log("Create supplier==" , resVal)
 			$("#mySuppModal").modal('hide');
 			$scope.changeDashBody("supplier");
 			common.hideLoader();
@@ -293,7 +280,11 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
     	var tmpData = new FormData();
     	for (var key in $scope.invoiceFormData) {
-    		tmpData.append( key , $scope.invoiceFormData[key] );
+    		if(typeof $scope.invoiceFormData[key] == "object"){
+    			tmpData.append( key , JSON.stringify($scope.invoiceFormData[key]) );
+    		}else{
+    			tmpData.append( key , $scope.invoiceFormData[key] );
+    		}
     	};
 
     	tmpData.append( "invoice" , $scope.invoice );
@@ -305,7 +296,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			method:'post',
 			param:  tmpData
 		}).then( function(resVal){
-			console.log("Create Invoice==" , resVal)
 			$("#myInvoiceModal").modal('hide');
 			$scope.changeDashBody("invoice");
 			common.hideLoader();
@@ -334,7 +324,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			url: PATH_NAME+ APP_CONSTANT.GET_SUPPLIERS,
 			method:'post'
 		}).then( function(resVal){
-			console.log("Get supplier==" , resVal)
 			$scope.supplierList = resVal.data
 			if(callback){
 				callback();
@@ -352,7 +341,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			url: PATH_NAME+ APP_CONSTANT.GET_INVOICES,
 			method:'post'
 		}).then( function(resVal){
-			console.log("Get Invoice==" , resVal)
 			$scope.invoiceList = resVal.data
 			common.hideLoader();
 	    }, function(error){

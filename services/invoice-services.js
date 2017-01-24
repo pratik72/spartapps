@@ -19,6 +19,12 @@ exports.addInvoice = function(invoiceData , callback){
 		    invoice: invoiceData.doc_attachment.invoice,
 		    PO: invoiceData.doc_attachment.PO,
 		    other_doc: invoiceData.doc_attachment.other_doc
+		},
+		iv_status : {
+			status: invoiceData.iv_status.status,
+			status_description : invoiceData.iv_status.status_description,
+			status_changedBy: invoiceData.iv_status.status_changedBy,
+			status_changeDate : invoiceData.iv_status.status_changeDate
 		}
 	});
 
@@ -39,4 +45,16 @@ exports.findInvoice = function(inv_id, callback){
 	Invoice.find( invIdParam , function(error, org){
 		callback(error , org)
 	})
+}
+
+exports.updateInvoice = function(inv_query, updateData ,callback){
+	var query = inv_query || {};
+	if(!updateData){
+		return callback({error : "Update Data not Provided"} , null);
+	}
+
+	Invoice.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+	    if (err) return callback({ error: err } , null);
+	    callback(null , doc)
+	});
 }
