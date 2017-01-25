@@ -44,7 +44,7 @@ router.post('/orgcreate', restrict , function(req, res, next) {
 			return res.render('Admin', { error : error });
 		}
 		console.log("Data Entered Successfully");
-  		res.redirect('/');
+  		res.redirect('/app-admin');
 	});
 });
 
@@ -58,6 +58,20 @@ router.post('/getAllOrgList', restrict , function(req, res, next) {
 		}
 		console.log("orgs" , orgs);
   		res.send(orgs);
+	});
+});
+
+
+//Get All Users
+router.post('/getAllUserList', restrict , function(req, res, next) {
+	var allUsers = {};
+	userService.findAllUsers( allUsers, function(error , result){
+		if(error){
+			console.log("Data Not Retrived" , error);
+			return res.render('Admin', { error : error });
+		}
+		console.log("Users" , result);
+  		res.json(result);
 	});
 });
 

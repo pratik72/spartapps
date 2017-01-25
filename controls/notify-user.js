@@ -38,6 +38,9 @@ function tabSpecificNotification( tabs , data ,callback){
 	    case "supplier":
 	        supplierNoticeDataChanges(data , callback)
 	        break;
+	    case "invoice":
+	        invoiceNoticeDataChanges(data , callback)
+	        break;
 	    case n:
 	        //TODO
 	        break;
@@ -46,6 +49,24 @@ function tabSpecificNotification( tabs , data ,callback){
 }
 
 function supplierNoticeDataChanges(data, next){
+	if(data){
+		var noticeData = {
+			sendTo : data.vendor_selection.selected_by, 
+			orgId : data.orgId,
+			sendBy : data.user_id,
+			isViewed : false,
+			viewDate : "",
+			tabArea : "supplier",
+			refKey : data._id,
+			title : "PO Approval Request from " + data.userName,
+			description : "You have Pending PO Approval Request from" + data.userName + ', against PO001.'
+		}
+
+		next(noticeData);
+	}
+}
+
+function invoiceNoticeDataChanges(data, next){
 	if(data){
 		var noticeData = {
 			sendTo : data.vendor_selection.selected_by, 

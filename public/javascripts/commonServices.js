@@ -1,3 +1,8 @@
+app.config(function($interpolateProvider) {
+	$interpolateProvider.startSymbol("{%");
+	return $interpolateProvider.endSymbol("%}");
+});
+
 app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 
 	var objAjaxLoader = null;
@@ -8,7 +13,6 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 
 		$timeout(function(){
 			objAjaxLoader = $('#ajaxLoader');
-			console.log("objAjaxLoader" , objAjaxLoader)
 			objAjaxLoader.hide();
 		} , 150);
 	}

@@ -1,0 +1,56 @@
+<div class="container">
+
+	<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" data-background-color="green">
+                    <h4 class="title">Oraganizations</h4>
+                    <button class="btn btn-default pull-right" ng-click="openOrgMod()">Create Organization</button>
+                </div>
+                <div class="card-content table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+						 	<tr>
+							    <th>No.</th>
+							    <th>Name</th>
+							    <th>CEO</th>
+							    <th>State</th>
+							    <th>Status</th>
+						  	</tr>
+						</thead>
+                        <tbody>
+                            <tr ng-repeat="usrData in AllOrgsData track by $index">
+							    <td>
+							    	<span class="text-muted">{% $index+1 %}</span>
+							    </td>
+							    <td>
+				        			<a href="#" ng-click="openSupplier(usrData)">
+							    		<span class="text-muted">{% usrData.orgName %}</span>
+							    	</a>
+							    </td>
+							    <td>
+							    	<span class="text-muted">{% usrData.ceoName %}</span>
+							    </td>
+							    <td>
+							    	<p class="text-muted">{% usrData.orgState %},{% usrData.orgCountry %}</p>
+							    </td>
+							    <td>
+							    	{% usrData.orgStatus %}
+							    </td>
+
+							</tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+<div ng-include="orgcreate_Model">
+    
+</div>

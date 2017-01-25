@@ -1,0 +1,53 @@
+<!-- Modal -->
+<div id="userCreateModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create User</h4>
+      </div>
+      <form name="signupForm" ng-submit="submitSignUp()">
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="firstName">First Name:</label>
+              <input type="text" required class="form-control" name="firstName" ng-model="userForm.firstName">
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name:</label>
+              <input type="text" required class="form-control" id="lastName" name="lastName" ng-model="userForm.lastName">
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" required class="form-control" id="email" name="email" ng-model="userForm.email">
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" required class="form-control" id="password" name="password" ng-model="userForm.password">
+            </div>
+            <div class="form-group">
+              <label for="organization">Organization:</label>
+              <select ng-options="item as item.orgName for item in AllOrgsData" ng-model="orgModel" name="organization" required ng-change="orgUpdate(this)" class="form-control">
+                <option value="">--select organization--</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="role">User Role:</label>
+              <!-- <input type="text" class="form-control" id="role" name="role" ng-model="userForm.role" required> -->
+              <select ng-options="item as item.name for item in AllUserRoles" ng-model="userRole" name="role" required ng-change="roleUpdate(this)" class="form-control">
+                <option value="">--select organization--</option>
+              </select>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

@@ -2,6 +2,7 @@
 var APP_CONSTANT = {
 	PATH_NAME: window.location.pathname,
 	GET_ORG_LIST: '/getAllOrgList',
+	GET_USER_LIST: '/getAllUserList',
 	SUBMIT_USERDATA: '/signup',
 	GET_CURRENT_USR: '/userDetails',
 	CREATE_SUPPLIER : '/createSupplier',

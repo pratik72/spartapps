@@ -1,10 +1,5 @@
 var app = angular.module('spartapps', []);
 
-app.config(function($interpolateProvider) {
-	$interpolateProvider.startSymbol("{%");
-	return $interpolateProvider.endSymbol("%}");
-});
-
 app.controller('mainController', ['common' , '$scope' , '$timeout',function(common , $scope , $timeout) {
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
 	var allTemplates = APP_CONSTANT.TEMPLATES;
