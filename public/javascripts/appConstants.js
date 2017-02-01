@@ -16,6 +16,9 @@ var APP_CONSTANT = {
 		invoice : "invoice-template.html",
 		supplierModel : "supplierModel.html",
 		invoiceModel : "invoiceModel.html",
+		sidebar : "templates/sidebar.html",
+		purchaseOrd : "templates/purchase-ord-template.html",
+		purchaseOrdModel : "templates/purchaseOrdModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
 	SUPPLIER_JSON : {
@@ -54,15 +57,6 @@ var APP_CONSTANT = {
 		    "TIN": "",
 		    "service_tax_no": ""
 		},
-		"product_information": {
-		    "product_name": "",
-		    "product_discreption": "",
-		    "HSN_code": "",
-		    "quantity": "",
-		    "rate": "",
-		    "amount": "",
-		    "payment_terms" : ""
-		},
 		"banking_details": {
 		    "bank_name": "",
 		    "IFSC_code": "",
@@ -75,11 +69,6 @@ var APP_CONSTANT = {
 		    "shortlisted_by": "",
 		    "division": ""
 		},
-		"budgets_and_approvals": {
-		    "location": "",
-		    "budget_head": "",
-		    "period": ""
-		},
 		"customer_reference": [{
 		    "customer_references1": "",
 		    "Name": "",
@@ -88,10 +77,41 @@ var APP_CONSTANT = {
 		}],
 		"doc_attachment": {
 		    "statutory_registration_certificates": "",
-		    "cancelled_cheque": "",
-		    "quotation": "",
 		    "agreements": "",
 		    "vendor_profile": "",
+		    "other_doc": []
+		}
+	},
+	PO_JSON : {
+		po_status : {
+			status:"",
+			status_description : "",
+			status_changedBy: "",
+			status_changeDate : "",
+		},
+		"product_information": {
+		    "product_name": "",
+		    "product_discreption": "",
+		    "HSN_code": "",
+		    "quantity": "",
+		    "rate": "",
+		    "amount": "",
+		    "payment_terms" : ""
+		},
+		"vendor_selection": {
+		    "suggested_by": "",
+		    "selected_by": "",
+		    "shortlisted_by": "",
+		    "division": ""
+		},
+		"budgets_and_approvals": {
+		    "location": "",
+		    "budget_head": "",
+		    "period": ""
+		},
+		"doc_attachment": {
+		    "cancelled_cheque": "",
+		    "quotation": "",
 		    "other_doc": []
 		}
 	},

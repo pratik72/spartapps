@@ -5,12 +5,15 @@
     
 </div>
 
-<div>
-	{{> navbar}}
-</div>
+<div class="wrapper">
+	
 
-<div ng-include="dashBody">
-    
+	<div ng-include="sidebar"></div>
+
+	<div class="main-panel">
+		{{> navbar}}
+		<div ng-include="dashBody"></div>
+	</div>
 </div>
 
 <div ng-include="status_Model">

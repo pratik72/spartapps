@@ -41,15 +41,6 @@ exports.addSupplier = function(suppData , callback){
 		    TIN: suppData.statutory_information.TIN,
 		    service_tax_no: suppData.statutory_information.service_tax_no
 		},
-		product_information: {
-		    product_name: suppData.product_information.product_name,
-		    product_discreption: suppData.product_information.product_discreption,
-		    HSN_code: suppData.product_information.HSN_code,
-		    quantity: suppData.product_information.quantity,
-		    rate: suppData.product_information.rate,
-		    amount: suppData.product_information.amount,
-		    payment_terms : suppData.product_information.payment_terms
-		},
 		banking_details: {
 		    bank_name: suppData.banking_details.bank_name,
 		    IFSC_code: suppData.banking_details.IFSC_code,
@@ -62,11 +53,6 @@ exports.addSupplier = function(suppData , callback){
 		    shortlisted_by: suppData.vendor_selection.shortlisted_by,
 		    division: suppData.vendor_selection.division
 		},
-		budgets_and_approvals: {
-		    location: suppData.budgets_and_approvals.location,
-		    budget_head: suppData.budgets_and_approvals.budget_head,
-		    period: suppData.budgets_and_approvals.period
-		},
 		/*customer_reference: [{
 		    customer_references1: suppData.customer_reference.customer_references1,
 		    Name: suppData.customer_reference.Name,
@@ -75,8 +61,6 @@ exports.addSupplier = function(suppData , callback){
 		}],*/
 		doc_attachment: {
 		    statutory_registration_certificates: suppData.doc_attachment.statutory_registration_certificates,
-		    cancelled_cheque: suppData.doc_attachment.cancelled_cheque,
-		    quotation: suppData.doc_attachment.quotation,
 		    agreements: suppData.doc_attachment.agreements,
 		    vendor_profile: suppData.doc_attachment.vendor_profile,
 		    other_doc: suppData.doc_attachment.other_doc

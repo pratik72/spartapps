@@ -17,7 +17,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		"Data Entry Ops" : "YY000"
 	}
 
-	$scope.orgDivision = ["Marketing","HR","Design","Procurement","Real Estate","Fianance"]
+	$scope.orgDivision = ["Marketing","HR","Design","Procurement","Real Estate","Fianance" , "Operations"]
 	$scope.orgLocation = ["HR BR","Electonic city","white field","Brigade"]
 
 	common.init( $scope );
@@ -26,6 +26,11 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		updatedStatus : "",
 		status_desc : ""
 	};
+
+	$scope.sidebar = allTemplates.sidebar;
+	$scope.purchaseOrd = allTemplates.purchaseOrd;
+	
+	$scope.purchaseOrd_Model = allTemplates.purchaseOrdModel;
 
 	$scope.supplier_Model = allTemplates.supplierModel;
 	
@@ -130,6 +135,10 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	$("#mySuppModal").modal('show');
     }
 
+    $scope.openPurchaseOrd = function(){
+    	$("#myPOModal").modal('show');
+    }
+
     $scope.supplierForInvoice = [];
     $scope.openInvoice = function(invData){
     	SupplierTemplateLoadData(function(){
@@ -226,8 +235,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	};
 
     	tmpData.append( "statutory_registration_certificates" , $scope.statutory_registration_certificates );
-    	tmpData.append( "cancelled_cheque" , $scope.cancelled_cheque );
-    	tmpData.append( "quotation" , $scope.quotation );
     	tmpData.append( "agreements" , $scope.agreements );
     	tmpData.append( "vendor_profile" , $scope.vendor_profile );
     	tmpData.append( "other_doc" , $scope.other_doc );
@@ -307,9 +314,15 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 				SupplierTemplateLoadData( callback );	
 			}else if( templateName.indexOf('invoice') > -1 ){
 				InvoiceTemplateLoadData( callback );
+			}else if( templateName.indexOf('purchaseOrd') > -1 ){
+				POTemplateLoadData( callback );
 			}
 			
 		} , 300);
+    }
+
+    function POTemplateLoadData(){
+    	console.log("PO Loaded")
     }
 
     $scope.supplierList = [];

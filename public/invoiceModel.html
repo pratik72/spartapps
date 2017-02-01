@@ -15,8 +15,6 @@
                 <tr>
                   <td>Name of Supplier</td>
                   <td colspan="3">
-                    <!-- <input type="text" class="form-control" name="supplier_name" ng-model="invoiceFormData.supplier_name"> -->
-
                     <select ng-options="item as item.supplier_name_address.supplier_name for item in supplierForInvoice" ng-model="suppModel" required ng-change="suppChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select supplier--</option>
                     </select>

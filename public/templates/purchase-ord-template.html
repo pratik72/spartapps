@@ -4,16 +4,16 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header" data-background-color="green">
-                    <h4 class="title">Supplier</h4>
-                    <button class="btn btn-default pull-right" ng-click="openSupplier()">Create Supplier</button>
+                    <h4 class="title">Purchase Order</h4>
+                    <button class="btn btn-default pull-right" ng-click="openPurchaseOrd()">Create PO</button>
                 </div>
                 <div class="card-content table-responsive">
                     <table class="table">
                         <thead class="text-primary">
 						 	<tr>
 							    <th>No.</th>
-							    <th>Supplier Name</th>
-							    <th>Email</th>
+							    <th>PO No.</th>
+							    <th>Supplier</th>
 							    <th>User</th>
 							    <th>Date</th>
 							    <th>Status</th>
@@ -58,6 +58,6 @@
 </div>
 
 
-<div ng-include="supplier_Model">
+<div ng-include="purchaseOrd_Model">
     
 </div>

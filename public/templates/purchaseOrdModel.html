@@ -1,0 +1,161 @@
+<!-- Modal -->
+<div id="myPOModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Purchase Order</h4>
+        <div class="pull-right" ng-if="supplierFormData.sa_status.status == 'pending'">
+          <button class="btn btn-default" ng-click="openStatusModel('supplier' , supplierFormData , 'Accept')">Approve</button>
+          <button class="btn btn-danger" ng-click="openStatusModel('supplier' , supplierFormData , 'Decline')">Decline</button>
+        </div>
+        <hr/>
+      </div>
+      <form name="supplierForm" ng-submit="supplierCreate()" enctype="multipart/form-data">
+        <div class="modal-body">
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <th colspan="4">Information on Product</th>
+                </tr>
+                <tr>
+                  <td>Name of Product</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="product_name" ng-model="supplierFormData.product_information.product_name" ng-disabled="isReadOnly" placeholder="Enter Name of Product">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Description of Product</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="product_discreption" ng-model="supplierFormData.product_information.product_discreption" ng-disabled="isReadOnly" placeholder="Enter Description of Product">
+                  </td>
+                </tr>
+                <tr>
+                  <td>HSN Code</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="HSN_code" ng-model="supplierFormData.product_information.HSN_code" ng-disabled="isReadOnly" placeholder="Enter HSN Code">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Quantity</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="quantity" ng-model="supplierFormData.product_information.quantity" ng-disabled="isReadOnly" placeholder="Enter Quantity">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rate</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="rate" ng-model="supplierFormData.product_information.rate" ng-disabled="isReadOnly" placeholder="Enter Rate">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Amount</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="amount" ng-model="supplierFormData.product_information.amount" ng-disabled="isReadOnly" placeholder="Enter Amount">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Payment Terms</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="payment_terms" ng-model="supplierFormData.product_information.payment_terms" ng-disabled="isReadOnly" placeholder="Enter Payment terms">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4"></td>
+                </tr>
+                <tr>
+                  <th colspan="4">Vendor Selection</th>
+                </tr>
+                <tr>
+                  <td>Suggested by</td>
+                  <td>
+                    <input type="text" class="form-control" name="suggested_by" ng-model="supplierFormData.vendor_selection.suggested_by" ng-disabled="isReadOnly" placeholder="Enter Suggested by">
+                  </td>
+                  <td>Shortlisted by</td>
+                  <td>
+                    <input type="text" class="form-control" name="shortlisted_by" ng-model="supplierFormData.vendor_selection.shortlisted_by" ng-disabled="isReadOnly" placeholder="Enter Shortlisted by">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Division</td>
+                  <td>
+                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select divison--</option>
+                    </select>
+                  </td>
+                  <td>Selected by</td>
+                  <td>
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select User--</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4"></td>
+                </tr>
+                <tr>
+                  <th colspan="4">Budgets and Approvals</th>
+                </tr>
+                <tr>
+                  <td>Location</td>
+                  <td colspan="3">
+                    <select ng-options="item as item for item in orgLocation" ng-model="locationModel" required ng-change="locationChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select Location--</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Budget Head</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="budget_head" ng-model="supplierFormData.budgets_and_approvals.budget_head" ng-disabled="isReadOnly" placeholder="Enter Budgets head">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Period</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="period" ng-model="supplierFormData.budgets_and_approvals.period" ng-disabled="isReadOnly" placeholder="Enter Period">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4"></td>
+                </tr>
+                <tr>
+                  <th colspan="4">Documents to be attached</th>
+                </tr>
+                <tr>
+                  <td>Cancelled Cheque</td>
+                  <td colspan="3">
+                    <input class="form-control" type="file" name="cancelled_cheque" onchange="angular.element(this).scope().setFiles(this , 'cancelled_cheque')" ng-hide="isReadOnly">
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.cancelled_cheque %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.cancelled_cheque %}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Quotation</td>
+                  <td colspan="3">
+                    <input class="form-control" type="file" name="quotation" onchange="angular.element(this).scope().setFiles(this , 'quotation')" ng-hide="isReadOnly">
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.quotation %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.quotation %}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Other Documents</td>
+                  <td colspan="3">
+                    <input class="form-control" type="file" name="other_doc" onchange="angular.element(this).scope().setFiles(this , 'other_doc')" ng-hide="isReadOnly">
+                    <a ng-href="/upload/{% supplierFormData.doc_attachment.other_doc %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.other_doc %}</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success" ng-hide="isReadOnly">Submit</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

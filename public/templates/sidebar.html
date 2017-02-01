@@ -1,0 +1,20 @@
+<div class="sidebar" data-color="green" data-image="assets/img/sidebar-1.jpg">
+			
+	<div class="logo">
+		<a class="navbar-brand" href="#">Spartapps</a>
+	</div>
+
+	<div class="sidebar-wrapper">
+        <ul class="nav">
+            <li ng-class="{ 'active': dashBody.indexOf('invoice') > -1 }">
+            	<a href="#" ng-click="changeDashBody('invoice')">Payment Intimation</a>
+            </li>
+        	<li ng-class="{ 'active': dashBody.indexOf('purchase') > -1 }">
+        		<a href="#" ng-click="changeDashBody('purchaseOrd')">PO</a>
+        	</li>
+        	<li ng-class="{ 'active': dashBody.indexOf('supplier') > -1 }">
+        		<a href="#" ng-click="changeDashBody('supplier')">Supplier</a>
+        	</li>            
+        </ul>
+	</div>
+</div>
