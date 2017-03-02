@@ -51,6 +51,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	//Init Form data of madel
 	$scope.supplierFormData = APP_CONSTANT.SUPPLIER_JSON;
 	$scope.invoiceFormData = APP_CONSTANT.INVOICE_JSON;
+	$scope.poFormData = APP_CONSTANT.PO_JSON;
 	$scope.isReadOnly = false;
 
 	//Init To get Current User Details on load
@@ -130,7 +131,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     		$scope.isReadOnly = true;
     		$scope.supplierFormData = angular.copy(suppDatas);
 			$scope.divisonModel = $scope.supplierFormData.vendor_selection.division;
-			$scope.locationModel = $scope.supplierFormData.budgets_and_approvals.location;
+			//$scope.locationModel = $scope.supplierFormData.budgets_and_approvals.location;
     	}    	
     	$("#mySuppModal").modal('show');
     }
@@ -252,13 +253,52 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+
+    //Submit po form data
+    $scope.poCreate = function(){
+    	common.showLoader();
+
+    	var tmpData = new FormData();
+    	for (var key in $scope.poFormData) {
+    		if(typeof $scope.poFormData[key] == "object"){
+    			tmpData.append( key , JSON.stringify($scope.poFormData[key]) );
+    		}else{
+    			tmpData.append( key , $scope.poFormData[key] );
+    		}
+    	};
+
+    	tmpData.append( "cancelled_cheque" , $scope.cancelled_cheque );
+    	tmpData.append( "quotation" , $scope.quotation );
+    	tmpData.append( "other_doc" , $scope.other_doc );
+
+    	console.log(tmpData)
+    	return
+    	common.asynCall({
+			url: PATH_NAME+ APP_CONSTANT.CREATE_PO,
+			method:'post',
+			param:  tmpData
+		}).then( function(resVal){
+			$("#myPOModal").modal('hide');
+			$scope.changeDashBody("purchaseOrd");
+			common.hideLoader();
+	    }, function(error){
+	    	console.log(error);
+	    });
+    }
+
     $scope.suppModel = "";
-    $scope.suppChngUpdate = function(e){
+    $scope.suppChngUpdate = function(e , comeFrom){
     	if(e.suppModel){
 			var supplierName = e.suppModel.supplier_name_address.supplier_name;
 			var supplierId = e.suppModel._id;
-    		$scope.invoiceFormData.supplier_name = supplierName;
-    		$scope.invoiceFormData.supplierId = supplierId;
+
+			if(comeFrom == "po"){
+				$scope.poFormData.supplier_name = supplierName;
+	    		$scope.poFormData.supplierId = supplierId;
+			}else if(comeFrom == "invoice"){
+	    		$scope.invoiceFormData.supplier_name = supplierName;
+	    		$scope.invoiceFormData.supplierId = supplierId;
+			}
     	}
     }
 
@@ -322,7 +362,11 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     function POTemplateLoadData(){
-    	console.log("PO Loaded")
+    	SupplierTemplateLoadData(function(){
+    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
+	    		return obj.sa_status.status == "Accept";
+	    	});    		
+    	});
     }
 
     $scope.supplierList = [];

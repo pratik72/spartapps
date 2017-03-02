@@ -7,13 +7,13 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Purchase Order</h4>
-        <div class="pull-right" ng-if="supplierFormData.sa_status.status == 'pending'">
-          <button class="btn btn-default" ng-click="openStatusModel('supplier' , supplierFormData , 'Accept')">Approve</button>
-          <button class="btn btn-danger" ng-click="openStatusModel('supplier' , supplierFormData , 'Decline')">Decline</button>
+        <div class="pull-right" ng-if="poFormData.sa_status.status == 'pending'">
+          <button class="btn btn-default" ng-click="openStatusModel('supplier' , poFormData , 'Accept')">Approve</button>
+          <button class="btn btn-danger" ng-click="openStatusModel('supplier' , poFormData , 'Decline')">Decline</button>
         </div>
         <hr/>
       </div>
-      <form name="supplierForm" ng-submit="supplierCreate()" enctype="multipart/form-data">
+      <form name="supplierForm" ng-submit="poCreate()" enctype="multipart/form-data">
         <div class="modal-body">
             <table class="table table-bordered">
               <tbody>
@@ -23,43 +23,51 @@
                 <tr>
                   <td>Name of Product</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="product_name" ng-model="supplierFormData.product_information.product_name" ng-disabled="isReadOnly" placeholder="Enter Name of Product">
+                    <input type="text" class="form-control" name="product_name" ng-model="poFormData.product_information.product_name" ng-disabled="isReadOnly" placeholder="Enter Name of Product">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Name of Supplier</td>
+                  <td colspan="3">
+                    <select ng-options="item as item.supplier_name_address.supplier_name for item in supplierForInvoice" ng-model="suppModel" required ng-change="suppChngUpdate(this,'po')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select supplier--</option>
+                    </select>
                   </td>
                 </tr>
                 <tr>
                   <td>Description of Product</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="product_discreption" ng-model="supplierFormData.product_information.product_discreption" ng-disabled="isReadOnly" placeholder="Enter Description of Product">
+                    <input type="text" class="form-control" name="product_discreption" ng-model="poFormData.product_information.product_discreption" ng-disabled="isReadOnly" placeholder="Enter Description of Product">
                   </td>
                 </tr>
                 <tr>
                   <td>HSN Code</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="HSN_code" ng-model="supplierFormData.product_information.HSN_code" ng-disabled="isReadOnly" placeholder="Enter HSN Code">
+                    <input type="text" class="form-control" name="HSN_code" ng-model="poFormData.product_information.HSN_code" ng-disabled="isReadOnly" placeholder="Enter HSN Code">
                   </td>
                 </tr>
                 <tr>
                   <td>Quantity</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="quantity" ng-model="supplierFormData.product_information.quantity" ng-disabled="isReadOnly" placeholder="Enter Quantity">
+                    <input type="text" class="form-control" name="quantity" ng-model="poFormData.product_information.quantity" ng-disabled="isReadOnly" placeholder="Enter Quantity">
                   </td>
                 </tr>
                 <tr>
                   <td>Rate</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="rate" ng-model="supplierFormData.product_information.rate" ng-disabled="isReadOnly" placeholder="Enter Rate">
+                    <input type="text" class="form-control" name="rate" ng-model="poFormData.product_information.rate" ng-disabled="isReadOnly" placeholder="Enter Rate">
                   </td>
                 </tr>
                 <tr>
                   <td>Amount</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="amount" ng-model="supplierFormData.product_information.amount" ng-disabled="isReadOnly" placeholder="Enter Amount">
+                    <input type="text" class="form-control" name="amount" ng-model="poFormData.product_information.amount" ng-disabled="isReadOnly" placeholder="Enter Amount">
                   </td>
                 </tr>
                 <tr>
                   <td>Payment Terms</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="payment_terms" ng-model="supplierFormData.product_information.payment_terms" ng-disabled="isReadOnly" placeholder="Enter Payment terms">
+                    <input type="text" class="form-control" name="payment_terms" ng-model="poFormData.product_information.payment_terms" ng-disabled="isReadOnly" placeholder="Enter Payment terms">
                   </td>
                 </tr>
                 <tr>
@@ -71,11 +79,11 @@
                 <tr>
                   <td>Suggested by</td>
                   <td>
-                    <input type="text" class="form-control" name="suggested_by" ng-model="supplierFormData.vendor_selection.suggested_by" ng-disabled="isReadOnly" placeholder="Enter Suggested by">
+                    <input type="text" class="form-control" name="suggested_by" ng-model="poFormData.vendor_selection.suggested_by" ng-disabled="isReadOnly" placeholder="Enter Suggested by">
                   </td>
                   <td>Shortlisted by</td>
                   <td>
-                    <input type="text" class="form-control" name="shortlisted_by" ng-model="supplierFormData.vendor_selection.shortlisted_by" ng-disabled="isReadOnly" placeholder="Enter Shortlisted by">
+                    <input type="text" class="form-control" name="shortlisted_by" ng-model="poFormData.vendor_selection.shortlisted_by" ng-disabled="isReadOnly" placeholder="Enter Shortlisted by">
                   </td>
                 </tr>
                 <tr>
@@ -109,13 +117,13 @@
                 <tr>
                   <td>Budget Head</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="budget_head" ng-model="supplierFormData.budgets_and_approvals.budget_head" ng-disabled="isReadOnly" placeholder="Enter Budgets head">
+                    <input type="text" class="form-control" name="budget_head" ng-model="poFormData.budgets_and_approvals.budget_head" ng-disabled="isReadOnly" placeholder="Enter Budgets head">
                   </td>
                 </tr>
                 <tr>
                   <td>Period</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="period" ng-model="supplierFormData.budgets_and_approvals.period" ng-disabled="isReadOnly" placeholder="Enter Period">
+                    <input type="text" class="form-control" name="period" ng-model="poFormData.budgets_and_approvals.period" ng-disabled="isReadOnly" placeholder="Enter Period">
                   </td>
                 </tr>
                 <tr>
@@ -128,21 +136,21 @@
                   <td>Cancelled Cheque</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="cancelled_cheque" onchange="angular.element(this).scope().setFiles(this , 'cancelled_cheque')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{% supplierFormData.doc_attachment.cancelled_cheque %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.cancelled_cheque %}</a>
+                    <a ng-href="/upload/{% poFormData.doc_attachment.cancelled_cheque %}" ng-show="isReadOnly" target="_blank">{% poFormData.doc_attachment.cancelled_cheque %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Quotation</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="quotation" onchange="angular.element(this).scope().setFiles(this , 'quotation')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{% supplierFormData.doc_attachment.quotation %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.quotation %}</a>
+                    <a ng-href="/upload/{% poFormData.doc_attachment.quotation %}" ng-show="isReadOnly" target="_blank">{% poFormData.doc_attachment.quotation %}</a>
                   </td>
                 </tr>
                 <tr>
                   <td>Other Documents</td>
                   <td colspan="3">
                     <input class="form-control" type="file" name="other_doc" onchange="angular.element(this).scope().setFiles(this , 'other_doc')" ng-hide="isReadOnly">
-                    <a ng-href="/upload/{% supplierFormData.doc_attachment.other_doc %}" ng-show="isReadOnly" target="_blank">{% supplierFormData.doc_attachment.other_doc %}</a>
+                    <a ng-href="/upload/{% poFormData.doc_attachment.other_doc %}" ng-show="isReadOnly" target="_blank">{% poFormData.doc_attachment.other_doc %}</a>
                   </td>
                 </tr>
               </tbody>

@@ -3,6 +3,7 @@ var passport = require('passport');
 var ObjectId = require('mongoose').Types.ObjectId;
 var restrict = require('../auth/restrict');
 var supplierService = require('../services/supplier-services');
+var poService = require('../services/po-services');
 var InvoiceService = require('../services/invoice-services');
 var userService = require('../services/user-services');
 var uploadService = require('../services/upload-services');
@@ -82,7 +83,7 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 
 			bodyObject = req.body;
 
-			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject);
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , "supplier");
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
 			supplierService.addSupplier(bodyObject , function(error , result){
@@ -99,6 +100,44 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 						return res.json( { error : "Notification Not added "+error});
 					}
 		  			return res.json({ OK : "User Entered Successfully" });
+				});
+			});
+		});
+
+	}else{
+		res.json({ error : "Invalid data..!!" });
+	}
+});
+
+
+//createPO
+router.post('/createPO', restrict , function(req, res, next) {
+	var bodyObject = req.body;
+	if (bodyObject) {
+
+		uploadService.uploadFiles(req, res, null , function(uplErr){
+
+			if(uplErr){
+				res.json({error : "File not Uploaded..!"});	
+			}
+
+			bodyObject = req.body;
+
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'po');
+			bodyObject = mergeUserDetailsData(bodyObject , req.user);
+
+			poService.addPO(bodyObject , function(error , result){
+				if(error){
+					console.log("PO Not Created" , error);
+					res.status(400);
+					return res.json(error);
+				}
+
+				notify.notifyUser( "po" , result , function(error , nots_data){
+					if(error){
+						return res.json( { error : "Notification Not added for PO"+error});
+					}
+		  			return res.json({ OK : "Notice Done" });
 				});
 			});
 		});
@@ -219,7 +258,7 @@ function mergeInvoiceUploadData(files , tmpObj){
 	return tmpObj;
 }
 
-function mergeSupplierUploadStatusData(files , tmpObj){
+function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 
 	for (var i in tmpObj) {
 		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
@@ -227,7 +266,12 @@ function mergeSupplierUploadStatusData(files , tmpObj){
 		}
 	};
 	
-	tmpObj["sa_status"].status = "pending";
+
+	if(comeFrom == "po"){
+		tmpObj["po_status"].status = "pending";
+	}else{
+		tmpObj["sa_status"].status = "pending";
+	}
 	tmpObj.doc_attachment = {};
 	
 	var allAttachParam = [ "statutory_registration_certificates" , "cancelled_cheque" , "quotation" , "agreements" , "vendor_profile" , "other_doc"];

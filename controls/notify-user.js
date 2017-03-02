@@ -25,8 +25,6 @@ exports.getNotifications = function(data , callback){
 
 exports.setNotificationsViewed = function(query , updateData , callback){
 	Notify.findOneAndUpdate(query, updateData, {new: true} , function(err, doc){
-		console.log("err" , err);
-		console.log("doc" , doc);
 	    if (err) return callback({ error: err } , null);
 	    callback(null , doc)
 	});
@@ -34,18 +32,37 @@ exports.setNotificationsViewed = function(query , updateData , callback){
 
 function tabSpecificNotification( tabs , data ,callback){
 
-	switch(tabs) {
+	NoticeDataChanges( tabs ,data , callback )
+	/*switch(tabs) {
 	    case "supplier":
 	        supplierNoticeDataChanges(data , callback)
 	        break;
 	    case "invoice":
 	        invoiceNoticeDataChanges(data , callback)
 	        break;
-	    case n:
-	        //TODO
+	    case "po":
+	        poNoticeDataChanges(data , callback)
 	        break;
-	}
+	}*/
 
+}
+
+function poNoticeDataChanges(data, next){
+	if(data){
+		var noticeData = {
+			sendTo : data.vendor_selection.selected_by, 
+			orgId : data.orgId,
+			sendBy : data.user_id,
+			isViewed : false,
+			viewDate : "",
+			tabArea : "po",
+			refKey : data._id,
+			title : "PO Approval Request from " + data.userName,
+			description : "You have Pending PO Approval Request from" + data.userName
+		}
+
+		next(noticeData);
+	}
 }
 
 function supplierNoticeDataChanges(data, next){
@@ -58,15 +75,15 @@ function supplierNoticeDataChanges(data, next){
 			viewDate : "",
 			tabArea : "supplier",
 			refKey : data._id,
-			title : "PO Approval Request from " + data.userName,
-			description : "You have Pending PO Approval Request from" + data.userName + ', against PO001.'
+			title : "Supplier Approval Request from " + data.userName,
+			description : "You have Pending Supplier Approval Request from" + data.userName
 		}
 
 		next(noticeData);
 	}
 }
 
-function invoiceNoticeDataChanges(data, next){
+function NoticeDataChanges(tabs ,data, next){
 	if(data){
 		var noticeData = {
 			sendTo : data.vendor_selection.selected_by, 
@@ -74,10 +91,10 @@ function invoiceNoticeDataChanges(data, next){
 			sendBy : data.user_id,
 			isViewed : false,
 			viewDate : "",
-			tabArea : "supplier",
+			tabArea : tabs,
 			refKey : data._id,
-			title : "PO Approval Request from " + data.userName,
-			description : "You have Pending PO Approval Request from" + data.userName + ', against PO001.'
+			title : tabs+" Approval Request from " + data.userName,
+			description : "You have Pending " + tabs+ "Approval Request from" + data.userName
 		}
 
 		next(noticeData);
