@@ -70,6 +70,19 @@ router.post('/getSupplierDetails', restrict , function(req, res, next) {
 	});
 });
 
+//getPOdetList
+router.post('/getPOdetList', restrict , function(req, res, next) {
+	
+	var userOrgId = req.user.orgId;
+	poService.findPO( { orgId : new ObjectId(userOrgId) }, function(error , suppData){
+		if(error){
+			console.log("PO Not Retrived" , error);
+			return res.json(error);
+		}
+  		res.json(suppData);
+	});
+});
+
 //createSupplier
 router.post('/createSupplier', restrict , function(req, res, next) {
 	var bodyObject = req.body;
@@ -259,13 +272,15 @@ function mergeInvoiceUploadData(files , tmpObj){
 }
 
 function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
-
 	for (var i in tmpObj) {
 		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
-			tmpObj[i] = JSON.parse(tmpObj[i]);
+			try{
+				tmpObj[i] = JSON.parse(tmpObj[i]) || tmpObj[i];
+			}catch(e){
+				tmpObj[i] = tmpObj[i];
+			}
 		}
 	};
-	
 
 	if(comeFrom == "po"){
 		tmpObj["po_status"].status = "pending";
@@ -277,7 +292,6 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 	var allAttachParam = [ "statutory_registration_certificates" , "cancelled_cheque" , "quotation" , "agreements" , "vendor_profile" , "other_doc"];
 
 	for (var k = 0; k < allAttachParam.length; k++) {
-		tmpObj.doc_attachment[ allAttachParam[k] ] = "";
 		for (var i = 0; i < files.length; i++) {
 			if(files[i].fieldname == allAttachParam[k] ){
 				tmpObj.doc_attachment[ allAttachParam[k] ] = files[i] ? files[i].filename : "";

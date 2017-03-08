@@ -10,6 +10,7 @@ var APP_CONSTANT = {
 	CREATE_PO : '/createPO',
 	STATUS_CHANGE_URL : '/statusChanges',
 	GET_SUPPLIERS : '/getSupplierDetails',
+	GET_POLIST : '/getPOdetList',
 	GET_INVOICES : '/getInvoicesDetails',
 	TEMPLATES : {
 		supplier : "supplier-template.html",

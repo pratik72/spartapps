@@ -101,8 +101,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	console.log(error);
     });
 
-    $scope.selectedByChngUpdate = function(obj){
-    	$scope.supplierFormData.vendor_selection.selected_by = obj.selectedByUser._id || "";
+    $scope.selectedByChngUpdate = function(obj, comeFrom){
+    	var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
+    	$scope[ tmpKey ].vendor_selection.selected_by = obj.selectedByUser._id || "";
     }
 
     $scope.openNotification = function(notData){
@@ -137,6 +138,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     $scope.openPurchaseOrd = function(){
+    	resetPOModel();
     	$("#myPOModal").modal('show');
     }
 
@@ -271,8 +273,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	tmpData.append( "quotation" , $scope.quotation );
     	tmpData.append( "other_doc" , $scope.other_doc );
 
-    	console.log(tmpData)
-    	return
     	common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.CREATE_PO,
 			method:'post',
@@ -286,31 +286,35 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+    var FORM_MAPPING_KEY = {
+    	po : "poFormData",
+    	invoice : "invoiceFormData",
+    	supplier : "supplierFormData"
+    }
+
     $scope.suppModel = "";
     $scope.suppChngUpdate = function(e , comeFrom){
     	if(e.suppModel){
 			var supplierName = e.suppModel.supplier_name_address.supplier_name;
 			var supplierId = e.suppModel._id;
+			var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
 
-			if(comeFrom == "po"){
-				$scope.poFormData.supplier_name = supplierName;
-	    		$scope.poFormData.supplierId = supplierId;
-			}else if(comeFrom == "invoice"){
-	    		$scope.invoiceFormData.supplier_name = supplierName;
-	    		$scope.invoiceFormData.supplierId = supplierId;
-			}
+			$scope[ tmpKey ].supplier_name = supplierName;
+    		$scope[ tmpKey ].supplierId = supplierId;
     	}
     }
 
-    $scope.divisonChngUpdate = function(e){
+    $scope.divisonChngUpdate = function(e , comeFrom){
     	if(e.divisonModel){
-			$scope.supplierFormData.vendor_selection.division = e.divisonModel;
+    		var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
+			$scope[ tmpKey ].vendor_selection.division = e.divisonModel;
     	}
     }
 
-    $scope.locationChngUpdate = function(e){
+    $scope.locationChngUpdate = function(e , comeFrom){
     	if(e.locationModel){
-			$scope.supplierFormData.budgets_and_approvals.location = e.locationModel;
+    		var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
+    		$scope[ tmpKey ].budgets_and_approvals.location = e.locationModel;
     	}
     }
 
@@ -361,13 +365,13 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		} , 300);
     }
 
-    function POTemplateLoadData(){
+    /*function POTemplateLoadData(){
     	SupplierTemplateLoadData(function(){
     		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
 	    		return obj.sa_status.status == "Accept";
-	    	});    		
+	    	});
     	});
-    }
+    }*/
 
     $scope.supplierList = [];
     function SupplierTemplateLoadData(callback){
@@ -379,6 +383,33 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			$scope.supplierList = resVal.data
 			if(callback){
 				callback();
+			}
+			common.hideLoader();
+	    }, function(error){
+	    	console.log(error);
+	    });
+    }
+
+
+    $scope.poList = [];
+    function POTemplateLoadData(callback){
+    	common.showLoader();
+
+		SupplierTemplateLoadData(function(){
+    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
+	    		return obj.sa_status.status == "Accept";
+	    	});
+    	});
+    	
+    	common.asynCall({
+			url: PATH_NAME+ APP_CONSTANT.GET_POLIST,
+			method:'post'
+		}).then( function(resVal){
+			$scope.poList = resVal.data
+			if(callback){
+				callback();
+				
+
 			}
 			common.hideLoader();
 	    }, function(error){
@@ -441,6 +472,23 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	if(!modelScope){
 	    	$scope.invoice = "";
 	    	$scope.PO = "";
+	    	$scope.other_doc = "";
+    	}
+    }
+
+    function resetPOModel(modelScope){
+    	var tmpModelScope = modelScope || $scope.poFormData;
+    	for (var key in tmpModelScope) {
+    		if(typeof tmpModelScope[key] == "object"){
+    			resetInvoiceModel( tmpModelScope[key] )
+    		}else{
+    			tmpModelScope[key] = "";
+    		}
+    	};
+
+    	if(!modelScope){
+	    	$scope.cancelled_cheque = "";
+	    	$scope.quotation = "";
 	    	$scope.other_doc = "";
     	}
     }

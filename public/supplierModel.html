@@ -194,13 +194,13 @@
                 <tr>
                   <td>Division</td>
                   <td>
-                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'supplier')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select divison--</option>
                     </select>
                   </td>
                   <td>Selected by</td>
                   <td>
-                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'supplier')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select User--</option>
                     </select>
                   </td>

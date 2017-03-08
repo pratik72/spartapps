@@ -5,6 +5,9 @@ var poSchema = new Schema({
 	orgId : Schema.Types.ObjectId,
 	user_id : Schema.Types.ObjectId,
 	orgName : String,
+	supplier_name : String,
+	PO_number : String,
+	supplierId : Schema.Types.ObjectId,
 	po_status : {
 		status: String,
 		status_description : String,
@@ -40,8 +43,16 @@ var poSchema = new Schema({
 	}
 });
 
+var poCountSchema = new Schema({
+	orgId : Schema.Types.ObjectId,
+	po_count : { type: Number, default: 1 }
+});
+
 var po = mongoose.model('purchase_order' , poSchema);
+var poCount = mongoose.model('poCounter' , poCountSchema);
+
 
 module.exports = {
-	po: po
+	po: po,
+	poCount : poCount
 };

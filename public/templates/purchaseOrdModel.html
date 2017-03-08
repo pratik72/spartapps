@@ -89,13 +89,13 @@
                 <tr>
                   <td>Division</td>
                   <td>
-                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'po')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select divison--</option>
                     </select>
                   </td>
                   <td>Selected by</td>
                   <td>
-                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'po')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select User--</option>
                     </select>
                   </td>
@@ -109,7 +109,7 @@
                 <tr>
                   <td>Location</td>
                   <td colspan="3">
-                    <select ng-options="item as item for item in orgLocation" ng-model="locationModel" required ng-change="locationChngUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item for item in orgLocation" ng-model="locationModel" required ng-change="locationChngUpdate(this ,'po')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select Location--</option>
                     </select>
                   </td>

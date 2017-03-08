@@ -1,10 +1,19 @@
 var purchase_Order = require('../models/purchaseOrder').po;
+var poCount = require('../models/purchaseOrder').poCount;
+var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.addPO = function(poData , callback){
+	var tmpPONumber = getNextPOSequence( poData.orgId );
+
+	console.log("tmpPONumber ==== ",tmpPONumber)
+
 	var newPO = new purchase_Order({
 		orgId : poData.orgId,
 		user_id : poData.user_id,
 		orgName : poData.orgName,
+		supplier_name : poData.supplier_name,
+		supplierId : poData.supplierId,
+		PO_number : tmpPONumber,
 		po_status : {
 			status: poData.po_status.status,
 			status_description : poData.po_status.status_description,
@@ -66,4 +75,32 @@ exports.updatePO = function(po_query, updateData ,callback){
 	    if (err) return callback({ error: err } , null);
 	    callback(null , doc)
 	});
+}
+
+function getNextPOSequence(orgId) {
+	var tmpQuery = { orgId : new ObjectId(orgId) };
+	var aa = poCount.find( tmpQuery , function(error, data){
+		console.log("Sequence data -----" , data)
+		if(data.length == 0){
+			var newCount = new poCount({
+				orgId : orgId,
+				po_count : 1
+			});
+			newCount.save(function (err, result, numAffected) {
+				if(err){
+					console.log("newCount" , err)
+					return null;
+				}
+				return result;
+			})
+		}else if(data.length > 0){
+			var updateCount = { po_count : data.po_count++ };
+			poCount.findOneAndUpdate( tmpQuery , updateCount, {upsert:true}, function(err, doc){
+			    if (err) return null;
+			    return doc;
+			});
+		}
+	});
+
+	return 1;
 }
