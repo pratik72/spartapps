@@ -109,12 +109,13 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     $scope.openNotification = function(notData){
     	var tabs = notData.tabArea;
     	$scope.changeDashBody( tabs , function(){
-	    	var thisSupp = $scope.supplierList.filter(function(a){
+    		var tmpKey = LIST_MAPPING_KEY[ tabs ];
+	    	var thisSupp = $scope[tmpKey].filter(function(a){
 	    		return a._id == notData.refKey; 
 	    	});
 
 	    	if(thisSupp.length > 0){
-	    		$scope.openSupplier(thisSupp[0]);
+	    		openModelForm( tabs , thisSupp[0]);
 	    		markNotificationAsView(notData);
 	    	}else{
 	    		alert("Notification reference not found..!")
@@ -122,6 +123,20 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	});
     	
     	//$scope.openSupplier();
+    }
+
+    function openModelForm(modelName , data) {
+    	switch(modelName){
+    		case "purchaseOrd" : 
+    			$scope.openPurchaseOrd(data);
+    			break;
+    		case "supplier" : 
+    			$scope.openSupplier(data);
+    			break;
+    		case "po" : 
+    			$scope.openInvoice(data);
+    			break;
+    	}
     }
 
 	//Init All events
@@ -132,13 +147,32 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     		$scope.isReadOnly = true;
     		$scope.supplierFormData = angular.copy(suppDatas);
 			$scope.divisonModel = $scope.supplierFormData.vendor_selection.division;
-			//$scope.locationModel = $scope.supplierFormData.budgets_and_approvals.location;
+			var selUser = $scope.notifyUser.filter(function(a){
+				return $scope.supplierFormData.vendor_selection.selected_by == a._id
+			});
+			$scope.selectedByUser = selUser[0]
     	}    	
     	$("#mySuppModal").modal('show');
     }
 
-    $scope.openPurchaseOrd = function(){
+    $scope.openPurchaseOrd = function(poDatas){
     	resetPOModel();
+    	$scope.isReadOnly = false;
+    	if(poDatas){
+    		$scope.isReadOnly = true;
+    		$scope.poFormData = angular.copy(poDatas);
+    		var selSuppObj = $scope.supplierForInvoice.filter(function(e){
+    			return $scope.poFormData.supplierId == e._id
+    		});
+    		$scope.suppModel = selSuppObj[0];
+			$scope.divisonModel = $scope.poFormData.vendor_selection.division;
+			var selUser = $scope.notifyUser.filter(function(a){
+				return $scope.poFormData.vendor_selection.selected_by == a._id
+			});
+			$scope.selectedByUser = selUser[0]
+
+			$scope.locationModel = $scope.poFormData.budgets_and_approvals.location
+    	} 
     	$("#myPOModal").modal('show');
     }
 
@@ -194,6 +228,11 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+    var MODEL_ID_MAP = {
+    	purchaseOrd : "myPOModal",
+    	invoice : "myInvoiceModal",
+    	supplier : "mySuppModal"
+    }
     $scope.statusChangeSubmit = function(){
     	common.showLoader();
 
@@ -216,7 +255,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			param:  tmpFormData
 		}).then( function(resVal){
 			$("#statusModal").modal('hide');
-			$("#mySuppModal").modal('hide');
+			$("#"+ MODEL_ID_MAP[ tempStatus.action ] ).modal('hide');
 			$scope.changeDashBody( tempStatus.action );
 			common.hideLoader();
 	    }, function(error){
@@ -290,6 +329,12 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	po : "poFormData",
     	invoice : "invoiceFormData",
     	supplier : "supplierFormData"
+    }
+
+    var LIST_MAPPING_KEY = {
+    	purchaseOrd : "poList",
+    	invoice : "invoiceList",
+    	supplier : "supplierList"
     }
 
     $scope.suppModel = "";
@@ -408,8 +453,6 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			$scope.poList = resVal.data
 			if(callback){
 				callback();
-				
-
 			}
 			common.hideLoader();
 	    }, function(error){

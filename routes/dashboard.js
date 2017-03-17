@@ -146,7 +146,7 @@ router.post('/createPO', restrict , function(req, res, next) {
 					return res.json(error);
 				}
 
-				notify.notifyUser( "po" , result , function(error , nots_data){
+				notify.notifyUser( "purchaseOrd" , result , function(error , nots_data){
 					if(error){
 						return res.json( { error : "Notification Not added for PO"+error});
 					}
@@ -346,6 +346,24 @@ function changeActionStatus(req , res , callback){
 		};
 
 		InvoiceService.updateInvoice(rowQuery , rowData , function(error , data){
+			if(error){
+				return callback({error : error});
+			}
+			return callback({ ok : data})
+		});
+	}else if(req.query.action == 'purchaseOrd'){
+		var rowId = req.body.rowId;
+		rowId = rowId ? new ObjectId(rowId) : {};
+
+		var rowQuery = { _id : rowId };
+		delete req.body.rowId;
+		var rowData = req.body && req.body.status;
+		if (!rowData) return callback({error : "Bad data structure..!"});
+		rowData = {
+			po_status : JSON.parse( rowData )
+		};
+
+		poService.updatePO(rowQuery , rowData , function(error , data){
 			if(error){
 				return callback({error : error});
 			}
