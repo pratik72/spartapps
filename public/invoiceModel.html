@@ -7,6 +7,11 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Invoice</h4>
+        <div class="pull-right" ng-if="invoiceFormData.iv_status.status == 'pending'">
+          <button class="btn btn-default" ng-click="openStatusModel('invoice' , invoiceFormData , 'Accept')">Approve</button>
+          <button class="btn btn-danger" ng-click="openStatusModel('invoice' , invoiceFormData , 'Decline')">Decline</button>
+        </div>
+        <hr/>
       </div>
       <form name="invoiceForm" ng-submit="InvoiceCreate()" enctype="multipart/form-data">
         <div class="modal-body">
@@ -23,7 +28,10 @@
                 <tr>
                   <td>PO No</td>
                   <td colspan="3">
-                    <input type="text" class="form-control" name="address1" ng-model="invoiceFormData.PO_number" placeholder="Enter PO number" ng-disabled="isReadOnly">
+                    <!-- <input type="text" class="form-control" name="address1" ng-model="invoiceFormData.PO_number" placeholder="Enter PO number" ng-disabled="isReadOnly"> -->
+                    <select ng-options="item as item.PO_number for item in allActivePOs" ng-model="ddPoModel" required ng-change="invPoChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select po--</option>
+                    </select>
                   </td>
                 </tr>
                 <tr>
@@ -92,7 +100,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-success">Submit</button>
+          <button type="submit" class="btn btn-success" ng-hide="isReadOnly">Submit</button>
         </div>
 
       </form>

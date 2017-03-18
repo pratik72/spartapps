@@ -9,6 +9,7 @@ exports.addInvoice = function(invoiceData , callback){
 		supplier_name : invoiceData.supplier_name,
 		supplierId : invoiceData.supplierId,
 		PO_number : invoiceData.PO_number,
+		PO_id : invoiceData.PO_id,
 		bill_number : invoiceData.bill_number,
 		Product_Nature : invoiceData.Product_Nature,
 		HSN_Code : invoiceData.HSN_Code,
@@ -33,7 +34,7 @@ exports.addInvoice = function(invoiceData , callback){
 			console.log("newInvoice" , err)
 			return callback(err)
 		}
-		callback(null);
+		callback(null , product);
 	})
 };
 

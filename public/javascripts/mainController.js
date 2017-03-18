@@ -37,6 +37,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	$scope.invoice_Model = allTemplates.invoiceModel;
 
 	$scope.initStatusData = APP_CONSTANT.STATUS_MODEL_JSON;
+	$scope.allActivePOs = [];
 
 	//Init all Scopes
 	$scope.userDetails = "";
@@ -133,7 +134,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     		case "supplier" : 
     			$scope.openSupplier(data);
     			break;
-    		case "po" : 
+    		case "invoice" : 
     			$scope.openInvoice(data);
     			break;
     	}
@@ -153,6 +154,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			$scope.selectedByUser = selUser[0]
     	}    	
     	$("#mySuppModal").modal('show');
+    	$('.main-panel').scrollTop(0);
     }
 
     $scope.openPurchaseOrd = function(poDatas){
@@ -174,6 +176,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			$scope.locationModel = $scope.poFormData.budgets_and_approvals.location
     	} 
     	$("#myPOModal").modal('show');
+    	$('.main-panel').scrollTop(0);
     }
 
     $scope.supplierForInvoice = [];
@@ -181,22 +184,46 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	SupplierTemplateLoadData(function(){
     		$scope.isReadOnly = false;
 	    	resetInvoiceModel();
-	    	$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
-	    		return obj.sa_status.status == "Accept";
+	    	
+	    	getAllActivePO(function(){
+	    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
+		    		return obj.sa_status.status == "Accept";
+		    	});
+		    	if(invData){
+		    		$scope.isReadOnly = true;
+
+		    		$scope.invoiceFormData = angular.copy(invData);
+
+		    		var tmpObj = $scope.supplierList.filter(function(obj){
+		    			return obj._id == $scope.invoiceFormData.supplierId;
+		    		})
+
+		    		var tmpPoObj = $scope.allActivePOs.filter(function(obj){
+		    			return obj._id == $scope.invoiceFormData.PO_id;
+		    		})
+
+		    		$scope.ddPoModel = tmpPoObj[0]
+
+		    		$scope.suppModel = tmpObj[0]
+		    	}
+	    		$("#myInvoiceModal").modal('show');
+	    		$('.main-panel').scrollTop(0);
 	    	});
-	    	if(invData){
-	    		$scope.isReadOnly = true;
-
-	    		$scope.invoiceFormData = angular.copy(invData);
-
-	    		var tmpObj = $scope.supplierList.filter(function(obj){
-	    			return obj._id == $scope.invoiceFormData.supplierId;
-	    		})
-
-	    		$scope.suppModel = tmpObj[0]
-	    	}
-	    	$("#myInvoiceModal").modal('show');	
     	})
+    }
+
+    function getAllActivePO(callback){
+    	common.showLoader();
+    	common.asynCall({
+			url: PATH_NAME + APP_CONSTANT.GET_ALL_PO,
+			method: 'post'
+		}).then( function(resVal){
+			$scope.allActivePOs = resVal.data;
+			callback();
+			common.hideLoader();
+	    }, function(error){
+	    	console.log(error);
+	    });
     }
 
     $scope.openStatusModel = function(action , row , statusVal){
@@ -218,7 +245,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	sendKeys.append( "primKey" , notsData._id );
     	
     	common.asynCall({
-			url: PATH_NAME + "/markNotificationAsViewed",
+			url: PATH_NAME + APP_CONSTANT.SET_MARK_AS_VIEW_NOTIFY,
 			method: 'post',
 			param : sendKeys
 		}).then( function(resVal){
@@ -349,6 +376,18 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	}
     }
 
+    $scope.ddPoModel = "";
+    $scope.invPoChngUpdate = function(e , comeFrom){
+    	if(e.ddPoModel){
+			var poNumber = e.ddPoModel.PO_number;
+			var poId = e.ddPoModel._id;
+			var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
+
+			$scope[ tmpKey ].PO_number = poNumber;
+    		$scope[ tmpKey ].PO_id = poId;
+    	}
+    }
+
     $scope.divisonChngUpdate = function(e , comeFrom){
     	if(e.divisonModel){
     		var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
@@ -461,13 +500,16 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
 	$scope.invoiceList = [];
-    function InvoiceTemplateLoadData(){
+    function InvoiceTemplateLoadData(callback){
     	common.showLoader();
     	common.asynCall({
 			url: PATH_NAME+ APP_CONSTANT.GET_INVOICES,
 			method:'post'
 		}).then( function(resVal){
-			$scope.invoiceList = resVal.data
+			$scope.invoiceList = resVal.data;
+			if(callback){
+				callback();
+			}
 			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);

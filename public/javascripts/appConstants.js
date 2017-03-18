@@ -7,6 +7,8 @@ var APP_CONSTANT = {
 	GET_CURRENT_USR: '/userDetails',
 	CREATE_SUPPLIER : '/createSupplier',
 	CREATE_INVOICE : '/createInvoice',
+	GET_ALL_PO : '/getAllPOs',
+	SET_MARK_AS_VIEW_NOTIFY: '/markNotificationAsViewed',
 	CREATE_PO : '/createPO',
 	STATUS_CHANGE_URL : '/statusChanges',
 	GET_SUPPLIERS : '/getSupplierDetails',

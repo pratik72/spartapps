@@ -70,6 +70,19 @@ router.post('/getSupplierDetails', restrict , function(req, res, next) {
 	});
 });
 
+//getAllPOs
+router.post('/getAllPOs', restrict , function(req, res, next) {
+	
+	var userOrgId = req.user.orgId;
+	poService.findPO( { orgId : new ObjectId(userOrgId) , "po_status.status" : "Accept" }, function(error , poData){
+		if(error){
+			console.log("PO Not Retrived" , error);
+			return res.json(error);
+		}
+  		res.json(poData);
+	});
+});
+
 //getPOdetList
 router.post('/getPOdetList', restrict , function(req, res, next) {
 	
@@ -150,7 +163,7 @@ router.post('/createPO', restrict , function(req, res, next) {
 					if(error){
 						return res.json( { error : "Notification Not added for PO"+error});
 					}
-		  			return res.json({ OK : "Notice Done" });
+		  			return res.json({ OK : "PO Created And Notice Done" });
 				});
 			});
 		});
@@ -232,14 +245,30 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
 			
 			//return res.json(tmpInvData);
-			InvoiceService.addInvoice( tmpInvData , function(error){
+			InvoiceService.addInvoice( tmpInvData , function(error , result){
 				if(error){
 					console.log("Invoice Not Created" , error);
 					res.status(400);
 					return res.json(error);
 				}
-				console.log("Data Entered Successfully");
-		  		return res.json({ OK : "Invoice Created Successfully" });
+
+				poService.findPO( { _id : new ObjectId(result.PO_id) }, function(error , jPoData){
+					if(error){
+						console.log("PO Not Retrived And Invoice Notice Fail" , error);
+						return res.json(error);
+					}
+					
+					result["vendor_selection"] = new Object();
+					result["vendor_selection"]["selected_by"] = "";
+					result["vendor_selection"]["selected_by"] = jPoData[0].vendor_selection.selected_by;
+					notify.notifyUser( "invoice" , result , function(error , nots_data){
+						if(error){
+							return res.json( { error : "Notification Not added for invoice"+error});
+						}
+			  			return res.json({ OK : "Invoice Created And Notice Done" });
+					});
+				});
+
 			});
 		});
 	}else{

@@ -10,6 +10,7 @@ var invoiceSchema = new Schema({
 	supplier_name : String,
 	supplierId : Schema.Types.ObjectId,
 	PO_number : String,
+	PO_id : Schema.Types.ObjectId,
 	bill_number : String,
 	Product_Nature : String,
 	HSN_Code : String,

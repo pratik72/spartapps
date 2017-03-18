@@ -30,60 +30,7 @@ exports.setNotificationsViewed = function(query , updateData , callback){
 	});
 }
 
-function tabSpecificNotification( tabs , data ,callback){
-
-	NoticeDataChanges( tabs ,data , callback )
-	/*switch(tabs) {
-	    case "supplier":
-	        supplierNoticeDataChanges(data , callback)
-	        break;
-	    case "invoice":
-	        invoiceNoticeDataChanges(data , callback)
-	        break;
-	    case "po":
-	        poNoticeDataChanges(data , callback)
-	        break;
-	}*/
-
-}
-
-function poNoticeDataChanges(data, next){
-	if(data){
-		var noticeData = {
-			sendTo : data.vendor_selection.selected_by, 
-			orgId : data.orgId,
-			sendBy : data.user_id,
-			isViewed : false,
-			viewDate : "",
-			tabArea : "po",
-			refKey : data._id,
-			title : "PO Approval Request from " + data.userName,
-			description : "You have Pending PO Approval Request from" + data.userName
-		}
-
-		next(noticeData);
-	}
-}
-
-function supplierNoticeDataChanges(data, next){
-	if(data){
-		var noticeData = {
-			sendTo : data.vendor_selection.selected_by, 
-			orgId : data.orgId,
-			sendBy : data.user_id,
-			isViewed : false,
-			viewDate : "",
-			tabArea : "supplier",
-			refKey : data._id,
-			title : "Supplier Approval Request from " + data.userName,
-			description : "You have Pending Supplier Approval Request from" + data.userName
-		}
-
-		next(noticeData);
-	}
-}
-
-function NoticeDataChanges(tabs ,data, next){
+function tabSpecificNotification(tabs ,data, next){
 	if(data){
 		var noticeData = {
 			sendTo : data.vendor_selection.selected_by, 
