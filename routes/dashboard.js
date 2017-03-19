@@ -243,6 +243,15 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 
 			var tmpInvData = mergeInvoiceUploadData(req.files , req.body);
 			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
+
+			var tmpIsExpense = false;
+
+			if( tmpInvData.isExpense == "true" ){
+				console.log("PO_id === " , tmpInvData.PO_id)
+				delete tmpInvData.PO_id;
+				tmpInvData.PO_number = "E";
+				tmpIsExpense = true;
+			}
 			
 			//return res.json(tmpInvData);
 			InvoiceService.addInvoice( tmpInvData , function(error , result){
@@ -250,6 +259,10 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 					console.log("Invoice Not Created" , error);
 					res.status(400);
 					return res.json(error);
+				}
+
+				if( tmpIsExpense ){
+					return res.json({ OK : "Invoice Expense Created" });
 				}
 
 				poService.findPO( { _id : new ObjectId(result.PO_id) }, function(error , jPoData){

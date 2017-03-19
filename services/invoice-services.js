@@ -11,6 +11,7 @@ exports.addInvoice = function(invoiceData , callback){
 		PO_number : invoiceData.PO_number,
 		PO_id : invoiceData.PO_id,
 		bill_number : invoiceData.bill_number,
+		isExpense : invoiceData.isExpense,
 		Product_Nature : invoiceData.Product_Nature,
 		HSN_Code : invoiceData.HSN_Code,
 		Quantity : invoiceData.Quantity,

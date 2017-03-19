@@ -50,9 +50,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	};
 	
 	//Init Form data of madel
-	$scope.supplierFormData = APP_CONSTANT.SUPPLIER_JSON;
-	$scope.invoiceFormData = APP_CONSTANT.INVOICE_JSON;
-	$scope.poFormData = APP_CONSTANT.PO_JSON;
+	$scope.supplierFormData = angular.copy( APP_CONSTANT.SUPPLIER_JSON );
+	$scope.invoiceFormData = angular.copy( APP_CONSTANT.INVOICE_JSON );
+	$scope.poFormData = angular.copy( APP_CONSTANT.PO_JSON );
 	$scope.isReadOnly = false;
 
 	//Init To get Current User Details on load
@@ -168,6 +168,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     		});
     		$scope.suppModel = selSuppObj[0];
 			$scope.divisonModel = $scope.poFormData.vendor_selection.division;
+			
 			var selUser = $scope.notifyUser.filter(function(a){
 				return $scope.poFormData.vendor_selection.selected_by == a._id
 			});
@@ -189,11 +190,12 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
 		    		return obj.sa_status.status == "Accept";
 		    	});
+
 		    	if(invData){
 		    		$scope.isReadOnly = true;
 
 		    		$scope.invoiceFormData = angular.copy(invData);
-
+		    		$scope.invoiceFormData.isExpense = $scope.invoiceFormData.isExpense.toString();
 		    		var tmpObj = $scope.supplierList.filter(function(obj){
 		    			return obj._id == $scope.invoiceFormData.supplierId;
 		    		})
@@ -210,6 +212,15 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    		$('.main-panel').scrollTop(0);
 	    	});
     	})
+    }
+
+    $scope.calculatePoAmount = function(){
+    	var strQuantity = $scope.poFormData.product_information.quantity;
+    	var strRate = $scope.poFormData.product_information.rate;
+
+    	var strAmount = parseFloat(strRate || 0 ) * parseFloat(strQuantity || 0);
+
+    	$scope.poFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
     }
 
     function getAllActivePO(callback){
@@ -364,6 +375,25 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	supplier : "supplierList"
     }
 
+    var TMP_BACKUP = {};
+    function customSelectOnChange(e , tabs){
+    	switch(tabs){
+    		case "invoice" :
+    			if( !TMP_BACKUP["allActivePOs"] ){
+    				TMP_BACKUP["allActivePOs"] = $scope.allActivePOs;
+    			}
+
+    			if(e.suppModel){
+					$scope.allActivePOs = $scope.allActivePOs.filter(function(obj){
+						return obj.supplierId == e.suppModel._id
+					});
+    			}else{
+    				$scope.allActivePOs = TMP_BACKUP["allActivePOs"];
+    			}
+    			break;
+    	}
+    }
+
     $scope.suppModel = "";
     $scope.suppChngUpdate = function(e , comeFrom){
     	if(e.suppModel){
@@ -373,7 +403,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
 			$scope[ tmpKey ].supplier_name = supplierName;
     		$scope[ tmpKey ].supplierId = supplierId;
+
     	}
+    	customSelectOnChange(e, comeFrom);
     }
 
     $scope.ddPoModel = "";
@@ -385,6 +417,10 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
 			$scope[ tmpKey ].PO_number = poNumber;
     		$scope[ tmpKey ].PO_id = poId;
+
+    		$scope[ tmpKey ].Quantity = e.ddPoModel.product_information.quantity;
+    		$scope[ tmpKey ].Rate = e.ddPoModel.product_information.rate;
+
     	}
     }
 
@@ -554,6 +590,8 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     		}
     	};
 
+    	$scope.invoiceFormData.isExpense = angular.copy( APP_CONSTANT.INVOICE_JSON ).isExpense;
+	    $scope.ddPoModel = "";
     	if(!modelScope){
 	    	$scope.invoice = "";
 	    	$scope.PO = "";
@@ -571,10 +609,13 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     		}
     	};
 
+    	$scope.poFormData.product_information.poCategory = angular.copy( APP_CONSTANT.PO_JSON ).product_information.poCategory;
+
     	if(!modelScope){
 	    	$scope.cancelled_cheque = "";
 	    	$scope.quotation = "";
 	    	$scope.other_doc = "";
+	    	$scope.divisonModel = "";
     	}
     }
 }]);

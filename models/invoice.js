@@ -12,10 +12,11 @@ var invoiceSchema = new Schema({
 	PO_number : String,
 	PO_id : Schema.Types.ObjectId,
 	bill_number : String,
+	isExpense : Boolean,
 	Product_Nature : String,
 	HSN_Code : String,
-	Quantity : String,
-	Rate : String,
+	Quantity : Number,
+	Rate : Number,
 	create_date : {type: Date, default: Date.now},
 	Payment_due_date : String,
 	doc_attachment: {

@@ -25,15 +25,37 @@
                     </select>
                   </td>
                 </tr>
+                
                 <tr>
+                  <td></td>
+                  <td colspan="3">
+                    <label>
+                      <input type="radio" ng-model="invoiceFormData.isExpense" value="false">
+                      PO
+                    </label> &nbsp;&nbsp;&nbsp;
+                    <label>
+                      <input type="radio" ng-model="invoiceFormData.isExpense" value="true">
+                      Expense
+                    </label>
+                  </td>
+                </tr>
+
+                <tr ng-if="invoiceFormData.isExpense == 'false'">
                   <td>PO No</td>
                   <td colspan="3">
-                    <!-- <input type="text" class="form-control" name="address1" ng-model="invoiceFormData.PO_number" placeholder="Enter PO number" ng-disabled="isReadOnly"> -->
                     <select ng-options="item as item.PO_number for item in allActivePOs" ng-model="ddPoModel" required ng-change="invPoChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select po--</option>
                     </select>
                   </td>
                 </tr>
+
+                <tr ng-show="false">
+                  <td>Expense</td>
+                  <td colspan="3">
+                    <input type="text" class="form-control" name="address2" ng-model="invoiceFormData.expAmount" placeholder="Enter Bill number" ng-disabled="isReadOnly">
+                  </td>
+                </tr>
+
                 <tr>
                   <td>Bill No</td>
                   <td colspan="3">
@@ -53,13 +75,13 @@
                   </td>
                   <td>Quantity</td>
                   <td>
-                    <input type="text" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly">
+                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly" required>
                   </td>
                 </tr>
                  <tr>
                   <td>Rate</td>
                   <td>
-                    <input type="text" class="form-control" name="district" ng-model="invoiceFormData.Rate" placeholder="Rate" ng-disabled="isReadOnly">
+                    <input type="number" class="form-control" name="district" ng-model="invoiceFormData.Rate" placeholder="Rate" ng-disabled="isReadOnly" required>
                   </td>
                   <td>Payment Due Date</td>
                   <td>

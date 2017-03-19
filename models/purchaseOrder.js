@@ -18,10 +18,11 @@ var poSchema = new Schema({
 	create_date : {type: Date, default: Date.now},
 	product_information: {
 	    product_name: String,
+	    poCategory : String,
 	    product_discreption: String,
 	    HSN_code: String,
-	    quantity: String,
-	    rate: String,
+	    quantity: Number,
+	    rate: Number,
 	    amount: String,
 	    payment_terms : String
 	},

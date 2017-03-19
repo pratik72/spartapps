@@ -95,6 +95,7 @@ var APP_CONSTANT = {
 		},
 		"product_information": {
 		    "product_name": "",
+		    "poCategory" : "product",
 		    "product_discreption": "",
 		    "HSN_code": "",
 		    "quantity": "",
@@ -133,9 +134,12 @@ var APP_CONSTANT = {
 		fieldSet : "",
 	},
 	INVOICE_JSON : {
+		orgName : "",
+		userName : "",
 		supplier_name : "",
 		PO_number : "",
 		bill_number : "",
+		isExpense : "false",
 		Product_Nature : "",
 		HSN_Code : "",
 		Quantity : "",

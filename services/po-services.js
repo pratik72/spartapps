@@ -21,6 +21,7 @@ exports.addPO = function(poData , callback){
 			userName : poData.userName,
 			product_information: {
 			    product_name: poData.product_information.product_name,
+			    poCategory : poData.product_information.poCategory,
 			    product_discreption: poData.product_information.product_discreption,
 			    HSN_code: poData.product_information.HSN_code,
 			    quantity: poData.product_information.quantity,
