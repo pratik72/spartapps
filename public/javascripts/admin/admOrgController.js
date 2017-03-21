@@ -24,8 +24,44 @@ app.controller('admOrgController', function($scope , common) {
 
 	}
 
-	$scope.openOrgMod = function(){
-		$('#orgCreateModal').modal('show');
-	}
+
+	$scope.openOrgMod = function(orgData){
+    	resetOrgMod();
+    	$scope.isReadOnly = false;
+    	if(orgData){
+    		return;//return because we did not provice org EDIT
+    		$scope.isReadOnly = true;
+    		$scope.userForm = angular.copy(orgData);
+			var selOrg = $scope.AllOrgsData.filter(function(a){
+				return $scope.userForm.orgId == a._id
+			});
+
+			var selUsrRole = $scope.AllUserRoles.filter(function(a){
+				return $scope.userForm.role == a.name
+			});
+			
+			$scope.orgModel = selOrg[0];
+			$scope.userRole = selUsrRole[0];
+    	}
+
+    	$("#orgCreateModal").modal('show');
+
+    }
+
+    function resetOrgMod(modelScope){
+    	/*var tmpModelScope = modelScope || $scope.userForm;
+    	for (var key in tmpModelScope) {
+    		if(typeof tmpModelScope[key] == "object"){
+    			resetUserMod( tmpModelScope[key] )
+    		}else{
+    			tmpModelScope[key] = "";
+    		}
+    	};
+
+    	if(!modelScope){
+	    	$scope.orgModel = "";
+			$scope.userRole = "";
+    	}*/
+    }
 
 });

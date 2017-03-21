@@ -77,7 +77,41 @@ app.controller('admUserController', function($scope , common) {
     }
 
 
-    $scope.openUserMod = function(){
+    $scope.openUserMod = function(userData){
+    	resetUserMod();
+    	$scope.isReadOnly = false;
+    	if(userData){
+    		$scope.isReadOnly = true;
+    		$scope.userForm = angular.copy(userData);
+			var selOrg = $scope.AllOrgsData.filter(function(a){
+				return $scope.userForm.orgId == a._id
+			});
+
+			var selUsrRole = $scope.AllUserRoles.filter(function(a){
+				return $scope.userForm.role == a.name
+			});
+			
+			$scope.orgModel = selOrg[0];
+			$scope.userRole = selUsrRole[0];
+    	}
+
     	$("#userCreateModal").modal('show');
+
+    }
+
+    function resetUserMod(modelScope){
+    	var tmpModelScope = modelScope || $scope.userForm;
+    	for (var key in tmpModelScope) {
+    		if(typeof tmpModelScope[key] == "object"){
+    			resetUserMod( tmpModelScope[key] )
+    		}else{
+    			tmpModelScope[key] = "";
+    		}
+    	};
+
+    	if(!modelScope){
+	    	$scope.orgModel = "";
+			$scope.userRole = "";
+    	}
     }
 });

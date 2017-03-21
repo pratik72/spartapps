@@ -92,16 +92,6 @@
                   <th colspan="4">Vendor Selection</th>
                 </tr>
                 <tr>
-                  <td>Suggested by</td>
-                  <td>
-                    <input type="text" class="form-control" name="suggested_by" ng-model="poFormData.vendor_selection.suggested_by" ng-disabled="isReadOnly" placeholder="Enter Suggested by">
-                  </td>
-                  <td>Shortlisted by</td>
-                  <td>
-                    <input type="text" class="form-control" name="shortlisted_by" ng-model="poFormData.vendor_selection.shortlisted_by" ng-disabled="isReadOnly" placeholder="Enter Shortlisted by">
-                  </td>
-                </tr>
-                <tr>
                   <td>Division</td>
                   <td>
                     <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'po')" class="form-control" ng-disabled="isReadOnly">

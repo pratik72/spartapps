@@ -104,9 +104,7 @@ var APP_CONSTANT = {
 		    "payment_terms" : ""
 		},
 		"vendor_selection": {
-		    "suggested_by": "",
 		    "selected_by": "",
-		    "shortlisted_by": "",
 		    "division": ""
 		},
 		"budgets_and_approvals": {

@@ -152,7 +152,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 				return $scope.supplierFormData.vendor_selection.selected_by == a._id
 			});
 			$scope.selectedByUser = selUser[0]
-    	}    	
+    	}	
     	$("#mySuppModal").modal('show');
     	$('.main-panel').scrollTop(0);
     }
@@ -420,6 +420,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
     		$scope[ tmpKey ].Quantity = e.ddPoModel.product_information.quantity;
     		$scope[ tmpKey ].Rate = e.ddPoModel.product_information.rate;
+
+    		$scope[ tmpKey ].HSN_Code = e.ddPoModel.product_information.HSN_Code;
+    		$scope[ tmpKey ].Product_Nature = e.ddPoModel.product_information.product_discreption;
 
     	}
     }

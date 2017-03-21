@@ -27,9 +27,7 @@ var poSchema = new Schema({
 	    payment_terms : String
 	},
 	vendor_selection: {
-	    suggested_by: String,
 	    selected_by: String,
-	    shortlisted_by: String,
 	    division: String
 	},
 	budgets_and_approvals: {

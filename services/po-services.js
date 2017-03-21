@@ -30,9 +30,7 @@ exports.addPO = function(poData , callback){
 			    payment_terms : poData.product_information.payment_terms
 			},
 			vendor_selection: {
-			    suggested_by: poData.vendor_selection.suggested_by,
 			    selected_by: poData.vendor_selection.selected_by,
-			    shortlisted_by: poData.vendor_selection.shortlisted_by,
 			    division: poData.vendor_selection.division
 			},
 			budgets_and_approvals: {

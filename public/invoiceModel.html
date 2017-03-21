@@ -31,11 +31,11 @@
                   <td colspan="3">
                     <label>
                       <input type="radio" ng-model="invoiceFormData.isExpense" value="false">
-                      PO
+                      with PO
                     </label> &nbsp;&nbsp;&nbsp;
                     <label>
                       <input type="radio" ng-model="invoiceFormData.isExpense" value="true">
-                      Expense
+                      without PO
                     </label>
                   </td>
                 </tr>
@@ -86,6 +86,24 @@
                   <td>Payment Due Date</td>
                   <td>
                     <input type="text" class="form-control" name="state" ng-model="invoiceFormData.Payment_due_date" placeholder="Enter due date" ng-disabled="isReadOnly">
+                  </td>
+                </tr>
+
+                <tr>
+                  <th colspan="4">Vendor Selection</th>
+                </tr>
+                <tr>
+                  <td>Division</td>
+                  <td>
+                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'invoice')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select divison--</option>
+                    </select>
+                  </td>
+                  <td>Selected by</td>
+                  <td>
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'invoice')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select User--</option>
+                    </select>
                   </td>
                 </tr>
                  
