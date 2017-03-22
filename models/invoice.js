@@ -19,6 +19,10 @@ var invoiceSchema = new Schema({
 	Rate : Number,
 	create_date : {type: Date, default: Date.now},
 	Payment_due_date : String,
+	vendor_selection: {
+		selected_by: String,
+		division: String
+	},
 	doc_attachment: {
 	    invoice: String,
 	    PO: String,

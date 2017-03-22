@@ -204,9 +204,13 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		    			return obj._id == $scope.invoiceFormData.PO_id;
 		    		})
 
-		    		$scope.ddPoModel = tmpPoObj[0]
+		    		var selUser = $scope.notifyUser.filter(function(a){
+						return $scope.supplierFormData.vendor_selection.selected_by == a._id
+					});
 
-		    		$scope.suppModel = tmpObj[0]
+					$scope.selectedByUser = selUser[0];
+		    		$scope.ddPoModel = tmpPoObj[0];
+		    		$scope.suppModel = tmpObj[0];
 		    	}
 	    		$("#myInvoiceModal").modal('show');
 	    		$('.main-panel').scrollTop(0);
@@ -218,7 +222,20 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	var strQuantity = $scope.poFormData.product_information.quantity;
     	var strRate = $scope.poFormData.product_information.rate;
 
+    	var strVAT = $scope.poFormData.product_information.VAT;
+    	var strCST = $scope.poFormData.product_information.CST;
+    	var strGST = $scope.poFormData.product_information.GST;
+    	var strServiceTax = $scope.poFormData.product_information.service_tax;
+    	var strExcise = $scope.poFormData.product_information.excise;
+
+
     	var strAmount = parseFloat(strRate || 0 ) * parseFloat(strQuantity || 0);
+
+    	strAmount += parseFloat(strVAT || 0);
+    	strAmount += parseFloat(strCST || 0);
+    	strAmount += parseFloat(strGST || 0);
+    	strAmount += parseFloat(strServiceTax || 0);
+    	strAmount += parseFloat(strExcise || 0);
 
     	$scope.poFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
     }

@@ -30,11 +30,11 @@
                   <td></td>
                   <td colspan="3">
                     <label>
-                      <input type="radio" ng-model="invoiceFormData.isExpense" value="false">
+                      <input type="radio" ng-model="invoiceFormData.isExpense" value="false" ng-disabled="isReadOnly">
                       with PO
                     </label> &nbsp;&nbsp;&nbsp;
                     <label>
-                      <input type="radio" ng-model="invoiceFormData.isExpense" value="true">
+                      <input type="radio" ng-model="invoiceFormData.isExpense" value="true" ng-disabled="isReadOnly">
                       without PO
                     </label>
                   </td>
@@ -99,7 +99,7 @@
                       <option value="">--select divison--</option>
                     </select>
                   </td>
-                  <td>Selected by</td>
+                  <td>Approver</td>
                   <td>
                     <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select User--</option>

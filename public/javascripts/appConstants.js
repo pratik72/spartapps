@@ -100,6 +100,11 @@ var APP_CONSTANT = {
 		    "HSN_code": "",
 		    "quantity": "",
 		    "rate": "",
+		    "VAT": "",
+		    "CST": "",
+		    "GST": "",
+		    "service_tax": "",
+		    "excise": "",
 		    "amount": "",
 		    "payment_terms" : ""
 		},
@@ -143,6 +148,10 @@ var APP_CONSTANT = {
 		Quantity : "",
 		Rate : "",
 		Payment_due_date : "",
+		"vendor_selection": {
+		    "selected_by": "",
+		    "division": ""
+		},
 		doc_attachment: {
 		    invoice: "",
 		    PO: "",

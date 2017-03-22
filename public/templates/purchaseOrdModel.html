@@ -39,11 +39,11 @@
                   <td> PO Category</td>
                   <td colspan="3">
                     <label>
-                      <input type="radio" ng-model="poFormData.product_information.poCategory" value="product">
+                      <input type="radio" ng-model="poFormData.product_information.poCategory" value="product" ng-disabled="isReadOnly">
                       Product
                     </label> &nbsp;&nbsp;&nbsp;
                     <label>
-                      <input type="radio" ng-model="poFormData.product_information.poCategory" value="service">
+                      <input type="radio" ng-model="poFormData.product_information.poCategory" value="service" ng-disabled="isReadOnly">
                       Service
                     </label>
                   </td>
@@ -63,19 +63,48 @@
                 </tr>
                 <tr>
                   <td>Quantity</td>
-                  <td colspan="3">
+                  <td>
                     <input type="number" class="form-control" name="quantity" ng-model="poFormData.product_information.quantity" ng-disabled="isReadOnly" placeholder="Enter Quantity" ng-change="calculatePoAmount()" required>
                   </td>
-                </tr>
-                <tr>
+                
                   <td>Rate</td>
-                  <td colspan="3">
+                  <td>
                     <input type="number" class="form-control" name="rate" ng-model="poFormData.product_information.rate" ng-disabled="isReadOnly" placeholder="Enter Rate" ng-change="calculatePoAmount()" required>
                   </td>
                 </tr>
+
                 <tr>
+                  <td>VAT</td>
+                  <td>
+                    <input type="number" class="form-control" name="VAT" ng-model="poFormData.product_information.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculatePoAmount()" >
+                  </td>
+                
+                  <td>CST</td>
+                  <td>
+                    <input type="number" class="form-control" name="CST" ng-model="poFormData.product_information.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculatePoAmount()" >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>GST</td>
+                  <td>
+                    <input type="number" class="form-control" name="GST" ng-model="poFormData.product_information.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculatePoAmount()" >
+                  </td>
+                
+                  <td>Service Tax</td>
+                  <td>
+                    <input type="number" class="form-control" name="service_tax" ng-model="poFormData.product_information.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculatePoAmount()" >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Excise</td>
+                  <td>
+                    <input type="number" class="form-control" name="excise" ng-model="poFormData.product_information.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculatePoAmount()" >
+                  </td>
+
                   <td>Amount</td>
-                  <td colspan="3">
+                  <td>
                     <input type="text" class="form-control" name="amount" ng-model="poFormData.product_information.amount" disabled placeholder="Enter Amount">
                   </td>
                 </tr>

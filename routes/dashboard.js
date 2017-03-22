@@ -244,13 +244,10 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 			var tmpInvData = mergeInvoiceUploadData(req.files , req.body);
 			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
 
-			var tmpIsExpense = false;
-
 			if( tmpInvData.isExpense == "true" ){
 				console.log("PO_id === " , tmpInvData.PO_id)
 				delete tmpInvData.PO_id;
 				tmpInvData.PO_number = "E";
-				tmpIsExpense = true;
 			}
 			
 			//return res.json(tmpInvData);
@@ -261,27 +258,12 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 					return res.json(error);
 				}
 
-				if( tmpIsExpense ){
-					return res.json({ OK : "Invoice Expense Created" });
-				}
-
-				poService.findPO( { _id : new ObjectId(result.PO_id) }, function(error , jPoData){
+				notify.notifyUser( "invoice" , result , function(error , nots_data){
 					if(error){
-						console.log("PO Not Retrived And Invoice Notice Fail" , error);
-						return res.json(error);
+						return res.json( { error : "Notification Not added for invoice"+error});
 					}
-					
-					result["vendor_selection"] = new Object();
-					result["vendor_selection"]["selected_by"] = "";
-					result["vendor_selection"]["selected_by"] = jPoData[0].vendor_selection.selected_by;
-					notify.notifyUser( "invoice" , result , function(error , nots_data){
-						if(error){
-							return res.json( { error : "Notification Not added for invoice"+error});
-						}
-			  			return res.json({ OK : "Invoice Created And Notice Done" });
-					});
+		  			return res.json({ OK : "Invoice Created And Notice Done" });
 				});
-
 			});
 		});
 	}else{
@@ -291,6 +273,8 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 
 
 function mergeInvoiceUploadData(files , tmpObj){
+
+	tmpObj.vendor_selection = JSON.parse(tmpObj.vendor_selection);
 	
 	tmpObj.doc_attachment = {};
 	tmpObj.doc_attachment.invoice = files[0] ? files[0].filename : "";

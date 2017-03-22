@@ -26,6 +26,11 @@ exports.addPO = function(poData , callback){
 			    HSN_code: poData.product_information.HSN_code,
 			    quantity: poData.product_information.quantity,
 			    rate: poData.product_information.rate,
+			    VAT : poData.product_information.VAT,
+			    CST: poData.product_information.CST,
+			    GST: poData.product_information.GST,
+			    service_tax : poData.product_information.service_tax,
+			    excise: poData.product_information.excise,
 			    amount: poData.product_information.amount,
 			    payment_terms : poData.product_information.payment_terms
 			},

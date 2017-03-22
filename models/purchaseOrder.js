@@ -23,6 +23,11 @@ var poSchema = new Schema({
 	    HSN_code: String,
 	    quantity: Number,
 	    rate: Number,
+	    VAT : Number,
+	    CST: Number,
+	    GST: Number,
+	    service_tax : Number,
+	    excise: Number,
 	    amount: String,
 	    payment_terms : String
 	},

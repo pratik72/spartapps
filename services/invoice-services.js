@@ -17,6 +17,10 @@ exports.addInvoice = function(invoiceData , callback){
 		Quantity : invoiceData.Quantity,
 		Rate : invoiceData.Rate,
 		Payment_due_date : invoiceData.Payment_due_date,
+		vendor_selection: {
+		    selected_by: invoiceData.vendor_selection.selected_by,
+		    division: invoiceData.vendor_selection.division
+		},
 		doc_attachment: {
 		    invoice: invoiceData.doc_attachment.invoice,
 		    PO: invoiceData.doc_attachment.PO,
