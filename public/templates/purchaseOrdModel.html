@@ -7,16 +7,38 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Purchase Order</h4>
-        <div class="pull-right" ng-if="poFormData.po_status.status == 'pending'">
-          <button class="btn btn-default" ng-click="openStatusModel('purchaseOrd' , poFormData , 'Accept')">Approve</button>
-          <button class="btn btn-danger" ng-click="openStatusModel('purchaseOrd' , poFormData , 'Decline')">Decline</button>
+
+        <div class="pull-right" >
+          <button class="btn btn-success" ng-click="copyAndCreateNewPO()" ng-show="isReadOnly">Copy & Creat New PO</button>
+          <span ng-if="poFormData.po_status.status == 'pending' && isReadOnly">
+            <button class="btn btn-default" ng-click="openStatusModel('purchaseOrd' , poFormData , 'Accept')">Approve</button>
+            <button class="btn btn-danger" ng-click="openStatusModel('purchaseOrd' , poFormData , 'Decline')">Decline</button>
+          </span>
         </div>
+
         <hr/>
       </div>
       <form name="supplierForm" ng-submit="poCreate()" enctype="multipart/form-data">
         <div class="modal-body">
             <table class="table table-bordered">
               <tbody>
+
+                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
+                  <th colspan="4">Reply</th>
+                </tr>
+                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
+                  <td>Status</td>
+                  <td colspan="3">
+                    <span>{% poFormData.po_status.status %}</span>
+                  </td>
+                </tr>
+                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
+                  <td>Comment</td>
+                  <td colspan="3">
+                    <span>{% poFormData.po_status.status_description %}</span>
+                  </td>
+                </tr>
+
                 <tr>
                   <th colspan="4">Information on Product</th>
                 </tr>

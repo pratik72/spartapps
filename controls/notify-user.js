@@ -1,9 +1,9 @@
 var Notify = require('../models/notification').notify;
 
-exports.notifyUser = function( tabs , data , callback){
+exports.notifyUser = function( notfyObj , callback){
 
 
-	tabSpecificNotification(tabs , data ,function(notsData){
+	tabSpecificNotification( notfyObj ,function(notsData){
 
 	    var newNotify = new Notify(notsData);
 
@@ -30,18 +30,62 @@ exports.setNotificationsViewed = function(query , updateData , callback){
 	});
 }
 
-function tabSpecificNotification(tabs ,data, next){
+function tabSpecificNotification(tmpNotifyObj ,next){
+	
+	var data = tmpNotifyObj.data;
 	if(data){
+
+		var tabs = tmpNotifyObj.tabs;
+		var notifyType = tmpNotifyObj.notifyType;
+		var userData = tmpNotifyObj.userData;
+		var userName = userData.firstName + " " +userData.lastName;
+
+		var tmpSendTo = data.vendor_selection.selected_by;
+		var tmpSendBy = userData._id;
+
+		notifyType = parseInt(notifyType);
+		var tmpTitle = "" ,
+			tmpStatus = null,
+			tmpDesc = "";
+
+		switch(tabs){
+			case "supplier" : 
+				tmpStatus = data.sa_status.status;
+				break;
+			case "purchaseOrd" : 
+				tmpStatus = data.po_status.status;				
+				break;
+			case "invoice" : 
+				tmpStatus = data.iv_status.status;
+				break;
+		}
+		
+		switch(notifyType){
+			case 1 : //For Any Form createtion
+				tmpTitle = "New " + tabs+" Approval Request from " + userName;
+				tmpDesc = "You have Pending " + tabs+ "Approval Request from" + userName;
+				break;
+			case 2 : //For Any Form Update
+				tmpTitle = "Update " + tabs+" Approval Request from " + userName;
+				tmpDesc = "You have Pending " + tabs+ "Approval Request from" + userName;
+				break;
+			case 3 : //For Any Form Status Update
+				tmpTitle = tabs+" Request " + tmpStatus + " by " + userName;
+				tmpDesc = "Your " + tabs+ " Request " + tmpStatus + " by " + userName;
+				tmpSendTo = data.user_id;
+				break;
+		}
 		var noticeData = {
-			sendTo : data.vendor_selection.selected_by, 
+			sendTo : tmpSendTo, 
+			notifyType : notifyType,
 			orgId : data.orgId,
-			sendBy : data.user_id,
+			sendBy : tmpSendBy,
 			isViewed : false,
 			viewDate : "",
 			tabArea : tabs,
 			refKey : data._id,
-			title : tabs+" Approval Request from " + data.userName,
-			description : "You have Pending " + tabs+ "Approval Request from" + data.userName
+			title : tmpTitle,
+			description : tmpDesc
 		}
 
 		next(noticeData);

@@ -44,15 +44,34 @@ router.post('/distUserDetails', restrict , function(req, res, next) {
 
 
 router.post('/statusChanges' , restrict , function(req, res, next){
-	
+	var tmpNotifyType = 3;
 	uploadService.uploadFiles(req, res, null , function(uplErr){
+
+		var currUser = req.user;
 
 		if(uplErr){
 			res.json({error : "File not Uploaded..!"});	
 		}
 
 		changeActionStatus(req , res , function(msg){
-			res.json(msg)
+			var actQuery = req.query.action && req.query.action;
+
+			if(msg.ok){
+				var tmpNotifyObj = {
+					tabs : actQuery ,
+					data : msg.ok , 
+					notifyType : tmpNotifyType,
+					userData : currUser
+				}
+				notify.notifyUser( tmpNotifyObj, function(error , nots_data){
+					if(error){
+						return res.json( { error : "Notification Not added for status change. "+error});
+					}
+		  			return res.json(msg)
+				});
+			}else{
+				return res.json(msg)
+			}
 		});
 	});
 });
@@ -112,22 +131,80 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , "supplier");
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
-			supplierService.addSupplier(bodyObject , function(error , result){
-				if(error){
-					console.log("Supplier Not Created" , error);
-					res.status(400);
-					return res.json(error);
-				}
+			var tmpNotifyType = 1;
+			var currUser = req.user;
+			
+			if(req.query && req.query.action == 1){
+				var rowId = req.body._id;
+				rowId = rowId ? new ObjectId(rowId) : {};
 
-				//console.log("Data Entered Successfully" , result);
-				notify.notifyUser( "supplier" , result , function(error , nots_data){
+				var rowQuery = { _id : rowId };
+				var rowData = bodyObject;
+				tmpNotifyType = 2;
 
+				if (!rowData) return callback({error : "Bad data structure..!"});
+
+				supplierService.updateSupplier(rowQuery , rowData , function(error , data){
 					if(error){
-						return res.json( { error : "Notification Not added "+error});
+						console.log("Supplier Not Updated" , error);
+						res.status(400);
+						return res.json(error);
 					}
-		  			return res.json({ OK : "User Entered Successfully" });
+
+					var searchQuery = {
+						refKey : new ObjectId(data._id),
+						isViewed : false
+					}
+
+					var setValue = { 
+						isViewed : true,
+						description : "Auto marked due to record Updated",
+						viewDate : new Date()
+					};
+					notify.setNotificationsViewed( searchQuery , setValue , function(error , nData){
+						if(error){
+							console.log("Notification Not Mark as view" , error);
+						}
+
+						var tmpNotifyObj = {
+							tabs : "supplier",
+							data : data , 
+							notifyType : tmpNotifyType,
+							userData : currUser
+						}
+
+						notify.notifyUser( tmpNotifyObj , function(error , nots_data){
+							if(error){
+								return res.json( { error : "Notification Not added "+error});
+							}
+				  			return res.json({ OK : "Supplier Updated Successfully" });
+						});
+					});
 				});
-			});
+			}else{
+				supplierService.addSupplier(bodyObject , function(error , result){
+					if(error){
+						console.log("Supplier Not Created" , error);
+						res.status(400);
+						return res.json(error);
+					}
+
+					var tmpNotifyObj = {
+						tabs : "supplier",
+						data : result , 
+						notifyType : tmpNotifyType,
+						userData : currUser
+					}
+
+					notify.notifyUser( tmpNotifyObj , function(error , nots_data){
+
+						if(error){
+							return res.json( { error : "Notification Not added "+error});
+						}
+			  			return res.json({ OK : "Supplier Created Successfully" });
+					});
+				});
+			}
 		});
 
 	}else{
@@ -139,6 +216,7 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 //createPO
 router.post('/createPO', restrict , function(req, res, next) {
 	var bodyObject = req.body;
+	var tmpNotifyType = 1;
 	if (bodyObject) {
 
 		uploadService.uploadFiles(req, res, null , function(uplErr){
@@ -152,6 +230,9 @@ router.post('/createPO', restrict , function(req, res, next) {
 			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'po');
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
 
+
+			var currUser = req.user;
+
 			poService.addPO(bodyObject , function(error , result){
 				if(error){
 					console.log("PO Not Created" , error);
@@ -159,7 +240,14 @@ router.post('/createPO', restrict , function(req, res, next) {
 					return res.json(error);
 				}
 
-				notify.notifyUser( "purchaseOrd" , result , function(error , nots_data){
+				var tmpNotifyObj = {
+					tabs : "purchaseOrd",
+					data : result , 
+					notifyType : tmpNotifyType,
+					userData : currUser
+				}
+
+				notify.notifyUser( tmpNotifyObj , function(error , nots_data){
 					if(error){
 						return res.json( { error : "Notification Not added for PO"+error});
 					}
@@ -214,8 +302,7 @@ router.post('/markNotificationAsViewed', restrict , function(req, res, next) {
 				return res.json(error);
 			}
 	  		res.json(nData);
-		});
-		
+		});		
 	});
 });
 
@@ -234,6 +321,7 @@ router.post('/getInvoicesDetails', restrict , function(req, res, next) {
 
 router.post('/createInvoice', restrict , function(req, res, next) {
 	var bodyObject = req.body;
+	var tmpNotifyType = 1;
 	//uploadFiles
 	if (bodyObject) {
 		uploadService.uploadFiles(req, res, null , function(uplErr){
@@ -241,11 +329,11 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 				res.json({error : "File not Uploaded..!"});	
 			}
 
+			var currUser = req.user;
 			var tmpInvData = mergeInvoiceUploadData(req.files , req.body);
 			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
 
 			if( tmpInvData.isExpense == "true" ){
-				console.log("PO_id === " , tmpInvData.PO_id)
 				delete tmpInvData.PO_id;
 				tmpInvData.PO_number = "E";
 			}
@@ -258,7 +346,14 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 					return res.json(error);
 				}
 
-				notify.notifyUser( "invoice" , result , function(error , nots_data){
+				var tmpNotifyObj = {
+					tabs : "invoice",
+					data : result , 
+					notifyType : tmpNotifyType,
+					userData : currUser
+				}
+
+				notify.notifyUser( tmpNotifyObj , function(error , nots_data){
 					if(error){
 						return res.json( { error : "Notification Not added for invoice"+error});
 					}
@@ -310,8 +405,13 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 
 	if(comeFrom == "po"){
 		tmpObj["po_status"].status = "pending";
+		tmpObj["po_status"].status_description = "";
+		tmpObj["po_status"].status_changedBy = ""
 	}else{
 		tmpObj["sa_status"].status = "pending";
+		tmpObj["sa_status"].status_changeDate = "";
+		tmpObj["sa_status"].status_description = "";
+		tmpObj["sa_status"].status_changedBy = ""
 	}
 	tmpObj.doc_attachment = {};
 	
@@ -338,10 +438,10 @@ function mergeUserDetailsData( mobjData , user){
 }
 
 function changeActionStatus(req , res , callback){
-	var query = req.query.action && req.query.action.toLowerCase();
-	if(!req.query.action ){
+	var actQuery = req.query.action && req.query.action.toLowerCase();
+	if(!actQuery ){
 		return callback({error : "Action required..!"})
-	}else if(req.query.action == 'supplier'){
+	}else if(actQuery == 'supplier'){
 		var rowId = req.body.rowId;
 		rowId = rowId ? new ObjectId(rowId) : {};
 
@@ -359,7 +459,7 @@ function changeActionStatus(req , res , callback){
 			}
 			return callback({ ok : data})
 		});
-	}else if(req.query.action == 'invoice'){
+	}else if(actQuery == 'invoice'){
 		var rowId = req.body.rowId;
 		rowId = rowId ? new ObjectId(rowId) : {};
 
@@ -377,7 +477,7 @@ function changeActionStatus(req , res , callback){
 			}
 			return callback({ ok : data})
 		});
-	}else if(req.query.action == 'purchaseOrd'){
+	}else if(actQuery == 'purchaseord'){
 		var rowId = req.body.rowId;
 		rowId = rowId ? new ObjectId(rowId) : {};
 

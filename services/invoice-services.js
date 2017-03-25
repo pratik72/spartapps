@@ -59,7 +59,7 @@ exports.updateInvoice = function(inv_query, updateData ,callback){
 		return callback({error : "Update Data not Provided"} , null);
 	}
 
-	Invoice.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+	Invoice.findOneAndUpdate(query, updateData, {new: true, upsert:true}, function(err, doc){
 	    if (err) return callback({ error: err } , null);
 	    callback(null , doc)
 	});

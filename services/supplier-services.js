@@ -92,7 +92,7 @@ exports.updateSupplier = function(supp_query, updateData ,callback){
 		return callback({error : "Update Data not Provided"} , null);
 	}
 
-	Supplier.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+	Supplier.findOneAndUpdate(query, updateData, {new: true,upsert:true}, function(err, doc){
 	    if (err) return callback({ error: err } , null);
 	    callback(null , doc)
 	});

@@ -75,7 +75,7 @@ exports.updatePO = function(po_query, updateData ,callback){
 		return callback({error : "Update Data not Provided"} , null);
 	}
 
-	purchase_Order.findOneAndUpdate(query, updateData, {upsert:true}, function(err, doc){
+	purchase_Order.findOneAndUpdate(query, updateData, {new: true, upsert:true}, function(err, doc){
 	    if (err) return callback({ error: err } , null);
 	    callback(null , doc)
 	});
@@ -99,7 +99,7 @@ function getNextPOSequence(orgId , next) {
 			var updCnt = data[0].po_count;
 			updCnt++;
 			var updateCount = { po_count : updCnt };
-			poCount.findOneAndUpdate( tmpQuery , updateCount, {upsert:true}, function(err, doc){
+			poCount.findOneAndUpdate( tmpQuery , updateCount, {new: true, upsert:true}, function(err, doc){
 			    if (err) return err;
 			    next(doc);
 			});

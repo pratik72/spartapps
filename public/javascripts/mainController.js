@@ -54,6 +54,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	$scope.invoiceFormData = angular.copy( APP_CONSTANT.INVOICE_JSON );
 	$scope.poFormData = angular.copy( APP_CONSTANT.PO_JSON );
 	$scope.isReadOnly = false;
+	$scope.hasEditSupplier = false;
 
 	//Init To get Current User Details on load
 	common.asynCall({
@@ -152,7 +153,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 				return $scope.supplierFormData.vendor_selection.selected_by == a._id
 			});
 			$scope.selectedByUser = selUser[0]
-    	}	
+    	}
     	$("#mySuppModal").modal('show');
     	$('.main-panel').scrollTop(0);
     }
@@ -254,6 +255,11 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+    $scope.enableToEdit = function(){
+    	$scope.isReadOnly = false;
+    	$scope.hasEditSupplier = true;
+    }
+
     $scope.openStatusModel = function(action , row , statusVal){
     	if($scope.permissions.ApprvSupplierReq){
     		$scope.initStatusData.action = action;
@@ -322,6 +328,8 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     $scope.supplierCreate = function(){
     	common.showLoader();
 
+    	var suppURL = APP_CONSTANT.CREATE_SUPPLIER;
+
     	var tmpData = new FormData();
     	for (var key in $scope.supplierFormData) {
     		if(typeof $scope.supplierFormData[key] == "object"){
@@ -336,8 +344,13 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	tmpData.append( "vendor_profile" , $scope.vendor_profile );
     	tmpData.append( "other_doc" , $scope.other_doc );
 
+    	if($scope.hasEditSupplier){
+    		suppURL += '?action=1';
+    		$scope.hasEditSupplier = false;
+    	}
+
     	common.asynCall({
-			url: PATH_NAME+ APP_CONSTANT.CREATE_SUPPLIER,
+			url: PATH_NAME+ suppURL,
 			method:'post',
 			param:  tmpData
 		}).then( function(resVal){
@@ -572,6 +585,10 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+    $scope.copyAndCreateNewPO = function(){
+    	$scope.isReadOnly = false;
+    }
+
 	//Init Templates
     $scope.changeDashBody("invoice");
 
@@ -597,6 +614,9 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    	$scope.agreements = "";
 	    	$scope.vendor_profile = "";
 	    	$scope.other_doc = "";
+    	}else{
+    		$scope.selectedByUser = "";
+			$scope.divisonModel = "";
     	}
     }
 
@@ -630,12 +650,13 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	};
 
     	$scope.poFormData.product_information.poCategory = angular.copy( APP_CONSTANT.PO_JSON ).product_information.poCategory;
-
+	    $scope.divisonModel = "";
+	    $scope.selectedByUser = "";
+	    $scope.suppModel = "";
     	if(!modelScope){
 	    	$scope.cancelled_cheque = "";
 	    	$scope.quotation = "";
 	    	$scope.other_doc = "";
-	    	$scope.divisonModel = "";
     	}
     }
 }]);
