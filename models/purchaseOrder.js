@@ -49,7 +49,8 @@ var poSchema = new Schema({
 
 var poCountSchema = new Schema({
 	orgId : Schema.Types.ObjectId,
-	po_count : { type: Number, default: 1 }
+	form_name : String,
+	count : { type: Number, default: 1 }
 });
 
 var po = mongoose.model('purchase_order' , poSchema);

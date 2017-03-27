@@ -11,9 +11,25 @@ var APP_CONSTANT = {
 	SET_MARK_AS_VIEW_NOTIFY: '/markNotificationAsViewed',
 	CREATE_PO : '/createPO',
 	STATUS_CHANGE_URL : '/statusChanges',
+	SEARCH_TAB : '/searchInAllTab',
 	GET_SUPPLIERS : '/getSupplierDetails',
 	GET_POLIST : '/getPOdetList',
 	GET_INVOICES : '/getInvoicesDetails',
+	INV_SEARCH_KEY :{
+		orgName : 'Organization Name',
+		userName : 'Username',
+		PO_number : 'PO Nu.',
+		bill_number : 'Bill No.',
+		Product_Nature : 'Product Nature',
+		HSN_Code : 'HSN Code',
+		Quantity : 'Quantity',
+		Rate : 'Rate',
+		Payment_due_date : 'Payment Due Date',
+		'vendor_selection.selected_by': 'Selected By',
+		'vendor_selection.division': 'Division',
+		'iv_status.status' : 'Status',
+		'iv_status.status_description' : 'Description'
+	},
 	TEMPLATES : {
 		supplier : "supplier-template.html",
 		statusModel : "status-change.html",
@@ -23,6 +39,8 @@ var APP_CONSTANT = {
 		sidebar : "templates/sidebar.html",
 		purchaseOrd : "templates/purchase-ord-template.html",
 		purchaseOrdModel : "templates/purchaseOrdModel.html",
+		finance : "templates/finance-template.html",
+		financeModel : "templates/financeModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
 	SUPPLIER_JSON : {

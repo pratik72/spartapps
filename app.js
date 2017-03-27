@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var config = require('./config');
 var passport = require('passport');
 var expressSession = require('express-session');
+const MongoStore = require('connect-mongo')(expressSession);
 var flash = require('connect-flash');
 var hbs = require('hbs');
 var fs = require('fs');
@@ -58,7 +59,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession({
 	secret: "The Spartan",
 	saveUninitialized: false,
-	resave: false
+	resave: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 app.use( flash() );

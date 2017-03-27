@@ -50,3 +50,33 @@ img.ajax-loader-img {
     margin-right: 60px;
     margin-top: -15px;
 }
+
+.tab-title{
+    width: 200px;
+}
+
+.display-line{
+    display: inline-block;
+}
+
+.card .card-header{
+    padding: 10px;
+}
+
+.navbar-form {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.form-group {
+    padding-bottom: 7px;
+    margin: 13px 0 0 0;
+}
+
+.form-group .form-control {
+    color: white;
+}
+
+.is-focused select.form-control{
+    color: grey;
+}

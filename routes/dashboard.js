@@ -115,6 +115,37 @@ router.post('/getPOdetList', restrict , function(req, res, next) {
 	});
 });
 
+//searchInAllTab
+router.post('/searchInAllTab', restrict , function(req, res, next) {
+	
+
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+
+			if(uplErr){
+				res.json({error : "File not Uploaded..!"});	
+			}
+
+		var userOrgId = req.user.orgId;
+
+		var searchString = req.body.searchText;
+		var searchModel = req.body.searchModel;
+
+		var searchQuery = { 
+			orgId : new ObjectId(userOrgId),
+		}
+
+		searchQuery[ searchModel ] = searchString
+
+		InvoiceService.findInvoice( searchQuery, function(error , suppData){
+			if(error){
+				console.log("PO Not Retrived" , error);
+				return res.json(error);
+			}
+	  		res.json(suppData);
+		});
+	});
+});
+
 //createSupplier
 router.post('/createSupplier', restrict , function(req, res, next) {
 	var bodyObject = req.body;

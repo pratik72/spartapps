@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var supplierSchema = new Schema({
 	orgId : Schema.Types.ObjectId,
 	user_id : Schema.Types.ObjectId,
+	supplier_no : String,
 	orgName : String,
 	sa_status : {
 		status: String,

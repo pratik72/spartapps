@@ -1,0 +1,132 @@
+<!-- Modal -->
+<div id="myFinanceModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Pre Payment</h4>
+
+        <div class="pull-right" >
+          <!-- <button class="btn btn-success" ng-click="copyAndCreateNewPO()" ng-show="isReadOnly">Copy & Creat New PO</button> -->
+          <span ng-if="poFormData.po_status.status == 'pending' && isReadOnly">
+            <button class="btn btn-default" ng-click="openStatusModel('finance' , poFormData , 'Accept')">Approve</button>
+            <button class="btn btn-danger" ng-click="openStatusModel('finance' , poFormData , 'Decline')">Decline</button>
+          </span>
+        </div>
+
+        <hr/>
+      </div>
+      <form name="prePaymentForm" ng-submit="prePaymentCreate()" enctype="multipart/form-data">
+        <div class="modal-body">
+            <table class="table table-bordered">
+              <tbody>
+
+                <!-- <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
+                  <th colspan="4">Reply</th>
+                </tr>
+                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
+                  <td>Status</td>
+                  <td colspan="3">
+                    <span>{% poFormData.po_status.status %}</span>
+                  </td>
+                </tr>
+                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
+                  <td>Comment</td>
+                  <td colspan="3">
+                    <span>{% poFormData.po_status.status_description %}</span>
+                  </td>
+                </tr> -->
+
+                <tr>
+                  <th colspan="4">Information on Payment Intimation</th>
+                </tr>
+
+                <tr>
+                  <td>PI</td>
+                  <td colspan="3">
+                    <select ng-options="item as item.inv_no for item in invoiceList" ng-model="piModel" required ng-change="suppChngUpdate(this,'po')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select supplier--</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>PO Amount</td>
+                  <td colspan="3">
+                    <% piModel.amount%>
+                  </td>
+                </tr>
+
+                
+
+                <tr>
+                  <td>VAT</td>
+                  <td>
+                    <input type="number" class="form-control" name="VAT" ng-model="poFormData.product_information.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculatePoAmount()" >
+                  </td>
+                
+                  <td>CST</td>
+                  <td>
+                    <input type="number" class="form-control" name="CST" ng-model="poFormData.product_information.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculatePoAmount()" >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>GST</td>
+                  <td>
+                    <input type="number" class="form-control" name="GST" ng-model="poFormData.product_information.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculatePoAmount()" >
+                  </td>
+                
+                  <td>Service Tax</td>
+                  <td>
+                    <input type="number" class="form-control" name="service_tax" ng-model="poFormData.product_information.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculatePoAmount()" >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Excise</td>
+                  <td>
+                    <input type="number" class="form-control" name="excise" ng-model="poFormData.product_information.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculatePoAmount()" >
+                  </td>
+
+                  <td>Amount</td>
+                  <td>
+                    <input type="text" class="form-control" name="amount" ng-model="poFormData.product_information.amount" disabled placeholder="Enter Amount">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4"></td>
+                </tr>
+                <tr>
+                  <th colspan="4">Audit Selection</th>
+                </tr>
+                <tr>
+                  <td>Division</td>
+                  <td>
+                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'po')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select divison--</option>
+                    </select>
+                  </td>
+                  <td>Audit by</td>
+                  <td>
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'po')" class="form-control" ng-disabled="isReadOnly">
+                      <option value="">--select User--</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success" ng-hide="isReadOnly">Submit</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

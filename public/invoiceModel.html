@@ -73,19 +73,62 @@
                   <td>
                     <input type="text" class="form-control" name="area" ng-model="invoiceFormData.HSN_Code" placeholder="Enter HSN code" ng-disabled="isReadOnly">
                   </td>
-                  <td>Quantity</td>
+                  
+                  <td>Payment Due Date</td>
                   <td>
-                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly" required>
+                    <input type="text" class="form-control" name="state" ng-model="invoiceFormData.Payment_due_date" placeholder="Enter due date" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                  <tr>
                   <td>Rate</td>
                   <td>
-                    <input type="number" class="form-control" name="district" ng-model="invoiceFormData.Rate" placeholder="Rate" ng-disabled="isReadOnly" required>
+                    <input type="number" class="form-control" name="district" ng-model="invoiceFormData.Rate" placeholder="Rate" disabled required ng-change="calculateInvAmount()">
                   </td>
-                  <td>Payment Due Date</td>
+
+                  <td>Add. Rate</td>
                   <td>
-                    <input type="text" class="form-control" name="state" ng-model="invoiceFormData.Payment_due_date" placeholder="Enter due date" ng-disabled="isReadOnly">
+                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.additionalRate" placeholder="Enter Additional Rate" ng-disabled="isReadOnly" required ng-change="calculateInvAmount()">
+                  </td>
+
+                  <td>Quantity</td>
+                  <td>
+                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly" required ng-change="calculateInvAmount()">
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>VAT</td>
+                  <td>
+                    <input type="number" class="form-control" name="VAT" ng-model="invoiceFormData.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculateInvAmount()" >
+                  </td>
+                
+                  <td>CST</td>
+                  <td>
+                    <input type="number" class="form-control" name="CST" ng-model="invoiceFormData.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculateInvAmount()" >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>GST</td>
+                  <td>
+                    <input type="number" class="form-control" name="GST" ng-model="invoiceFormData.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculateInvAmount()" >
+                  </td>
+                
+                  <td>Service Tax</td>
+                  <td>
+                    <input type="number" class="form-control" name="service_tax" ng-model="invoiceFormData.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculateInvAmount()" >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Excise</td>
+                  <td>
+                    <input type="number" class="form-control" name="excise" ng-model="invoiceFormData.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculateInvAmount()" >
+                  </td>
+
+                  <td>Amount</td>
+                  <td>
+                    <input type="text" class="form-control" name="amount" ng-model="invoiceFormData.amount" disabled placeholder="Enter Amount">
                   </td>
                 </tr>
 

@@ -35,6 +35,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	$scope.supplier_Model = allTemplates.supplierModel;
 	
 	$scope.invoice_Model = allTemplates.invoiceModel;
+	$scope.finance_Model = allTemplates.financeModel;
 
 	$scope.initStatusData = APP_CONSTANT.STATUS_MODEL_JSON;
 	$scope.allActivePOs = [];
@@ -181,6 +182,12 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	$('.main-panel').scrollTop(0);
     }
 
+    $scope.openPrePayment = function(){
+    	$("#myFinanceModal").modal('show');
+    	$('.main-panel').scrollTop(0);	
+    }
+
+
     $scope.supplierForInvoice = [];
     $scope.openInvoice = function(invData){
     	SupplierTemplateLoadData(function(){
@@ -241,6 +248,30 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	$scope.poFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
     }
 
+    $scope.calculateInvAmount = function(){
+    	var strQuantity = $scope.invoiceFormData.Quantity;
+    	var strRate = $scope.invoiceFormData.Rate;
+    	var strAddRate = $scope.invoiceFormData.additionalRate;    	
+
+    	var strVAT = $scope.invoiceFormData.VAT;
+    	var strCST = $scope.invoiceFormData.CST;
+    	var strGST = $scope.invoiceFormData.GST;
+    	var strServiceTax = $scope.invoiceFormData.service_tax;
+    	var strExcise = $scope.invoiceFormData.excise;
+
+
+    	var strAmount = parseFloat(strRate || 0 ) * parseFloat(strQuantity || 0);
+
+    	strAmount += parseFloat(strAddRate || 0);
+    	strAmount += parseFloat(strVAT || 0);
+    	strAmount += parseFloat(strCST || 0);
+    	strAmount += parseFloat(strGST || 0);
+    	strAmount += parseFloat(strServiceTax || 0);
+    	strAmount += parseFloat(strExcise || 0);
+
+    	$scope.invoiceFormData.amount = strAmount.toFixed(2) || "0.00";
+    }
+
     function getAllActivePO(callback){
     	common.showLoader();
     	common.asynCall({
@@ -275,7 +306,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     }
 
     function markNotificationAsView(notsData){
-    	var sendKeys = new FormData();    	
+    	var sendKeys = new FormData();
     	sendKeys.append( "primKey" , notsData._id );
     	
     	common.asynCall({
@@ -283,7 +314,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			method: 'post',
 			param : sendKeys
 		}).then( function(resVal){
-			getNotifications();			
+			getNotifications();
 	    }, function(error){
 	    	console.log(error);
 	    });
@@ -359,6 +390,29 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);
+	    });
+    }
+
+    $scope.resetSearch = function(){
+    	InvoiceTemplateLoadData();
+    }
+
+    $scope.searchText = ""
+    $scope.searchTab = function(obj , tabs){
+
+    	var sendKeys = new FormData();
+    	sendKeys.append( "searchText" , obj.searchText );
+    	sendKeys.append( "searchModel" , obj.searchModel );
+    	
+    	common.asynCall({
+			url: PATH_NAME + APP_CONSTANT.SEARCH_TAB,
+			method: 'post',
+			param : sendKeys
+		}).then( function(resVal){
+			$scope.invoiceList = resVal.data;
+	    }, function(error){
+	    	console.log(error);
+	    	alert("Data Not found")
 	    });
     }
 
@@ -513,20 +567,25 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 				InvoiceTemplateLoadData( callback );
 			}else if( templateName.indexOf('purchaseOrd') > -1 ){
 				POTemplateLoadData( callback );
+			}else if( templateName.indexOf('finance') > -1 ){
+				FMTemplateLoadData( callback );
 			}
 			
 		} , 300);
     }
 
-    /*function POTemplateLoadData(){
-    	SupplierTemplateLoadData(function(){
-    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
-	    		return obj.sa_status.status == "Accept";
+    function FMTemplateLoadData(){
+    	InvoiceTemplateLoadData(function(){
+    		$scope.piModel = "";
+    		$scope.invoiceList = $scope.invoiceList.filter(function(obj){
+	    		return obj.iv_status.status == "Accept";
 	    	});
     	});
-    }*/
+    }
 
     $scope.supplierList = [];
+    $scope.piModel = "";
+
     function SupplierTemplateLoadData(callback){
     	common.showLoader();
     	common.asynCall({
@@ -568,6 +627,11 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    });
     }
 
+    $scope.searchAttrChange = function(obj , tabs){
+    	console.log(obj)
+    }
+
+    $scope.searchAttr = angular.copy(APP_CONSTANT.INV_SEARCH_KEY);
 	$scope.invoiceList = [];
     function InvoiceTemplateLoadData(callback){
     	common.showLoader();
@@ -576,6 +640,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 			method:'post'
 		}).then( function(resVal){
 			$scope.invoiceList = resVal.data;
+			$scope.searchAttr = angular.copy(APP_CONSTANT.INV_SEARCH_KEY);
 			if(callback){
 				callback();
 			}

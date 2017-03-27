@@ -3,7 +3,7 @@ var poCount = require('../models/purchaseOrder').poCount;
 var ObjectId = require('mongoose').Types.ObjectId;
 
 exports.addPO = function(poData , callback){
-	getNextPOSequence( poData.orgId , function(poNum){
+	this.getNextSequence( poData.orgId , 'purchaseOrd' , function(poNum){
 
 		var newPO = new purchase_Order({
 			orgId : poData.orgId,
@@ -11,7 +11,7 @@ exports.addPO = function(poData , callback){
 			orgName : poData.orgName,
 			supplier_name : poData.supplier_name,
 			supplierId : poData.supplierId,
-			PO_number : "PO"+poNum.po_count,
+			PO_number : "PO"+poNum.count,
 			po_status : {
 				status: poData.po_status.status,
 				status_description : poData.po_status.status_description,
@@ -81,13 +81,17 @@ exports.updatePO = function(po_query, updateData ,callback){
 	});
 }
 
-function getNextPOSequence(orgId , next) {
-	var tmpQuery = { orgId : new ObjectId(orgId) };
+exports.getNextSequence = function(orgId , formName , next) {
+	var tmpQuery = { 
+		orgId : new ObjectId(orgId),
+		form_name : formName
+	};
 	poCount.find( tmpQuery , function(error, data){
 		if(data.length == 0){
 			var newCount = new poCount({
 				orgId : orgId,
-				po_count : 1
+				form_name : formName,
+				count : 1
 			});
 			newCount.save(function (err, result, numAffected) {
 				if(err){
@@ -96,9 +100,9 @@ function getNextPOSequence(orgId , next) {
 				next(result);
 			})
 		}else if(data.length > 0){
-			var updCnt = data[0].po_count;
+			var updCnt = data[0].count;
 			updCnt++;
-			var updateCount = { po_count : updCnt };
+			var updateCount = { count : updCnt };
 			poCount.findOneAndUpdate( tmpQuery , updateCount, {new: true, upsert:true}, function(err, doc){
 			    if (err) return err;
 			    next(doc);
