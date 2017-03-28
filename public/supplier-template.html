@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="card-content table-responsive clearfix">
-                    <table class="table">
+                    <table class="table" ng-if="supplierList.length > 0">
                         <thead class="text-primary">
 						 	<tr>
 							    <th>No.</th>
@@ -75,6 +75,9 @@
                         </tbody>
                     </table>
 
+                    <div ng-if="supplierList.length == 0">
+                    	No Records found.!!
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ var APP_CONSTANT = {
 	GET_CURRENT_USR: '/userDetails',
 	CREATE_SUPPLIER : '/createSupplier',
 	CREATE_INVOICE : '/createInvoice',
+	CREATE_PAYREQ : '/createPayRequest',
 	GET_ALL_PO : '/getAllPOs',
 	SET_MARK_AS_VIEW_NOTIFY: '/markNotificationAsViewed',
 	CREATE_PO : '/createPO',
@@ -176,6 +177,24 @@ var APP_CONSTANT = {
 		    other_doc: ""
 		},
 		iv_status : {
+			status: "",
+			status_description : "",
+			status_changedBy: "",
+			status_changeDate : ""
+		}
+	},
+	PAYREQ_JSON : {
+		orgName : "",
+		userName : "",
+		PI_number : "",
+		"vendor_selection": {
+		    "selected_by": "",
+		    "division": ""
+		},
+		doc_attachment: {
+		    other_doc: ""
+		},
+		pay_status : {
 			status: "",
 			status_description : "",
 			status_changedBy: "",

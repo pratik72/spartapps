@@ -1,7 +1,6 @@
 var User = require('../models/users').User;
 
 exports.addUser = function(userData , callback){
-	console.log("userData.email" , userData.email)
 	var newUser = new User({
 		firstName : userData.firstName,
 		lastName : userData.lastName,

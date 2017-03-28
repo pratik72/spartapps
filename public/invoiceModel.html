@@ -19,8 +19,8 @@
               <tbody>
                 <tr>
                   <td>Name of Supplier</td>
-                  <td colspan="3">
-                    <select ng-options="item as item.supplier_name_address.supplier_name for item in supplierForInvoice" ng-model="suppModel" required ng-change="suppChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
+                  <td colspan="5">
+                    <select ng-options="item as ( item.supplier_no +' -- '+ item.supplier_name_address.supplier_name) for item in supplierForInvoice" ng-model="suppModel" required ng-change="suppChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select supplier--</option>
                     </select>
                   </td>
@@ -28,7 +28,7 @@
                 
                 <tr>
                   <td></td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <label>
                       <input type="radio" ng-model="invoiceFormData.isExpense" value="false" ng-disabled="isReadOnly">
                       with PO
@@ -42,7 +42,7 @@
 
                 <tr ng-if="invoiceFormData.isExpense == 'false'">
                   <td>PO No</td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <select ng-options="item as item.PO_number for item in allActivePOs" ng-model="ddPoModel" required ng-change="invPoChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select po--</option>
                     </select>
@@ -51,24 +51,23 @@
 
                 <tr ng-show="false">
                   <td>Expense</td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <input type="text" class="form-control" name="address2" ng-model="invoiceFormData.expAmount" placeholder="Enter Bill number" ng-disabled="isReadOnly">
                   </td>
                 </tr>
 
                 <tr>
                   <td>Bill No</td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <input type="text" class="form-control" name="address2" ng-model="invoiceFormData.bill_number" placeholder="Enter Bill number" ng-disabled="isReadOnly">
                   </td>
                 </tr>
                 <tr>
                   <td>Nature of Product</td>
-                  <td colspan="3">
+                  <td>
                     <input type="text" class="form-control" name="address3" ng-model="invoiceFormData.Product_Nature" placeholder="Enter Nature of product" ng-disabled="isReadOnly">
                   </td>
-                </tr>
-                <tr>
+                
                   <td>HSN Code</td>
                   <td>
                     <input type="text" class="form-control" name="area" ng-model="invoiceFormData.HSN_Code" placeholder="Enter HSN code" ng-disabled="isReadOnly">
@@ -106,21 +105,18 @@
                   <td>
                     <input type="number" class="form-control" name="CST" ng-model="invoiceFormData.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculateInvAmount()" >
                   </td>
-                </tr>
-
-                <tr>
                   <td>GST</td>
                   <td>
                     <input type="number" class="form-control" name="GST" ng-model="invoiceFormData.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculateInvAmount()" >
                   </td>
-                
+                </tr>
+
+                <tr>
                   <td>Service Tax</td>
                   <td>
                     <input type="number" class="form-control" name="service_tax" ng-model="invoiceFormData.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculateInvAmount()" >
                   </td>
-                </tr>
 
-                <tr>
                   <td>Excise</td>
                   <td>
                     <input type="number" class="form-control" name="excise" ng-model="invoiceFormData.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculateInvAmount()" >
@@ -133,17 +129,17 @@
                 </tr>
 
                 <tr>
-                  <th colspan="4">Vendor Selection</th>
+                  <th colspan="6">Vendor Selection</th>
                 </tr>
                 <tr>
                   <td>Division</td>
-                  <td>
+                  <td colspan="2">
                     <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select divison--</option>
                     </select>
                   </td>
                   <td>Approver</td>
-                  <td>
+                  <td colspan="2">
                     <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select User--</option>
                     </select>
@@ -151,11 +147,11 @@
                 </tr>
                  
                 <tr>
-                  <th colspan="4">Documents to be attached</th>
+                  <th colspan="6">Documents to be attached</th>
                 </tr>
                 <tr>
                   <td>Invoice</td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <input class="form-control" type="file" name="invoice_attachment" onchange="angular.element(this).scope().setFiles(this , 'invoice')" ng-hide="isReadOnly">
 
                     <a ng-href="/upload/{% invoiceFormData.doc_attachment.invoice %}" ng-show="isReadOnly" target="_blank">{% invoiceFormData.doc_attachment.invoice %}</a>
@@ -163,7 +159,7 @@
                 </tr>
                 <tr>
                   <td>PO</td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'PO')" ng-hide="isReadOnly">
 
                     <a ng-href="/upload/{% invoiceFormData.doc_attachment.PO %}" ng-show="isReadOnly" target="_blank">{% invoiceFormData.doc_attachment.PO %}</a>
@@ -171,7 +167,7 @@
                 </tr>
                 <tr>
                   <td>Other Documents</td>
-                  <td colspan="3">
+                  <td colspan="5">
                     <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'other_doc')" ng-hide="isReadOnly">
 
                     <a ng-href="/upload/{% invoiceFormData.doc_attachment.other_doc %}" ng-show="isReadOnly" target="_blank">{% invoiceFormData.doc_attachment.other_doc %}</a>

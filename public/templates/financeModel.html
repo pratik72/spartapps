@@ -46,7 +46,7 @@
                 <tr>
                   <td>PI</td>
                   <td colspan="3">
-                    <select ng-options="item as item.inv_no for item in invoiceList" ng-model="piModel" required ng-change="suppChngUpdate(this,'po')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item.inv_no for item in invoiceList" ng-model="piModel" required ng-change="suppChngUpdate(this,'finance')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select supplier--</option>
                     </select>
                   </td>
@@ -55,45 +55,43 @@
                 <tr>
                   <td>PO Amount</td>
                   <td colspan="3">
-                    <% piModel.amount%>
+                    {% piModel.amount %}
                   </td>
                 </tr>
-
-                
 
                 <tr>
                   <td>VAT</td>
                   <td>
-                    <input type="number" class="form-control" name="VAT" ng-model="poFormData.product_information.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculatePoAmount()" >
+                    <input type="number" class="form-control" name="VAT" ng-model="payFormData.product_information.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculatePiAmount()" >
                   </td>
                 
                   <td>CST</td>
                   <td>
-                    <input type="number" class="form-control" name="CST" ng-model="poFormData.product_information.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculatePoAmount()" >
+                    <input type="number" class="form-control" name="CST" ng-model="payFormData.product_information.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculatePiAmount()" >
                   </td>
                 </tr>
 
                 <tr>
                   <td>GST</td>
                   <td>
-                    <input type="number" class="form-control" name="GST" ng-model="poFormData.product_information.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculatePoAmount()" >
+                    <input type="number" class="form-control" name="GST" ng-model="payFormData.product_information.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculatePiAmount()" >
                   </td>
                 
                   <td>Service Tax</td>
                   <td>
-                    <input type="number" class="form-control" name="service_tax" ng-model="poFormData.product_information.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculatePoAmount()" >
+                    <input type="number" class="form-control" name="service_tax" ng-model="payFormData.product_information.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculatePiAmount()" >
                   </td>
                 </tr>
 
                 <tr>
                   <td>Excise</td>
                   <td>
-                    <input type="number" class="form-control" name="excise" ng-model="poFormData.product_information.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculatePoAmount()" >
+                    <input type="number" class="form-control" name="excise" ng-model="payFormData.product_information.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculatePiAmount()" >
                   </td>
 
                   <td>Amount</td>
                   <td>
-                    <input type="text" class="form-control" name="amount" ng-model="poFormData.product_information.amount" disabled placeholder="Enter Amount">
+                    <input type="text" class="form-control" name="amount" ng-model="payFormData.product_information.amount" disabled placeholder="Enter Amount">
                   </td>
                 </tr>
                 <tr>
@@ -105,15 +103,27 @@
                 <tr>
                   <td>Division</td>
                   <td>
-                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'po')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item for item in orgDivision" ng-model="divisonModel" required ng-change="divisonChngUpdate(this, 'finance')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select divison--</option>
                     </select>
                   </td>
                   <td>Audit by</td>
                   <td>
-                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'po')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'finance')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select User--</option>
                     </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th colspan="6">Documents to be attached</th>
+                </tr>
+                <tr>
+                  <td>Other Documents</td>
+                  <td colspan="5">
+                    <input class="form-control" type="file" name="PO_attachment" onchange="angular.element(this).scope().setFiles(this , 'other_doc')" ng-hide="isReadOnly">
+
+                    <a ng-href="/upload/{% payFormData.doc_attachment.other_doc %}" ng-show="isReadOnly" target="_blank">{% payFormData.doc_attachment.other_doc %}</a>
                   </td>
                 </tr>
               </tbody>

@@ -248,6 +248,29 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	$scope.poFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
     }
 
+    $scope.calculatePiAmount = function(){
+    	var strQuantity = $scope.poFormData.product_information.quantity;
+    	var strRate = $scope.poFormData.product_information.rate;
+
+    	var strVAT = $scope.poFormData.product_information.VAT;
+    	var strCST = $scope.poFormData.product_information.CST;
+    	var strGST = $scope.poFormData.product_information.GST;
+    	var strServiceTax = $scope.poFormData.product_information.service_tax;
+    	var strExcise = $scope.poFormData.product_information.excise;
+
+
+    	var strAmount = parseFloat( $scope.piModel.amount || 0 );
+
+    	strAmount += parseFloat(strVAT || 0);
+    	strAmount += parseFloat(strCST || 0);
+    	strAmount += parseFloat(strGST || 0);
+    	strAmount += parseFloat(strServiceTax || 0);
+    	strAmount += parseFloat(strExcise || 0);
+
+    	$scope.poFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
+    }
+
+
     $scope.calculateInvAmount = function(){
     	var strQuantity = $scope.invoiceFormData.Quantity;
     	var strRate = $scope.invoiceFormData.Rate;
@@ -450,7 +473,8 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     var FORM_MAPPING_KEY = {
     	po : "poFormData",
     	invoice : "invoiceFormData",
-    	supplier : "supplierFormData"
+    	supplier : "supplierFormData",
+    	finance : "payFormData"
     }
 
     var LIST_MAPPING_KEY = {
@@ -551,6 +575,33 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		}).then( function(resVal){
 			$("#myInvoiceModal").modal('hide');
 			$scope.changeDashBody("invoice");
+			common.hideLoader();
+	    }, function(error){
+	    	console.log(error);
+	    });
+    }
+
+    $scope.prePaymentCreate = function(){
+    	common.showLoader();
+
+    	var tmpData = new FormData();
+    	for (var key in $scope.payFormData) {
+    		if(typeof $scope.payFormData[key] == "object"){
+    			tmpData.append( key , JSON.stringify($scope.payFormData[key]) );
+    		}else{
+    			tmpData.append( key , $scope.payFormData[key] );
+    		}
+    	};
+
+    	tmpData.append( "other_doc" , $scope.other_doc );
+    	
+    	common.asynCall({
+			url: PATH_NAME+ APP_CONSTANT.CREATE_PAYREQ,
+			method:'post',
+			param:  tmpData
+		}).then( function(resVal){
+			$("#myFinanceModal").modal('hide');
+			$scope.changeDashBody("finance");
 			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);
@@ -679,10 +730,10 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	    	$scope.agreements = "";
 	    	$scope.vendor_profile = "";
 	    	$scope.other_doc = "";
-    	}else{
-    		$scope.selectedByUser = "";
-			$scope.divisonModel = "";
     	}
+		$scope.selectedByUser = "";
+		$scope.divisonModel = "";
+    	
     }
 
     function resetInvoiceModel(modelScope){
