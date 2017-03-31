@@ -4,6 +4,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var restrict = require('../auth/restrict');
 var supplierService = require('../services/supplier-services');
 var poService = require('../services/po-services');
+var payReqService = require('../services/payreq-services');
 var InvoiceService = require('../services/invoice-services');
 var userService = require('../services/user-services');
 var uploadService = require('../services/upload-services');
@@ -96,6 +97,19 @@ router.post('/getAllPOs', restrict , function(req, res, next) {
 	poService.findPO( { orgId : new ObjectId(userOrgId) , "po_status.status" : "Accept" }, function(error , poData){
 		if(error){
 			console.log("PO Not Retrived" , error);
+			return res.json(error);
+		}
+  		res.json(poData);
+	});
+});
+
+//getAllPayReq
+router.post('/getAllPayReq', restrict , function(req, res, next) {
+	
+	var userOrgId = req.user.orgId;
+	payReqService.findPayReq( { orgId : new ObjectId(userOrgId) }, function(error , poData){
+		if(error){
+			console.log("pay_req Not Retrived" , error);
 			return res.json(error);
 		}
   		res.json(poData);
@@ -236,6 +250,53 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 					});
 				});
 			}
+		});
+
+	}else{
+		res.json({ error : "Invalid data..!!" });
+	}
+});
+
+//createPayRequest
+router.post('/createPayRequest', restrict , function(req, res, next) {
+	var bodyObject = req.body;
+	var tmpNotifyType = 1;
+	if (bodyObject) {
+
+		uploadService.uploadFiles(req, res, null , function(uplErr){
+
+			if(uplErr){
+				res.json({error : "File not Uploaded..!"});	
+			}
+
+			bodyObject = req.body;
+
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'pay_req');
+			bodyObject = mergeUserDetailsData(bodyObject , req.user);
+
+			var currUser = req.user;
+
+			payReqService.addPayReq(bodyObject , function(error , result){
+				if(error){
+					console.log("Pay Req Not Created" , error);
+					res.status(400);
+					return res.json(error);
+				}
+
+				var tmpNotifyObj = {
+					tabs : "pay_req",
+					data : result , 
+					notifyType : tmpNotifyType,
+					userData : currUser
+				}
+
+				notify.notifyUser( tmpNotifyObj , function(error , nots_data){
+					if(error){
+						return res.json( { error : "Notification Not added for PO"+error});
+					}
+		  			return res.json({ OK : "PO Created And Notice Done" });
+				});
+			});
 		});
 
 	}else{
@@ -424,6 +485,12 @@ function mergeInvoiceUploadData(files , tmpObj){
 }
 
 function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
+	var statusKey = {
+		po : "po_status",
+		supplier : "sa_status",
+		pay_req : "pay_status",
+	}
+
 	for (var i in tmpObj) {
 		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
 			try{
@@ -434,16 +501,11 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 		}
 	};
 
-	if(comeFrom == "po"){
-		tmpObj["po_status"].status = "pending";
-		tmpObj["po_status"].status_description = "";
-		tmpObj["po_status"].status_changedBy = ""
-	}else{
-		tmpObj["sa_status"].status = "pending";
-		tmpObj["sa_status"].status_changeDate = "";
-		tmpObj["sa_status"].status_description = "";
-		tmpObj["sa_status"].status_changedBy = ""
-	}
+	tmpObj[ statusKey[comeFrom] ].status = "pending";
+	tmpObj[ statusKey[comeFrom] ].status_changeDate = "";
+	tmpObj[ statusKey[comeFrom] ].status_description = "";
+	tmpObj[ statusKey[comeFrom] ].status_changedBy = ""
+
 	tmpObj.doc_attachment = {};
 	
 	var allAttachParam = [ "statutory_registration_certificates" , "cancelled_cheque" , "quotation" , "agreements" , "vendor_profile" , "other_doc"];

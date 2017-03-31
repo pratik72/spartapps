@@ -46,15 +46,20 @@
                 <tr>
                   <td>PI</td>
                   <td colspan="3">
-                    <select ng-options="item as item.inv_no for item in invoiceList" ng-model="piModel" required ng-change="suppChngUpdate(this,'finance')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item.inv_no for item in invoiceList" ng-model="piModel" required ng-change="PiChngUpdate(this,'finance')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select supplier--</option>
                     </select>
                   </td>
                 </tr>
 
                 <tr>
+                  <td>PO Number</td>
+                  <td>
+                    {% piModel.PO_number %}
+                  </td>
+
                   <td>PO Amount</td>
-                  <td colspan="3">
+                  <td>
                     {% piModel.amount %}
                   </td>
                 </tr>
@@ -62,31 +67,31 @@
                 <tr>
                   <td>VAT</td>
                   <td>
-                    <input type="number" class="form-control" name="VAT" ng-model="payFormData.product_information.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculatePiAmount()" >
+                    <input type="number" class="form-control" name="VAT" ng-model="payFormData.product_information.VAT" ng-disabled="isReadOnly" placeholder="Enter VAT" ng-change="calculatePayReqAmount()" >
                   </td>
                 
                   <td>CST</td>
                   <td>
-                    <input type="number" class="form-control" name="CST" ng-model="payFormData.product_information.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculatePiAmount()" >
+                    <input type="number" class="form-control" name="CST" ng-model="payFormData.product_information.CST" ng-disabled="isReadOnly" placeholder="Enter CST" ng-change="calculatePayReqAmount()" >
                   </td>
                 </tr>
 
                 <tr>
                   <td>GST</td>
                   <td>
-                    <input type="number" class="form-control" name="GST" ng-model="payFormData.product_information.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculatePiAmount()" >
+                    <input type="number" class="form-control" name="GST" ng-model="payFormData.product_information.GST" ng-disabled="isReadOnly" placeholder="Enter GST" ng-change="calculatePayReqAmount()" >
                   </td>
                 
                   <td>Service Tax</td>
                   <td>
-                    <input type="number" class="form-control" name="service_tax" ng-model="payFormData.product_information.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculatePiAmount()" >
+                    <input type="number" class="form-control" name="service_tax" ng-model="payFormData.product_information.service_tax" ng-disabled="isReadOnly" placeholder="Enter Service Tax" ng-change="calculatePayReqAmount()" >
                   </td>
                 </tr>
 
                 <tr>
                   <td>Excise</td>
                   <td>
-                    <input type="number" class="form-control" name="excise" ng-model="payFormData.product_information.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculatePiAmount()" >
+                    <input type="number" class="form-control" name="excise" ng-model="payFormData.product_information.excise" ng-disabled="isReadOnly" placeholder="Enter Excise" ng-change="calculatePayReqAmount()" >
                   </td>
 
                   <td>Amount</td>

@@ -5,6 +5,7 @@ var APP_CONSTANT = {
 	GET_USER_LIST: '/getAllUserList',
 	SUBMIT_USERDATA: '/signup',
 	GET_CURRENT_USR: '/userDetails',
+	GET_PAYREQUEST : '/getAllPayReq',
 	CREATE_SUPPLIER : '/createSupplier',
 	CREATE_INVOICE : '/createInvoice',
 	CREATE_PAYREQ : '/createPayRequest',
@@ -186,10 +187,19 @@ var APP_CONSTANT = {
 	PAYREQ_JSON : {
 		orgName : "",
 		userName : "",
-		PI_number : "",
-		"vendor_selection": {
-		    "selected_by": "",
-		    "division": ""
+		product_information: {
+			PI_number : "",
+			PO_number : "",
+		    VAT: 0,
+		    CST: 0,
+		    GST: 0,
+		    service_tax: 0,
+		    excise: 0,
+		    amount: ""
+		},
+		vendor_selection: {
+		    selected_by: "",
+		    division: ""
 		},
 		doc_attachment: {
 		    other_doc: ""

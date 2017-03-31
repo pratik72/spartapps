@@ -43,6 +43,8 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 		var tmpSendTo = data.vendor_selection.selected_by;
 		var tmpSendBy = userData._id;
 
+		var tabAreaStr = "";
+
 		notifyType = parseInt(notifyType);
 		var tmpTitle = "" ,
 			tmpStatus = null,
@@ -50,28 +52,34 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 
 		switch(tabs){
 			case "supplier" : 
+				tabAreaStr = tabs;
 				tmpStatus = data.sa_status.status;
 				break;
 			case "purchaseOrd" : 
+				tabAreaStr = "purchase order";
 				tmpStatus = data.po_status.status;				
 				break;
 			case "invoice" : 
+				tabAreaStr = "payment intimation";
 				tmpStatus = data.iv_status.status;
 				break;
+			case "pay_req" : 
+				tabAreaStr = "audit request";
+				tmpStatus = data.pay_status.status;
 		}
 		
 		switch(notifyType){
 			case 1 : //For Any Form createtion
-				tmpTitle = "New " + tabs+" Approval Request from " + userName;
-				tmpDesc = "You have Pending " + tabs+ "Approval Request from" + userName;
+				tmpTitle = "New " + tabAreaStr+" Approval Request from " + userName;
+				tmpDesc = "You have Pending " + tabAreaStr+ "Approval Request from" + userName;
 				break;
 			case 2 : //For Any Form Update
-				tmpTitle = "Update " + tabs+" Approval Request from " + userName;
-				tmpDesc = "You have Pending " + tabs+ "Approval Request from" + userName;
+				tmpTitle = "Update " + tabAreaStr+" Approval Request from " + userName;
+				tmpDesc = "You have Pending " + tabAreaStr+ "Approval Request from" + userName;
 				break;
 			case 3 : //For Any Form Status Update
-				tmpTitle = tabs+" Request " + tmpStatus + " by " + userName;
-				tmpDesc = "Your " + tabs+ " Request " + tmpStatus + " by " + userName;
+				tmpTitle = tabAreaStr+" Request " + tmpStatus + " by " + userName;
+				tmpDesc = "Your " + tabAreaStr+ " Request " + tmpStatus + " by " + userName;
 				tmpSendTo = data.user_id;
 				break;
 		}

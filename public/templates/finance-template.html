@@ -30,7 +30,54 @@
 				  	<button ng-if="permissions.CreateInvoiceReq" class="btn btn-default pull-right" ng-click="openPrePayment()">Create Pre Payment</button>
                 </div>
                 <div class="card-content table-responsive clearfix">
-                    <div>No Data Found</div>
+                    <table class="table" ng-if="payReqList.length > 0">
+                        <thead class="text-primary">
+						 	<tr>
+							    <th>No.</th>
+							    <th>Audit No.</th>
+							    <th>PI No.</th>
+							    <th>PO No.</th>
+							    <th>User</th>
+							    <th>Date</th>
+							    <th>Status</th>
+						  	</tr>
+						</thead>
+                        <tbody>
+                            <tr ng-repeat="payData in payReqList track by $index">
+							    <td>
+							    	<span class="text-muted">{% $index+1 %}</span>
+							    </td>
+							    <td>
+				        			<a href="#" ng-click="openPurchaseOrd(payData)">
+							    		<span class="text-muted">{% payData.PayReq_number %}</span>
+							    	</a>
+							    </td>
+							    <td>
+							    	<span class="text-muted">{% payData.product_information.PI_number %}</span>
+							    </td>
+							    <td>
+							    	<span class="text-muted">{% payData.product_information.PO_number %}</span>
+							    </td>
+							    <td>
+							    	<p class="text-muted">{% payData.userName %}</p>
+							    </td>
+							    <td>
+							    	<p class="text-muted">{% payData.create_date | date:'dd/MM/yyyy' %}</p>
+							    </td>
+							    <td>
+							    	<a ng-hide="payData.pay_status.status_changedBy && payData.pay_status.status_changeDate" href="#" ng-click="openStatusModel('purchaseOrd' , payData)">
+							    		<span class="text-danger">{% payData.pay_status.status %}</span>
+							    	</a>
+							    	<span ng-show="payData.pay_status.status_changedBy && payData.pay_status.status_changeDate" class="text-success">{% payData.pay_status.status %}</span>
+							    </td>
+
+							</tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-if="payReqList.length == 0">
+                    	No Records found.!!
+                    </div>
 
                 </div>
             </div>

@@ -1,6 +1,6 @@
 var app = angular.module('spartapps', []);
 
-app.controller('mainController', ['common' , '$scope' , '$timeout',function(common , $scope , $timeout) {
+app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',function(common , $rootScope, $scope , $timeout) {
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
 	var allTemplates = APP_CONSTANT.TEMPLATES;
 	var adminRights = {
@@ -54,6 +54,8 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 	$scope.supplierFormData = angular.copy( APP_CONSTANT.SUPPLIER_JSON );
 	$scope.invoiceFormData = angular.copy( APP_CONSTANT.INVOICE_JSON );
 	$scope.poFormData = angular.copy( APP_CONSTANT.PO_JSON );
+	$scope.payFormData = angular.copy( APP_CONSTANT.PAYREQ_JSON );
+
 	$scope.isReadOnly = false;
 	$scope.hasEditSupplier = false;
 
@@ -184,6 +186,7 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 
     $scope.openPrePayment = function(){
     	$("#myFinanceModal").modal('show');
+    	TMP_PI_AMOUNT = 0;
     	$('.main-panel').scrollTop(0);	
     }
 
@@ -268,6 +271,26 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	strAmount += parseFloat(strExcise || 0);
 
     	$scope.poFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
+    }
+
+    $scope.calculatePayReqAmount = function(){
+
+    	var strVAT = $scope.payFormData.product_information.VAT;
+    	var strCST = $scope.payFormData.product_information.CST;
+    	var strGST = $scope.payFormData.product_information.GST;
+    	var strServiceTax = $scope.payFormData.product_information.service_tax;
+    	var strExcise = $scope.payFormData.product_information.excise;
+
+
+    	var strAmount = parseFloat( TMP_PI_AMOUNT || 0 );
+
+    	strAmount += parseFloat(strVAT || 0);
+    	strAmount += parseFloat(strCST || 0);
+    	strAmount += parseFloat(strGST || 0);
+    	strAmount += parseFloat(strServiceTax || 0);
+    	strAmount += parseFloat(strExcise || 0);
+
+    	$scope.payFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
     }
 
 
@@ -549,6 +572,21 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
     	}
     }
 
+    var TMP_PI_AMOUNT = 0;
+    $scope.PiChngUpdate = function(e , comeFrom){
+    	if(e.piModel){
+    		var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
+    		TMP_PI_AMOUNT = e.piModel.amount;
+
+    		$scope[ tmpKey ].product_information.PI_number = e.piModel.inv_no;
+			$scope[ tmpKey ].product_information.PI_id = e.piModel._id;
+			$scope[ tmpKey ].product_information.PO_id = e.piModel.PO_id;
+			$scope[ tmpKey ].product_information.PO_number = e.piModel.PO_number;
+
+			$scope.calculatePayReqAmount();
+    	}
+    }
+
     //Submit Invoice form data
     $scope.InvoiceCreate = function(){
     	common.showLoader();
@@ -625,13 +663,28 @@ app.controller('mainController', ['common' , '$scope' , '$timeout',function(comm
 		} , 300);
     }
 
-    function FMTemplateLoadData(){
+    $scope.payReqList = [];
+    function FMTemplateLoadData(callback){
     	InvoiceTemplateLoadData(function(){
     		$scope.piModel = "";
     		$scope.invoiceList = $scope.invoiceList.filter(function(obj){
 	    		return obj.iv_status.status == "Accept";
 	    	});
     	});
+
+    	common.showLoader();
+    	common.asynCall({
+			url: PATH_NAME+ APP_CONSTANT.GET_PAYREQUEST,
+			method:'post'
+		}).then( function(resVal){
+			$scope.payReqList = resVal.data
+			if(callback){
+				callback();
+			}
+			common.hideLoader();
+	    }, function(error){
+	    	console.log(error);
+	    });
     }
 
     $scope.supplierList = [];
