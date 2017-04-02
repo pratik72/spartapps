@@ -141,6 +141,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     		case "invoice" : 
     			$scope.openInvoice(data);
     			break;
+    		case "pay_req" : 
+    			$scope.openPrePayment(data);
+    			break;
     	}
     }
 
@@ -178,16 +181,37 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			});
 			$scope.selectedByUser = selUser[0]
 
-			$scope.locationModel = $scope.poFormData.budgets_and_approvals.location
+			$scope.locationModel = $scope.poFormData.budgets_and_approvals.location;
     	} 
     	$("#myPOModal").modal('show');
     	$('.main-panel').scrollTop(0);
     }
 
-    $scope.openPrePayment = function(){
+    $scope.openPrePayment = function(preData){
     	$("#myFinanceModal").modal('show');
     	TMP_PI_AMOUNT = 0;
-    	$('.main-panel').scrollTop(0);	
+    	$('.main-panel').scrollTop(0);
+
+    	$scope.isReadOnly = false;
+    	if(preData){
+    		$scope.isReadOnly = true;
+
+    		$scope.payFormData = angular.copy(preData);
+
+    		var selPI = $scope.invoiceList.filter(function(a){
+				return $scope.payFormData.product_information.PI_id == a._id
+			});
+
+			var selUser = $scope.notifyUser.filter(function(a){
+				return $scope.payFormData.vendor_selection.selected_by == a._id
+			});
+
+
+			$scope.piModel = selPI[0];
+
+			$scope.selectedByUser = selUser[0];
+		    $scope.divisonModel = $scope.payFormData.vendor_selection.division;
+    	}
     }
 
 
@@ -275,22 +299,25 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
     $scope.calculatePayReqAmount = function(){
 
-    	var strVAT = $scope.payFormData.product_information.VAT;
-    	var strCST = $scope.payFormData.product_information.CST;
-    	var strGST = $scope.payFormData.product_information.GST;
-    	var strServiceTax = $scope.payFormData.product_information.service_tax;
-    	var strExcise = $scope.payFormData.product_information.excise;
-
+    	var strTDS_rate = $scope.payFormData.product_information.TDS_rate;
+    	var strTDS_amnt = $scope.payFormData.product_information.TDS_amount;
+    	var strPF_amount = $scope.payFormData.product_information.PF_amount;
+    	var strECIS_amount = $scope.payFormData.product_information.ECIS_amount;
+    	var strPT_amount = $scope.payFormData.product_information.PT_amount;
+    	var strLoanEMI = $scope.payFormData.product_information.LoanEMI;
+    	var strOtherDeductionAmount = $scope.payFormData.product_information.otherDeductionAmount;
 
     	var strAmount = parseFloat( TMP_PI_AMOUNT || 0 );
 
-    	strAmount += parseFloat(strVAT || 0);
-    	strAmount += parseFloat(strCST || 0);
-    	strAmount += parseFloat(strGST || 0);
-    	strAmount += parseFloat(strServiceTax || 0);
-    	strAmount += parseFloat(strExcise || 0);
+    	strAmount -= parseFloat(strTDS_rate || 0);
+    	strAmount -= parseFloat(strTDS_amnt || 0);
+    	strAmount -= parseFloat(strPF_amount || 0);
+    	strAmount -= parseFloat(strECIS_amount || 0);
+    	strAmount -= parseFloat(strPT_amount || 0);
+    	strAmount -= parseFloat(strLoanEMI || 0);
+    	strAmount -= parseFloat(strOtherDeductionAmount || 0);
 
-    	$scope.payFormData.product_information.amount = strAmount.toFixed(2) || "0.00";
+    	$scope.payFormData.product_information.netAmount = strAmount.toFixed(2) || "0.00";
     }
 
 
@@ -503,7 +530,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     var LIST_MAPPING_KEY = {
     	purchaseOrd : "poList",
     	invoice : "invoiceList",
-    	supplier : "supplierList"
+    	supplier : "supplierList",
+    	pay_req : "payReqList"
     }
 
     var TMP_BACKUP = {};
@@ -577,7 +605,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	if(e.piModel){
     		var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
     		TMP_PI_AMOUNT = e.piModel.amount;
-
+    		
+    		$scope[ tmpKey ].product_information.act_amount = TMP_PI_AMOUNT;
     		$scope[ tmpKey ].product_information.PI_number = e.piModel.inv_no;
 			$scope[ tmpKey ].product_information.PI_id = e.piModel._id;
 			$scope[ tmpKey ].product_information.PO_id = e.piModel.PO_id;
@@ -656,7 +685,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 				InvoiceTemplateLoadData( callback );
 			}else if( templateName.indexOf('purchaseOrd') > -1 ){
 				POTemplateLoadData( callback );
-			}else if( templateName.indexOf('finance') > -1 ){
+			}else if( templateName.indexOf('pay_req') > -1 ){
 				FMTemplateLoadData( callback );
 			}
 			

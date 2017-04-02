@@ -64,7 +64,7 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 				tmpStatus = data.iv_status.status;
 				break;
 			case "pay_req" : 
-				tabAreaStr = "audit request";
+				tabAreaStr = "audit";
 				tmpStatus = data.pay_status.status;
 		}
 		

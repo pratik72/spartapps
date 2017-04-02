@@ -41,7 +41,7 @@ var APP_CONSTANT = {
 		sidebar : "templates/sidebar.html",
 		purchaseOrd : "templates/purchase-ord-template.html",
 		purchaseOrdModel : "templates/purchaseOrdModel.html",
-		finance : "templates/finance-template.html",
+		pay_req : "templates/finance-template.html",
 		financeModel : "templates/financeModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
@@ -187,15 +187,23 @@ var APP_CONSTANT = {
 	PAYREQ_JSON : {
 		orgName : "",
 		userName : "",
+		isPaid : false,
+		paymentMode :"",
+		bankRefNo : "",
+		bank_name : "",
 		product_information: {
 			PI_number : "",
 			PO_number : "",
-		    VAT: 0,
-		    CST: 0,
-		    GST: 0,
-		    service_tax: 0,
-		    excise: 0,
-		    amount: ""
+		    act_amount : 0,
+		    TDS_rate: 0,
+		    TDS_amount: 0,
+		    PF_amount: 0,
+		    ECIS_amount: 0,
+		    PT_amount: 0,
+		    LoanEMI: 0,
+		    otherDeductionType : "",
+		    otherDeductionAmount : 0,
+		    netAmount: 0
 		},
 		vendor_selection: {
 		    selected_by: "",

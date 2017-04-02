@@ -48,7 +48,7 @@
 							    	<span class="text-muted">{% $index+1 %}</span>
 							    </td>
 							    <td>
-				        			<a href="#" ng-click="openPurchaseOrd(payData)">
+				        			<a href="#" ng-click="openPrePayment(payData)">
 							    		<span class="text-muted">{% payData.PayReq_number %}</span>
 							    	</a>
 							    </td>
@@ -65,7 +65,7 @@
 							    	<p class="text-muted">{% payData.create_date | date:'dd/MM/yyyy' %}</p>
 							    </td>
 							    <td>
-							    	<a ng-hide="payData.pay_status.status_changedBy && payData.pay_status.status_changeDate" href="#" ng-click="openStatusModel('purchaseOrd' , payData)">
+							    	<a ng-hide="payData.pay_status.status_changedBy && payData.pay_status.status_changeDate" href="#" ng-click="openStatusModel('pay_req' , payData)">
 							    		<span class="text-danger">{% payData.pay_status.status %}</span>
 							    	</a>
 							    	<span ng-show="payData.pay_status.status_changedBy && payData.pay_status.status_changeDate" class="text-success">{% payData.pay_status.status %}</span>

@@ -15,7 +15,6 @@ router.get('/', restrict , function(req, res, next) {
 });
 
 router.post('/signup', restrict , function(req, res, next) {
-	console.log(req.body)
 
 	uploadService.uploadFiles(req, res, null , function(uplErr){
 			
@@ -37,7 +36,6 @@ router.post('/signup', restrict , function(req, res, next) {
 
 //orgcreate
 router.post('/orgcreate', restrict , function(req, res, next) {
-	console.log(req.body)
 	orgService.addOrganization(req.body , function(error){
 		if(error){
 			console.log("Data Not Entered" , error);
@@ -70,7 +68,6 @@ router.post('/getAllUserList', restrict , function(req, res, next) {
 			console.log("Data Not Retrived" , error);
 			return res.render('Admin', { error : error });
 		}
-		console.log("Users" , result);
   		res.json(result);
 	});
 });

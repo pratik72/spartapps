@@ -588,6 +588,24 @@ function changeActionStatus(req , res , callback){
 			}
 			return callback({ ok : data})
 		});
+	}else if(actQuery == 'pay_req'){
+		var rowId = req.body.rowId;
+		rowId = rowId ? new ObjectId(rowId) : {};
+
+		var rowQuery = { _id : rowId };
+		delete req.body.rowId;
+		var rowData = req.body && req.body.status;
+		if (!rowData) return callback({error : "Bad data structure..!"});
+		rowData = {
+			pay_status : JSON.parse( rowData )
+		};
+
+		payReqService.updatePayReq(rowQuery , rowData , function(error , data){
+			if(error){
+				return callback({error : error});
+			}
+			return callback({ ok : data})
+		});
 	}else{
 		return callback({error : "Wrong action...!"})
 	}
