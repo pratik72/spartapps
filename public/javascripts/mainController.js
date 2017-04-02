@@ -675,6 +675,17 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    });
     }
 
+    $scope.downloadReports = function(){
+        common.asynCall({
+            url: PATH_NAME+ '/downloadRepors',
+            method:'post'   
+        }).then( function(resVal){
+            common.hideLoader();
+        }, function(error){
+            console.log(error);
+        });
+    }
+
     $scope.changeDashBody = function(templateName , callback){
 		$scope.dashBody = allTemplates[ templateName ];
 
@@ -687,7 +698,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 				POTemplateLoadData( callback );
 			}else if( templateName.indexOf('pay_req') > -1 ){
 				FMTemplateLoadData( callback );
-			}
+			}else if( templateName.indexOf('reports') > -1 ){
+                FMTemplateLoadData( callback );
+            }
 			
 		} , 300);
     }

@@ -20,6 +20,7 @@
     "multer": "^1.2.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "python-shell": "^0.4.0",
     "serve-favicon": "~2.3.0"
   }
 }

@@ -42,6 +42,7 @@ var APP_CONSTANT = {
 		purchaseOrd : "templates/purchase-ord-template.html",
 		purchaseOrdModel : "templates/purchaseOrdModel.html",
 		pay_req : "templates/finance-template.html",
+		reports : "templates/reports.html",
 		financeModel : "templates/financeModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
