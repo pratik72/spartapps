@@ -64,3 +64,11 @@ body, html{
 .container-fluid{
     width: 450px;
 }
+
+.tab-title{
+    width: 200px;
+}
+
+.display-line {
+    display: inline-block;
+}
