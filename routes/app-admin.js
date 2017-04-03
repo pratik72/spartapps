@@ -11,7 +11,7 @@ router.get('/', restrict , function(req, res, next) {
 		title : 'Admin',
 		userName : req.user ? req.user.firstName : 'User'
 	}
-  res.render('Admin', vm);
+  res.render('admin', vm);
 });
 
 router.post('/signup', restrict , function(req, res, next) {
@@ -54,7 +54,6 @@ router.post('/getAllOrgList', restrict , function(req, res, next) {
 			console.log("Data Not Retrived" , error);
 			return res.render('Admin', { error : error });
 		}
-		console.log("orgs" , orgs);
   		res.send(orgs);
 	});
 });
