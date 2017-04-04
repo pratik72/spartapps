@@ -8,67 +8,67 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Organization</h4>
       </div>
-      <form name="signupForm" action="/app-admin/orgcreate" method="post" >
+      <form name="signupForm" ng-submit="submitOrgCreate()">
         <div class="modal-body">
             <div class="form-group">
               <label for="orgName">Organization Name:</label>
-              <input type="text" class="form-control" id="orgName" name="orgName">
+              <input type="text" class="form-control" id="orgName" name="orgName" required ng-model="orgFormData.orgName">
             </div>
             <div class="form-group">
               <label for="ceoName">CEO Name:</label>
-              <input type="text" class="form-control" id="ceoName" name="ceoName">
+              <input type="text" class="form-control" id="ceoName" name="ceoName" required ng-model="orgFormData.ceoName">
             </div>
             <div class="form-group">
               <label for="orgPAN">PAN:</label>
-              <input type="text" class="form-control" id="orgPAN" name="orgPAN">
+              <input type="text" class="form-control" id="orgPAN" name="orgPAN" required ng-model="orgFormData.orgPAN">
             </div>
             <div class="form-group">
               <label for="orgGST">GST:</label>
-              <input type="text" class="form-control" id="orgGST" name="orgGST">
+              <input type="text" class="form-control" id="orgGST" name="orgGST" required ng-model="orgFormData.orgGST">
             </div>
             <div class="form-group">
               <label for="orgTIN">TIN:</label>
-              <input type="text" class="form-control" id="orgTIN" name="orgTIN">
+              <input type="text" class="form-control" id="orgTIN" name="orgTIN" required ng-model="orgFormData.orgTIN">
             </div>
             <div class="form-group">
               <label for="service_tax_no">Service Tax No:</label>
-              <input type="text" class="form-control" id="service_tax_no" name="service_tax_no">
+              <input type="text" class="form-control" id="service_tax_no" name="service_tax_no" required ng-model="orgFormData.service_tax_no">
             </div>
             <div class="form-group">
-              <label for="export_import_regd_no">Export/Import Regd No:</label>
-              <input type="text" class="form-control" id="export_import_regd_no" name="export_import_regd_no">
+              <label for="export_import_regd_no">Export/Import Registration No: </label>
+              <input type="text" class="form-control" id="export_import_regd_no" name="export_import_regd_no" required ng-model="orgFormData.export_import_regd_no">
             </div>
             <div class="form-group">
-              <label for="form_regd_no">Form Regd No:</label>
-              <input type="text" class="form-control" id="form_regd_no" name="form_regd_no">
+              <label for="form_regd_no">Form Registration No:</label>
+              <input type="text" class="form-control" id="form_regd_no" name="form_regd_no" required ng-model="orgFormData.form_regd_no">
             </div>
             <div class="form-group">
-              <label for="orgAddr1">Organization Address1:</label>
-              <input type="text" class="form-control" id="orgAddr1" name="orgAddr1">
+              <label for="orgAddr1">Organization Address 1:</label>
+              <input type="text" class="form-control" id="orgAddr1" name="orgAddr1" required ng-model="orgFormData.orgAddr1">
             </div>
             <div class="form-group">
-              <label for="orgAddr2">Organization Address2:</label>
-              <input type="text" class="form-control" id="orgAddr2" name="orgAddr2">
+              <label for="orgAddr2">Organization Address 2:</label>
+              <input type="text" class="form-control" id="orgAddr2" name="orgAddr2" required ng-model="orgFormData.orgAddr2">
             </div>
             <div class="form-group">
               <label for="orgCity">Organization City:</label>
-              <input type="text" class="form-control" id="orgCity" name="orgCity">
+              <input type="text" class="form-control" id="orgCity" name="orgCity" required ng-model="orgFormData.orgCity">
             </div>
             <div class="form-group">
               <label for="orgDistrict">Organization District:</label>
-              <input type="text" class="form-control" id="orgDistrict" name="orgDistrict">
+              <input type="text" class="form-control" id="orgDistrict" name="orgDistrict" required ng-model="orgFormData.orgDistrict">
             </div>
             <div class="form-group">
               <label for="orgState">Organization State:</label>
-              <input type="text" class="form-control" id="orgState" name="orgState">
+              <input type="text" class="form-control" id="orgState" name="orgState" required ng-model="orgFormData.orgState">
             </div>
             <div class="form-group">
               <label for="orgCountry">Organization Country:</label>
-              <input type="text" class="form-control" id="orgCountry" name="orgCountry">
+              <input type="text" class="form-control" id="orgCountry" name="orgCountry" required ng-model="orgFormData.orgCountry">
             </div>
             <div class="form-group">
               <label for="orgStatus">Organization Status:</label>
-              <input type="text" class="form-control" id="orgStatus" name="orgStatus">
+              <input type="text" class="form-control" id="orgStatus" name="orgStatus" required ng-model="orgFormData.orgStatus">
             </div>
         </div>
 

@@ -1,4 +1,6 @@
 app.controller('admUserController', function($scope , common) {
+
+	common.init($scope);
     
     var PATH_NAME = APP_CONSTANT.PATH_NAME;
     $scope.usrcreate_Model = "templates/admin/userCreateModel.html";

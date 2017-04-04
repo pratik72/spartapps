@@ -4,6 +4,7 @@ var APP_CONSTANT = {
 	GET_ORG_LIST: '/getAllOrgList',
 	GET_USER_LIST: '/getAllUserList',
 	SUBMIT_USERDATA: '/signup',
+	SUBMIT_ORGDATA: '/orgcreate',
 	GET_CURRENT_USR: '/userDetails',
 	GET_PAYREQUEST : '/getAllPayReq',
 	CREATE_SUPPLIER : '/createSupplier',
@@ -151,6 +152,23 @@ var APP_CONSTANT = {
 		"password" : "",
 		"organization" : "",
 		"role" : ""
+	},
+	ORG_JSON : {
+		orgName : "",
+		ceoName : "",
+		orgPAN : "",
+		orgGST : "",
+		orgTIN : "",
+		service_tax_no : "",
+		export_import_regd_no : "",
+		form_regd_no : "",	
+		orgAddr1 : "",
+		orgAddr2 : "",
+		orgCity : "",
+		orgDistrict : "",
+		orgState : "",
+		orgCountry : "",
+		orgStatus : ""
 	},
 	STATUS_MODEL_JSON : {
 		action : "",

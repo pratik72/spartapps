@@ -36,7 +36,7 @@ app.service('common',[ '$http' , '$timeout', function($http , $timeout) {
 	}
 
 	this.showLoader = function(){
-		//objAjaxLoader = $('#ajaxLoader');
+		objAjaxLoader = $('#ajaxLoader');
 		objAjaxLoader.show();
 	}
 

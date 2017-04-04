@@ -36,14 +36,22 @@ router.post('/signup', restrict , function(req, res, next) {
 
 //orgcreate
 router.post('/orgcreate', restrict , function(req, res, next) {
-	orgService.addOrganization(req.body , function(error){
-		if(error){
-			console.log("Data Not Entered" , error);
-			return res.render('Admin', { error : error });
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+			
+		if(uplErr){
+			res.json({error : "File not Uploaded..!"});	
 		}
-		console.log("Data Entered Successfully");
-  		res.redirect('/app-admin');
-	});
+		
+		orgService.addOrganization(req.body , function(error){
+			if(error){
+				console.log("Data Not Entered" , error);
+				res.status(400);
+				return res.send(error);
+			}
+			console.log("Data Entered Successfully");
+		  	return res.send({ OK : "User Entered Successfully" });
+		});
+	})
 });
 
 //Get All Organization
