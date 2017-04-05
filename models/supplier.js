@@ -7,12 +7,12 @@ var supplierSchema = new Schema({
 	user_id : Schema.Types.ObjectId,
 	supplier_no : String,
 	orgName : String,
-	sa_status : {
+	sa_status : [{
 		status: String,
 		status_description : String,
 		status_changedBy: String,
 		status_changeDate : String
-	},
+	}],
 	userName : String,
 	create_date : {type: Date, default: Date.now},
 	supplier_name_address: {

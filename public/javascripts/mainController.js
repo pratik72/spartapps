@@ -97,14 +97,25 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	
 	//distUserDetails
 	$scope.notifyUser = [];
-	common.asynCall({
-		url: PATH_NAME + "/distUserDetails",
-		method: 'post'
-	}).then( function(resVal){
-		$scope.notifyUser = resVal.data;
-    }, function(error){
-    	console.log(error);
-    });
+	getUserDetails(null , function(ndata){
+		$scope.notifyUser = ndata.data;
+	});
+
+	function getUserDetails(param, next){
+		var tmpformData = new FormData();;
+		if(param){
+    		tmpformData.append( "users" , param );
+		}
+		common.asynCall({
+			url: PATH_NAME + APP_CONSTANT.GET_USER_DET,
+			method: 'post',
+			param : tmpformData
+		}).then( function(resVal){
+			next(resVal);
+	    }, function(error){
+	    	console.log(error);
+	    });
+	}
 
     $scope.selectedByChngUpdate = function(obj, comeFrom){
     	var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
@@ -152,16 +163,28 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	resetSupplierModel();
     	$scope.isReadOnly = false;
     	if(suppDatas){
-    		$scope.isReadOnly = true;
-    		$scope.supplierFormData = angular.copy(suppDatas);
-			$scope.divisonModel = $scope.supplierFormData.vendor_selection.division;
-			var selUser = $scope.notifyUser.filter(function(a){
-				return $scope.supplierFormData.vendor_selection.selected_by == a._id
-			});
-			$scope.selectedByUser = selUser[0]
-    	}
-    	$("#mySuppModal").modal('show');
-    	$('.main-panel').scrollTop(0);
+    		var arrUsers = [];
+
+    		for (var i = 0; i < suppDatas.sa_status.length; i++) {
+    			arrUsers.push(suppDatas.sa_status[i].status_changedBy)
+    		}
+    		
+    		getUserDetails( arrUsers , function(){
+	    		$scope.isReadOnly = true;
+	    		$scope.supplierFormData = angular.copy(suppDatas);
+				$scope.divisonModel = $scope.supplierFormData.vendor_selection.division;
+				var selUser = $scope.notifyUser.filter(function(a){
+					return $scope.supplierFormData.vendor_selection.selected_by == a._id
+				});
+				$scope.selectedByUser = selUser[0];
+
+				$("#mySuppModal").modal('show');
+    			$('.main-panel').scrollTop(0);
+    		});
+    	}else{
+    		$("#mySuppModal").modal('show');
+    		$('.main-panel').scrollTop(0);
+    	}    	
     }
 
     $scope.openPurchaseOrd = function(poDatas){
@@ -684,6 +707,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
         }, function(error){
             console.log(error);
         });
+    }
+
+    $scope.getStatusIndex = function(objArray){
+    	return objArray.length - 1;
     }
 
     $scope.changeDashBody = function(templateName , callback){

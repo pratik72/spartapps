@@ -10,12 +10,12 @@ exports.addSupplier = function(suppData , callback){
 			orgName : suppData.orgName,
 			supplier_no : "SUP"+suppNum.count,
 			userName : suppData.userName,
-			sa_status : {
-				status: suppData.sa_status.status,
-				status_description : suppData.sa_status.status_description,
-				status_changedBy: suppData.sa_status.status_changedBy,
-				status_changeDate : suppData.sa_status.status_changeDate
-			},
+			sa_status : [{
+				status: suppData.sa_status[0].status,
+				status_description : suppData.sa_status[0].status_description,
+				status_changedBy: suppData.sa_status[0].status_changedBy,
+				status_changeDate : suppData.sa_status[0].status_changeDate
+			}],
 			supplier_name_address: {
 			    supplier_name: suppData.supplier_name_address.supplier_name,
 			    address1: suppData.supplier_name_address.address1,

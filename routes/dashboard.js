@@ -58,8 +58,6 @@ router.post('/downloadRepors', restrict , function(req, res, next) {
 	
 });
 
-
-
 router.post('/distUserDetails', restrict , function(req, res, next) {
 	var serach = { orgId : req.user.orgId }
 	userService.findAllUsers( serach, function(error , result){
@@ -519,6 +517,8 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 		pay_req : "pay_status",
 	}
 
+	tmpObj[ statusKey[comeFrom] ] = [];
+
 	for (var i in tmpObj) {
 		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
 			try{
@@ -529,10 +529,14 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 		}
 	};
 
-	tmpObj[ statusKey[comeFrom] ].status = "pending";
-	tmpObj[ statusKey[comeFrom] ].status_changeDate = "";
-	tmpObj[ statusKey[comeFrom] ].status_description = "";
-	tmpObj[ statusKey[comeFrom] ].status_changedBy = ""
+	var newStatusObj = {
+		status : "pending",
+		status_changeDate : "",
+		status_description : "",
+		status_changedBy : ""
+	}
+
+	tmpObj[ statusKey[comeFrom] ].push(newStatusObj)
 
 	tmpObj.doc_attachment = {};
 	
@@ -574,7 +578,11 @@ function changeActionStatus(req , res , callback){
 			sa_status : JSON.parse( rowData )
 		};
 
-		supplierService.updateSupplier(rowQuery , rowData , function(error , data){
+		var newQuery = {
+			$push : rowData
+		}
+
+		supplierService.updateSupplier(rowQuery , newQuery , function(error , data){
 			if(error){
 				return callback({error : error});
 			}

@@ -9,6 +9,7 @@ var APP_CONSTANT = {
 	GET_PAYREQUEST : '/getAllPayReq',
 	CREATE_SUPPLIER : '/createSupplier',
 	CREATE_INVOICE : '/createInvoice',
+	GET_USER_DET : "/distUserDetails",
 	CREATE_PAYREQ : '/createPayRequest',
 	GET_ALL_PO : '/getAllPOs',
 	SET_MARK_AS_VIEW_NOTIFY: '/markNotificationAsViewed',
