@@ -80,3 +80,16 @@ img.ajax-loader-img {
 .is-focused select.form-control{
     color: grey;
 }
+
+.trackDot {
+    background: blue;
+    padding: 6px;
+    margin: 5px 20px;
+    color: white;
+    border-radius: 100%;
+    font-size: 12px;
+    line-height: 2;
+    vertical-align: middle;
+    cursor: pointer;
+    box-shadow: 0px 0px 3px 3px #44448a;
+}

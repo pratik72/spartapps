@@ -10,7 +10,7 @@
         <div class="pull-right" >
           <button class="btn btn-success" ng-click="enableToEdit()" ng-show="isReadOnly">Edit</button>
 
-          <span ng-if="supplierFormData.sa_status.status == 'pending' && isReadOnly">
+          <span ng-if="supplierFormData.sa_status[ getStatusIndex( supplierFormData.sa_status) ].status == 'pending' && isReadOnly">
             <button class="btn btn-default" ng-click="openStatusModel('supplier' , supplierFormData , 'Accept')">Approve</button>
             <button class="btn btn-danger" ng-click="openStatusModel('supplier' , supplierFormData , 'Decline')">Decline</button>
           </span>
@@ -21,32 +21,37 @@
         <div class="modal-body">
             <table class="table table-bordered">
               <tbody>
-
-                <tr ng-hide="supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status == '' || supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status == 'pending'">
+                <tr ng-hide="!isReadOnly">
                   <th colspan="4">Trail</th>
                 </tr>
 
-                <tr ng-hide="supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status == '' || supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status == 'pending'">
-                  <td>User</td>
+                <tr ng-hide="!isReadOnly">
+                  <td colspan="4">
+                    <span ng-repeat="itm in supplierTrail track by $index" >
+                      <span class="trackDot" title="{% itm.UserName %} | {% itm.role %}">{% $index+1 %}</span>
+                      <div title="{% itm.UserName %} | {% itm.role %}">{% itm.status %}</div>
+                    </spn>
+                  </td>
+                  <!-- <td>User</td>
                   <td>
-                    <span>{% supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status_changedBy %}</span>
+                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].UserName %}</span>
                   </td>
                   <td>Date</td>
                   <td>
-                    <span>{% supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status_changeDate | date:'dd/MM/yyyy' %} - {% supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status_changeDate | date:'HH:mm' %}</span>
-                  </td>
+                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].status_changeDate | date:'dd/MM/yyyy' %} - {% supplierTrail[ getStatusIndex( supplierTrail ) ].status_changeDate | date:'HH:mm' %}</span>
+                  </td> -->
                 </tr>
 
-                <tr ng-hide="supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status == '' || supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status == 'pending'">
+                <!-- <tr ng-hide="!isReadOnly">
                   <td>Status</td>
                   <td>
-                    <span>{% supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status %}</span>
+                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].status %}</span>
                   </td>
                   <td>Comment</td>
                   <td>
-                    <span>{% supplierFormData.sa_status[ getStatusIndex(suppData.sa_status) ].status_description %}</span>
+                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].status_description %}</span>
                   </td>
-                </tr>
+                </tr> -->
                 
 
                 <tr>

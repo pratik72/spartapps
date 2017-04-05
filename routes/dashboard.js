@@ -59,13 +59,22 @@ router.post('/downloadRepors', restrict , function(req, res, next) {
 });
 
 router.post('/distUserDetails', restrict , function(req, res, next) {
-	var serach = { orgId : req.user.orgId }
-	userService.findAllUsers( serach, function(error , result){
-		if(error){
-			console.log("User Not Retrived" , error);
-			return res.json(error);
+
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+		var serach = { orgId : req.user.orgId }
+
+		if( req.body.users ){
+			var tmpArrayOfUser = req.body.users.split(',');
+			serach._id = { $in : tmpArrayOfUser}
 		}
-  		res.json(result);
+
+		userService.findAllUsers( serach, function(error , result){
+			if(error){
+				console.log("User Not Retrived" , error);
+				return res.json(error);
+			}
+	  		res.json(result);
+		});
 	});
 });
 
@@ -199,8 +208,8 @@ router.post('/createSupplier', restrict , function(req, res, next) {
 
 			bodyObject = req.body;
 
-			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , "supplier");
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , "supplier");
 
 			var tmpNotifyType = 1;
 			var currUser = req.user;
@@ -529,11 +538,12 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 		}
 	};
 
+	var tmpUserId = tmpObj.user_id;
 	var newStatusObj = {
 		status : "pending",
-		status_changeDate : "",
-		status_description : "",
-		status_changedBy : ""
+		status_changeDate : Date.now(),
+		status_changedBy : tmpUserId,
+		status_description : ""
 	}
 
 	tmpObj[ statusKey[comeFrom] ].push(newStatusObj)
