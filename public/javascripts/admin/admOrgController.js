@@ -64,7 +64,6 @@ app.controller('admOrgController', function($scope , common) {
     	resetOrgMod();
     	$scope.isReadOnly = false;
     	if(orgData){
-    		return;//return because we did not provice org EDIT
     		$scope.isReadOnly = true;
     		$scope.userForm = angular.copy(orgData);
 			var selOrg = $scope.AllOrgsData.filter(function(a){

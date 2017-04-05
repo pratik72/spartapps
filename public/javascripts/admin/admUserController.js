@@ -1,12 +1,11 @@
-app.controller('admUserController', function($scope , common) {
+app.controller('admUserController', function($scope , common , $window , $route ,$rootScope) {
 
 	common.init($scope);
     
     var PATH_NAME = APP_CONSTANT.PATH_NAME;
     $scope.usrcreate_Model = "templates/admin/userCreateModel.html";
     $scope.AllUserRoles = APP_CONSTANT.USER_ROLES;
-    $scope.userForm = APP_CONSTANT.USER_JSON;
-    $scope.orgModel = "";
+    $scope.userForm = angular.copy(APP_CONSTANT.USER_JSON);
 
     LoadUserList()
 
@@ -16,6 +15,7 @@ app.controller('admUserController', function($scope , common) {
 		method: 'post'
 	}).then( function(resVal){
 		$scope.AllOrgsData= resVal.data;
+		$("#userCreateModal").modal('hide');
     }, function(error){
     	console.log(error);
     });
@@ -26,6 +26,8 @@ app.controller('admUserController', function($scope , common) {
 			method: 'post'
 		}).then( function(resVal){
 			$scope.AllUsersData= resVal.data;
+			$("#userCreateModal").modal('show');
+			
 		}, function(error){
 			console.log(error);
 		});
@@ -42,12 +44,13 @@ app.controller('admUserController', function($scope , common) {
 			method:'post',
 			param: tmpData
 		}).then( function(resVal){
-			console.log("Create User==" , resVal)
 			if(resVal.data && resVal.data.OK){
 				alert("Hurrey... \n\n"+resVal.data.OK);
-				$scope.userForm = APP_CONSTANT.USER_JSON;
+				
+				$scope.userForm = angular.copy(APP_CONSTANT.USER_JSON);
 				$("#userCreateModal").modal('hide');
-				LoadUserList()
+
+				$route.reload();
 			}
 	    }, function(error){
 	    	var servError = error.data.errors;
@@ -61,19 +64,19 @@ app.controller('admUserController', function($scope , common) {
     }
 
     //This function used to update userForm data for organization
-    $scope.orgUpdate = function(scpModel){
-    	if(scpModel.orgModel){
-    		var orgId = scpModel.orgModel._id;
-	    	var orgName = scpModel.orgModel.orgName;
+    $scope.orgUpdate = function(){
+    	if(this.orgModel){
+    		var orgId = this.orgModel._id;
+	    	var orgName = this.orgModel.orgName;
 	    	$scope.userForm.organization = orgName;
 	    	$scope.userForm.orgId = orgId;	
     	}    	
     }
 
     //This function used to update userForm data for roles
-    $scope.roleUpdate = function(scpModel){
-    	if(scpModel.userRole){
-	    	var roleName = scpModel.userRole.name;
+    $scope.roleUpdate = function(){
+    	if(this.userRole){
+	    	var roleName = this.userRole.name;
 	    	$scope.userForm.role = roleName;
     	}    	
     }
@@ -93,12 +96,15 @@ app.controller('admUserController', function($scope , common) {
 				return $scope.userForm.role == a.name
 			});
 			
-			$scope.orgModel = selOrg[0];
-			$scope.userRole = selUsrRole[0];
+			this.orgModel = selOrg[0];
+			this.userRole = selUsrRole[0];
     	}
 
     	$("#userCreateModal").modal('show');
 
+    	if(!userData){
+    		$('#userCreateModal form')[0].reset()
+    	}
     }
 
     function resetUserMod(modelScope){
@@ -111,9 +117,8 @@ app.controller('admUserController', function($scope , common) {
     		}
     	};
 
-    	if(!modelScope){
-	    	$scope.orgModel = "";
-			$scope.userRole = "";
-    	}
+	    this.orgModel = new Object();
+		this.userRole = new Object();
+
     }
 });

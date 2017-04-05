@@ -30,13 +30,13 @@
             </div>
             <div class="form-group">
               <label for="organization">Organization:</label>
-              <select ng-options="item as item.orgName for item in AllOrgsData" ng-model="orgModel" name="organization" required ng-change="orgUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+              <select ng-options="item as item.orgName for item in AllOrgsData" ng-model="orgModel" name="organization" required ng-change="orgUpdate()" class="form-control" ng-disabled="isReadOnly">
                 <option value="">--select organization--</option>
               </select>
             </div>
             <div class="form-group">
               <label for="role">User Role:</label>
-              <select ng-options="item as item.name for item in AllUserRoles" ng-model="userRole" name="role" required ng-change="roleUpdate(this)" class="form-control" ng-disabled="isReadOnly">
+              <select ng-options="item as item.name for item in AllUserRoles" ng-model="userRole" name="role" required ng-change="roleUpdate()" class="form-control" ng-disabled="isReadOnly">
                 <option value="">--select user role--</option>
               </select>
             </div>
