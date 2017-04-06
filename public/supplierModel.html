@@ -27,32 +27,19 @@
 
                 <tr ng-hide="!isReadOnly">
                   <td colspan="4">
-                    <span ng-repeat="itm in supplierTrail track by $index" >
-                      <span class="trackDot" title="{% itm.UserName %} | {% itm.role %}">{% $index+1 %}</span>
-                      <div title="{% itm.UserName %} | {% itm.role %}">{% itm.status %}</div>
-                    </spn>
-                  </td>
-                  <!-- <td>User</td>
-                  <td>
-                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].UserName %}</span>
-                  </td>
-                  <td>Date</td>
-                  <td>
-                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].status_changeDate | date:'dd/MM/yyyy' %} - {% supplierTrail[ getStatusIndex( supplierTrail ) ].status_changeDate | date:'HH:mm' %}</span>
-                  </td> -->
-                </tr>
 
-                <!-- <tr ng-hide="!isReadOnly">
-                  <td>Status</td>
-                  <td>
-                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].status %}</span>
+                    <div class="row">
+                      <div class="col-md-1 trackList" ng-repeat="itm in supplierTrail track by $index">
+                        <a href="#" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
+                          <div class="badge bg-info">{% $index+1 %}</div>
+                          <div >{% itm.status %}</div>
+                        </a>
+                      </div>
+                    </div>
+
                   </td>
-                  <td>Comment</td>
-                  <td>
-                    <span>{% supplierTrail[ getStatusIndex( supplierTrail ) ].status_description %}</span>
-                  </td>
-                </tr> -->
-                
+                  
+                </tr>
 
                 <tr>
                   <th colspan="4">Name and Address</th>

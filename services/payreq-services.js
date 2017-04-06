@@ -38,12 +38,12 @@ exports.addPayReq = function(poData , callback){
 			doc_attachment: {
 			    other_doc: poData.doc_attachment.other_doc
 			},
-			pay_status : {
-				status: poData.pay_status.status,
-				status_description : poData.pay_status.status_description,
-				status_changedBy: poData.pay_status.status_changedBy,
-				status_changeDate : poData.pay_status.status_changeDate
-			}
+			pay_status : [{
+				status: poData.pay_status[0].status,
+				status_description : poData.pay_status[0].status_description,
+				status_changedBy: poData.pay_status[0].status_changedBy,
+				status_changeDate : poData.pay_status[0].status_changeDate
+			}]
 		});
 
 		newPayReq.save(function (err, result, numAffected) {

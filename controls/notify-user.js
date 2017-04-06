@@ -53,21 +53,23 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 		switch(tabs){
 			case "supplier" : 
 				tabAreaStr = tabs;
-				tmpStatus = data.sa_status.status;
+				tmpStatus = data.sa_status;
 				break;
 			case "purchaseOrd" : 
 				tabAreaStr = "purchase order";
-				tmpStatus = data.po_status.status;				
+				tmpStatus = data.po_status;
 				break;
 			case "invoice" : 
 				tabAreaStr = "payment intimation";
-				tmpStatus = data.iv_status.status;
+				tmpStatus = data.iv_status;
 				break;
 			case "pay_req" : 
 				tabAreaStr = "audit";
-				tmpStatus = data.pay_status.status;
+				tmpStatus = data.pay_status;
 		}
 		
+		tmpStatus = tmpStatus[ tmpStatus.length -1] .status;
+
 		switch(notifyType){
 			case 1 : //For Any Form createtion
 				tmpTitle = "New " + tabAreaStr+" Approval Request from " + userName;

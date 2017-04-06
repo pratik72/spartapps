@@ -10,7 +10,7 @@
 
         <div class="pull-right" >
           <button class="btn btn-success" ng-click="copyAndCreateNewPO()" ng-show="isReadOnly">Copy & Creat New PO</button>
-          <span ng-if="poFormData.po_status.status == 'pending' && isReadOnly">
+          <span ng-if="poFormData.po_status[ getStatusIndex(poFormData.po_status) ].status == 'pending' && isReadOnly">
             <button class="btn btn-default" ng-click="openStatusModel('purchaseOrd' , poFormData , 'Accept')">Approve</button>
             <button class="btn btn-danger" ng-click="openStatusModel('purchaseOrd' , poFormData , 'Decline')">Decline</button>
           </span>
@@ -23,20 +23,23 @@
             <table class="table table-bordered">
               <tbody>
 
-                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
-                  <th colspan="4">Reply</th>
-                </tr>
-                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
-                  <td>Status</td>
-                  <td colspan="3">
-                    <span>{% poFormData.po_status.status %}</span>
+                <tr ng-hide="!isReadOnly">
+                  <td colspan="4">
+
+                    <div class="row">
+                      
+                      <div class="col-md-1 trackList" ng-repeat="itm in poTrail track by $index">
+                        <a href="#" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
+                          <div class="badge bg-info">{% $index+1 %}</div>
+                          <div >{% itm.status %}</div>
+                        </a>
+                        
+                      </div>
+
+                    </div>
+
                   </td>
-                </tr>
-                <tr ng-hide="poFormData.po_status.status == '' || poFormData.po_status.status == 'pending'">
-                  <td>Comment</td>
-                  <td colspan="3">
-                    <span>{% poFormData.po_status.status_description %}</span>
-                  </td>
+                  
                 </tr>
 
                 <tr>

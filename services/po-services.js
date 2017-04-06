@@ -12,12 +12,12 @@ exports.addPO = function(poData , callback){
 			supplier_name : poData.supplier_name,
 			supplierId : poData.supplierId,
 			PO_number : "PO"+poNum.count,
-			po_status : {
-				status: poData.po_status.status,
-				status_description : poData.po_status.status_description,
-				status_changedBy: poData.po_status.status_changedBy,
-				status_changeDate : poData.po_status.status_changeDate
-			},
+			po_status : [{
+				status: poData.po_status[0].status,
+				status_description : poData.po_status[0].status_description,
+				status_changedBy: poData.po_status[0].status_changedBy,
+				status_changeDate : poData.po_status[0].status_changeDate
+			}],
 			userName : poData.userName,
 			product_information: {
 			    product_name: poData.product_information.product_name,

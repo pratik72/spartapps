@@ -7,7 +7,7 @@ body, html {
 	font-weight: 600;
 }
 
-.modal .row div{
+.modal .row div:not(.trackList *){
 	padding: 0px;
 	margin-left: 40px;
 }
@@ -81,15 +81,6 @@ img.ajax-loader-img {
     color: grey;
 }
 
-.trackDot {
-    background: blue;
-    padding: 6px;
-    margin: 5px 20px;
-    color: white;
-    border-radius: 100%;
-    font-size: 12px;
-    line-height: 2;
-    vertical-align: middle;
-    cursor: pointer;
-    box-shadow: 0px 0px 3px 3px #44448a;
+.bottom-zero {
+    margin-bottom: 0px;
 }

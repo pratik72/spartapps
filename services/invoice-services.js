@@ -40,12 +40,12 @@ exports.addInvoice = function(invoiceData , callback){
 			    PO: invoiceData.doc_attachment.PO,
 			    other_doc: invoiceData.doc_attachment.other_doc
 			},
-			iv_status : {
-				status: invoiceData.iv_status.status,
-				status_description : invoiceData.iv_status.status_description,
-				status_changedBy: invoiceData.iv_status.status_changedBy,
-				status_changeDate : invoiceData.iv_status.status_changeDate
-			}
+			iv_status : [{
+				status: invoiceData.iv_status[0].status,
+				status_description : invoiceData.iv_status[0].status_description,
+				status_changedBy: invoiceData.iv_status[0].status_changedBy,
+				status_changeDate : invoiceData.iv_status[0].status_changeDate
+			}]
 		});
 
 		newInvoice.save(function (err, product, numAffected) {
@@ -60,12 +60,19 @@ exports.addInvoice = function(invoiceData , callback){
 
 exports.findInvoice = function(inv_id, callback){
 	var invIdParam = inv_id || {};
-	/*if(invIdParam.length > 2){
-		invIdParam = { _id : inv_id }
-	}*/
+
 	Invoice.find( invIdParam , function(error, org){
 		callback(error , org)
 	})
+}
+
+exports.searchInvEs = function(searchStr, callback){
+	
+	Invoice.find({$text: {$search: searchStr}})
+       .limit(10)
+       .exec(function(err, docs) {
+			callback(err , docs)
+       });
 }
 
 exports.updateInvoice = function(inv_query, updateData ,callback){

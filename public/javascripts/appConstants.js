@@ -49,12 +49,6 @@ var APP_CONSTANT = {
 		ajaxloader : "ajax-loader.html"
 	},
 	SUPPLIER_JSON : {
-		sa_status : {
-			status:"",
-			status_description : "",
-			status_changedBy: "",
-			status_changeDate : "",
-		},
 		"supplier_name_address": {
 		    "supplier_name": "",
 		    "address1": "",
@@ -110,12 +104,6 @@ var APP_CONSTANT = {
 		}
 	},
 	PO_JSON : {
-		po_status : {
-			status:"",
-			status_description : "",
-			status_changedBy: "",
-			status_changeDate : "",
-		},
 		"product_information": {
 		    "product_name": "",
 		    "poCategory" : "product",
@@ -174,7 +162,12 @@ var APP_CONSTANT = {
 	STATUS_MODEL_JSON : {
 		action : "",
 		row : "",
-		fieldSet : "",
+		fieldSet : {
+			status: "",
+			status_description : "",
+			status_changedBy: "",
+			status_changeDate : ""
+		},
 	},
 	INVOICE_JSON : {
 		orgName : "",
@@ -196,12 +189,6 @@ var APP_CONSTANT = {
 		    invoice: "",
 		    PO: "",
 		    other_doc: ""
-		},
-		iv_status : {
-			status: "",
-			status_description : "",
-			status_changedBy: "",
-			status_changeDate : ""
 		}
 	},
 	PAYREQ_JSON : {
@@ -231,12 +218,6 @@ var APP_CONSTANT = {
 		},
 		doc_attachment: {
 		    other_doc: ""
-		},
-		pay_status : {
-			status: "",
-			status_description : "",
-			status_changedBy: "",
-			status_changeDate : ""
 		}
 	},
 	USER_ROLES : [

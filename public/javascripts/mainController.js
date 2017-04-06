@@ -37,7 +37,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	$scope.invoice_Model = allTemplates.invoiceModel;
 	$scope.finance_Model = allTemplates.financeModel;
 
-	$scope.initStatusData = APP_CONSTANT.STATUS_MODEL_JSON;
+	$scope.initStatusData = angular.copy( APP_CONSTANT.STATUS_MODEL_JSON );
 	$scope.allActivePOs = [];
 
 	//Init all Scopes
@@ -158,6 +158,23 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	}
     }
 
+    function setSearchTree(area , data) {
+    	switch(area){
+    		case "purchaseOrd" : 
+    			
+    			break;
+    		case "supplier" : 
+    			
+    			break;
+    		case "invoice" : 
+				$scope.invoiceList = data;
+    			break;
+    		case "pay_req" : 
+    			
+    			break;
+    	}
+    }
+
 	//Init All events
 
 	$scope.supplierTrail = [];
@@ -174,20 +191,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     		getUserDetails( arrUsers , function(udata){
 	    		$scope.isReadOnly = true;
 	    		$scope.supplierFormData = angular.copy(suppDatas);
-	    		$scope.supplierTrail = [];
-	    		var tmpSuppStatus = angular.copy(suppDatas.sa_status);
-
-    			for (var k = 0; k < tmpSuppStatus.length; k++) {
-    				var tmpObj = []
-    				for (var i = 0; i < udata.data.length; i++) {
-	    				if( tmpSuppStatus[k].status_changedBy == udata.data[i]._id ){
-	    					tmpObj = tmpSuppStatus[k]
-	    					tmpObj.UserName = udata.data[i].firstName +' '+udata.data[i].lastName;
-	    					tmpObj.role = udata.data[i].role;
-	    				}
-    				}    			
-    				$scope.supplierTrail[k] = tmpObj;
-    			}
+	    		$scope.supplierTrail = getTrailArray( udata , suppDatas.sa_status);
 
 				$scope.divisonModel = $scope.supplierFormData.vendor_selection.division;
 				var selUser = $scope.notifyUser.filter(function(a){
@@ -205,27 +209,63 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	}    	
     }
 
+    function getTrailArray(udata , modalData){
+    	var tmpTrailArray = [];
+		var tmpSuppStatus = angular.copy( modalData );
+
+		for (var k = 0; k < tmpSuppStatus.length; k++) {
+			var tmpObj = []
+			for (var i = 0; i < udata.data.length; i++) {
+				if( tmpSuppStatus[k].status_changedBy == udata.data[i]._id ){
+					tmpObj = tmpSuppStatus[k]
+					tmpObj.UserName = udata.data[i].firstName +' '+udata.data[i].lastName;
+					tmpObj.role = udata.data[i].role;
+				}
+			}    			
+			tmpTrailArray[k] = tmpObj;
+		}
+
+		return tmpTrailArray;
+    }
+
+	$scope.poTrail = [];
     $scope.openPurchaseOrd = function(poDatas){
     	resetPOModel();
     	$scope.isReadOnly = false;
     	if(poDatas){
-    		$scope.isReadOnly = true;
-    		$scope.poFormData = angular.copy(poDatas);
-    		var selSuppObj = $scope.supplierForInvoice.filter(function(e){
-    			return $scope.poFormData.supplierId == e._id
-    		});
-    		$scope.suppModel = selSuppObj[0];
-			$scope.divisonModel = $scope.poFormData.vendor_selection.division;
-			
-			var selUser = $scope.notifyUser.filter(function(a){
-				return $scope.poFormData.vendor_selection.selected_by == a._id
-			});
-			$scope.selectedByUser = selUser[0]
 
-			$scope.locationModel = $scope.poFormData.budgets_and_approvals.location;
-    	} 
-    	$("#myPOModal").modal('show');
-    	$('.main-panel').scrollTop(0);
+    		var arrUsers = [];
+
+    		for (var i = 0; i < poDatas.po_status.length; i++) {
+    			arrUsers.push(poDatas.po_status[i].status_changedBy)
+    		}
+
+    		getUserDetails( arrUsers , function(udata){
+				$scope.isReadOnly = true;
+				$scope.poFormData = angular.copy(poDatas);
+
+	    		$scope.poTrail = getTrailArray( udata , poDatas.po_status);
+
+				var selSuppObj = $scope.supplierForInvoice.filter(function(e){
+					return $scope.poFormData.supplierId == e._id
+				});
+				$scope.suppModel = selSuppObj[0];
+				$scope.divisonModel = $scope.poFormData.vendor_selection.division;
+				
+				var selUser = $scope.notifyUser.filter(function(a){
+					return $scope.poFormData.vendor_selection.selected_by == a._id
+				});
+				$scope.selectedByUser = selUser[0]
+
+				$scope.locationModel = $scope.poFormData.budgets_and_approvals.location;
+
+				$("#myPOModal").modal('show');
+	    		$('.main-panel').scrollTop(0);	
+    		});
+    	}else{
+	    	$("#myPOModal").modal('show');
+	    	$('.main-panel').scrollTop(0);
+    	}
     }
 
     $scope.openPrePayment = function(preData){
@@ -264,32 +304,50 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    	
 	    	getAllActivePO(function(){
 	    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
-		    		return obj.sa_status.status == "Accept";
+		    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
 		    	});
 
 		    	if(invData){
-		    		$scope.isReadOnly = true;
+		    		var arrUsers = [];
 
-		    		$scope.invoiceFormData = angular.copy(invData);
-		    		$scope.invoiceFormData.isExpense = $scope.invoiceFormData.isExpense.toString();
-		    		var tmpObj = $scope.supplierList.filter(function(obj){
-		    			return obj._id == $scope.invoiceFormData.supplierId;
+		    		for (var i = 0; i < invData.iv_status.length; i++) {
+		    			arrUsers.push(invData.iv_status[i].status_changedBy)
+		    		}
+		    		
+		    		getUserDetails( arrUsers , function(udata){
+			    		$scope.isReadOnly = true;
+
+			    		$scope.invoiceFormData = angular.copy(invData);
+			    		$scope.invoiceFormData.isExpense = $scope.invoiceFormData.isExpense.toString();
+
+	    				$scope.invoiceTrail = getTrailArray( udata , invData.iv_status);
+
+			    		var tmpObj = $scope.supplierList.filter(function(obj){
+			    			return obj._id == $scope.invoiceFormData.supplierId;
+			    		})
+
+			    		var tmpPoObj = $scope.allActivePOs.filter(function(obj){
+			    			return obj._id == $scope.invoiceFormData.PO_id;
+			    		})
+
+			    		var selUser = $scope.notifyUser.filter(function(a){
+							return $scope.invoiceFormData.vendor_selection.selected_by == a._id
+						});
+
+						$scope.selectedByUser = selUser[0];
+			    		$scope.ddPoModel = tmpPoObj[0];
+			    		$scope.suppModel = tmpObj[0];
+
+						$scope.divisonModel = $scope.invoiceFormData.vendor_selection.division;
+
+						$("#myInvoiceModal").modal('show');
+			    		$('.main-panel').scrollTop(0);
 		    		})
 
-		    		var tmpPoObj = $scope.allActivePOs.filter(function(obj){
-		    			return obj._id == $scope.invoiceFormData.PO_id;
-		    		})
-
-		    		var selUser = $scope.notifyUser.filter(function(a){
-						return $scope.supplierFormData.vendor_selection.selected_by == a._id
-					});
-
-					$scope.selectedByUser = selUser[0];
-		    		$scope.ddPoModel = tmpPoObj[0];
-		    		$scope.suppModel = tmpObj[0];
+		    	}else{
+		    		$("#myInvoiceModal").modal('show');
+		    		$('.main-panel').scrollTop(0);
 		    	}
-	    		$("#myInvoiceModal").modal('show');
-	    		$('.main-panel').scrollTop(0);
 	    	});
     	})
     }
@@ -405,11 +463,16 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	$scope.hasEditSupplier = true;
     }
 
+    var statusKey = {
+		po : "po_status",
+		supplier : "sa_status",
+		pay_req : "pay_status",
+	}
+
     $scope.openStatusModel = function(action , row , statusVal){
     	if($scope.permissions.ApprvSupplierReq){
     		$scope.initStatusData.action = action;
 	    	$scope.initStatusData.row = row;
-	    	$scope.initStatusData.fieldSet = APP_CONSTANT.SUPPLIER_JSON.sa_status;
 
 	    	$scope.statusForm.updatedStatus = statusVal || "";
 	    	$scope.statusForm.status_desc = "";
@@ -515,15 +578,15 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     $scope.searchTab = function(obj , tabs){
 
     	var sendKeys = new FormData();
+    	sendKeys.append( "searchTab" , tabs );
     	sendKeys.append( "searchText" , obj.searchText );
-    	sendKeys.append( "searchModel" , obj.searchModel );
     	
     	common.asynCall({
 			url: PATH_NAME + APP_CONSTANT.SEARCH_TAB,
 			method: 'post',
 			param : sendKeys
 		}).then( function(resVal){
-			$scope.invoiceList = resVal.data;
+			setSearchTree( tabs , resVal.data);
 	    }, function(error){
 	    	console.log(error);
 	    	alert("Data Not found")
@@ -623,7 +686,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
     		$scope[ tmpKey ].HSN_Code = e.ddPoModel.product_information.HSN_Code;
     		$scope[ tmpKey ].Product_Nature = e.ddPoModel.product_information.product_discreption;
-
+    		$scope.calculateInvAmount();
     	}
     }
 
@@ -800,7 +863,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
 		SupplierTemplateLoadData(function(){
     		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
-	    		return obj.sa_status.status == "Accept";
+	    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
 	    	});
     	});
     	

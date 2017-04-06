@@ -7,7 +7,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Invoice</h4>
-        <div class="pull-right" ng-if="invoiceFormData.iv_status.status == 'pending'">
+        <div class="pull-right" ng-if="invoiceFormData.iv_status[ getStatusIndex(invoiceFormData.iv_status) ].status == 'pending'">
           <button class="btn btn-default" ng-click="openStatusModel('invoice' , invoiceFormData , 'Accept')">Approve</button>
           <button class="btn btn-danger" ng-click="openStatusModel('invoice' , invoiceFormData , 'Decline')">Decline</button>
         </div>
@@ -17,6 +17,26 @@
         <div class="modal-body">
             <table class="table table-bordered">
               <tbody>
+
+                <tr ng-hide="!isReadOnly">
+                  <td colspan="6">
+
+                    <div class="row">
+                      
+                      <div class="col-md-1 trackList" ng-repeat="itm in invoiceTrail track by $index">
+                        <a href="#" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
+                          <div class="badge bg-info">{% $index+1 %}</div>
+                          <div >{% itm.status %}</div>
+                        </a>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
                 <tr>
                   <td>Name of Supplier</td>
                   <td colspan="5">
@@ -86,7 +106,7 @@
 
                   <td>Add. Rate</td>
                   <td>
-                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.additionalRate" placeholder="Enter Additional Rate" ng-disabled="isReadOnly" required ng-change="calculateInvAmount()">
+                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.additionalRate" placeholder="Enter Additional Rate" ng-disabled="isReadOnly" ng-change="calculateInvAmount()">
                   </td>
 
                   <td>Quantity</td>

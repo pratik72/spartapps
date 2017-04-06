@@ -9,10 +9,6 @@
 
 	                    <form class="navbar-form" role="search" ng-submit="searchTab( this,'invoice')" enctype="multipart/form-data">
 							<div class="form-group  is-empty">
-								<select ng-options="key as value for  (key , value) in searchAttr" ng-model="searchModel" required ng-change="searchAttrChange(this,'invoice')" class="form-control">
-			                      <option value="">--select attribute--</option>
-			                    </select>
-
 								<input type="text" class="form-control" placeholder="Search" ng-model="searchText" required>
 								<span class="material-input"  ></span>
 							<span class="material-input"></span></div>
@@ -23,7 +19,6 @@
 								<i class="material-icons dp48">restore</i><div class="ripple-container"></div>
 							</button>
 
-							
 						</form>
 
                 	</div>
@@ -34,6 +29,7 @@
                         <thead class="text-primary">
 						  <tr>
 						    <th>No.</th>
+						    <th>PI No.</th>
 						    <th>Supplier Name</th>
 						    <th>PO No.</th>
 						    <th>Bill No.</th>
@@ -47,6 +43,11 @@
                             <tr ng-repeat="invoiceData in invoiceList track by $index">
 							    <td>
 							    	<span class="text-muted">{% $index+1 %}</span>
+							    </td>
+							    <td>
+							    	<a href="#" ng-click="openInvoice(invoiceData)">
+							    		<span class="text-muted">{% invoiceData.inv_no %}</span>
+							    	</a>
 							    </td>
 							    <td>
 							    	<a href="#" ng-click="openInvoice(invoiceData)">
@@ -66,10 +67,10 @@
 							    	<p class="text-muted">{% invoiceData.create_date | date:'dd/MM/yyyy' %}</p>
 							    </td>
 							    <td>
-							    	<a ng-hide="invoiceData.iv_status.status_changedBy && invoiceData.iv_status.status_changeDate" href="#" ng-click="openStatusModel('invoice' , invoiceData)">
-							    		<span class="text-danger">{% invoiceData.iv_status.status %}</span>
+							    	<a ng-hide="invoiceData.iv_status[ getStatusIndex(invoiceData.iv_status) ].status != 'pending'" ng-click="openStatusModel('invoice' , invoiceData)">
+							    		<span class="text-danger">{% invoiceData.iv_status[ getStatusIndex(invoiceData.iv_status) ].status %}</span>
 							    	</a>
-							    	<span ng-show="invoiceData.iv_status.status_changedBy && invoiceData.iv_status.status_changeDate" class="text-success">{% invoiceData.iv_status.status %}</span>
+							    	<span ng-show="invoiceData.iv_status[ getStatusIndex(invoiceData.iv_status) ].status != 'pending'" class="text-success">{% invoiceData.iv_status[ getStatusIndex(invoiceData.iv_status) ].status %}</span>
 							    </td>
 							    <td>
 							    	<p class="text-muted">{% invoiceData.Rate %}</p>

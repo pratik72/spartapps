@@ -35,12 +35,12 @@ var payReqSchema = new Schema({
 	doc_attachment: {
 	    other_doc: String
 	},
-	pay_status : {
+	pay_status : [{
 		status: String,
 		status_description : String,
 		status_changedBy: String,
 		status_changeDate : String
-	}
+	}]
 });
 
 var payReq = mongoose.model('paymentRequest_list' , payReqSchema);

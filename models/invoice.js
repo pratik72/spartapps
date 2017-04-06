@@ -36,13 +36,15 @@ var invoiceSchema = new Schema({
 	    PO: String,
 	    other_doc: String
 	},
-	iv_status : {
+	iv_status : [{
 		status: String,
 		status_description : String,
 		status_changedBy: String,
 		status_changeDate : String
-	}
+	}]
 });
+
+invoiceSchema.index({'$**': 'text'});
 
 var invoice = mongoose.model('invoice_docs' , invoiceSchema);
 

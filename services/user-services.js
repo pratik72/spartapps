@@ -18,7 +18,7 @@ exports.addUser = function(userData , callback){
 			return callback(err)
 		}
 		callback(null);
-	})
+	});
 };
 
 exports.findUser = function(email, callback){

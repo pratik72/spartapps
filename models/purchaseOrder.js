@@ -8,12 +8,12 @@ var poSchema = new Schema({
 	supplier_name : String,
 	PO_number : String,
 	supplierId : Schema.Types.ObjectId,
-	po_status : {
+	po_status : [{
 		status: String,
 		status_description : String,
 		status_changedBy: String,
 		status_changeDate : String
-	},
+	}],
 	userName : String,
 	create_date : {type: Date, default: Date.now},
 	product_information: {

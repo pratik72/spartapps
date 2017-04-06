@@ -170,22 +170,15 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 
 	uploadService.uploadFiles(req, res, null , function(uplErr){
 
-			if(uplErr){
-				res.json({error : "File not Uploaded..!"});	
-			}
+		if(uplErr){
+			res.json({error : "File not Uploaded..!"});	
+		}
 
 		var userOrgId = req.user.orgId;
 
-		var searchString = req.body.searchText;
-		var searchModel = req.body.searchModel;
+		var searchString = req.body.searchText[1];
 
-		var searchQuery = { 
-			orgId : new ObjectId(userOrgId),
-		}
-
-		searchQuery[ searchModel ] = searchString
-
-		InvoiceService.findInvoice( searchQuery, function(error , suppData){
+		InvoiceService.searchInvEs( searchString , function(error , suppData){
 			if(error){
 				console.log("PO Not Retrived" , error);
 				return res.json(error);
@@ -306,8 +299,8 @@ router.post('/createPayRequest', restrict , function(req, res, next) {
 
 			bodyObject = req.body;
 
-			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'pay_req');
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'pay_req');
 
 			var currUser = req.user;
 
@@ -354,8 +347,8 @@ router.post('/createPO', restrict , function(req, res, next) {
 
 			bodyObject = req.body;
 
-			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'po');
 			bodyObject = mergeUserDetailsData(bodyObject , req.user);
+			bodyObject = mergeSupplierUploadStatusData(req.files , bodyObject , 'po');
 
 
 			var currUser = req.user;
@@ -457,8 +450,8 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 			}
 
 			var currUser = req.user;
-			var tmpInvData = mergeInvoiceUploadData(req.files , req.body);
-			tmpInvData = mergeUserDetailsData(tmpInvData , req.user);
+			var tmpInvData = mergeUserDetailsData(req.body , req.user);
+			tmpInvData = mergeInvoiceUploadData(req.files , tmpInvData);
 
 			if( tmpInvData.isExpense == "true" ){
 				delete tmpInvData.PO_id;
@@ -495,6 +488,7 @@ router.post('/createInvoice', restrict , function(req, res, next) {
 
 
 function mergeInvoiceUploadData(files , tmpObj){
+	var invStutusKey = "iv_status";
 
 	tmpObj.vendor_selection = JSON.parse(tmpObj.vendor_selection);
 	
@@ -503,10 +497,21 @@ function mergeInvoiceUploadData(files , tmpObj){
 	tmpObj.doc_attachment.PO = files[1] ? files[1].filename : "";
 	tmpObj.doc_attachment.other_doc = files[2] ? files[2].filename : "";
 
-	tmpObj["iv_status"] = JSON.parse( tmpObj["iv_status"] );
-	tmpObj["iv_status"].status = "pending";
+	if( typeof tmpObj[  invStutusKey  ] == "undefined"){
+		tmpObj[  invStutusKey  ] = [];
+	}
 
-	var allAttachParam = [ "invoice" , "PO" , "other_doc"];
+	var tmpUserId = tmpObj.user_id;
+	var newStatusObj = {
+		status : "pending",
+		status_changeDate : Date.now(),
+		status_changedBy : tmpUserId,
+		status_description : ""
+	}
+
+	tmpObj[  invStutusKey  ].push(newStatusObj)
+
+	/*var allAttachParam = [ "invoice" , "PO" , "other_doc"];
 	for (var k = 0; k < allAttachParam.length; k++) {
 		tmpObj.doc_attachment[ allAttachParam[k] ] = "";
 		for (var i = 0; i < files.length; i++) {
@@ -514,7 +519,7 @@ function mergeInvoiceUploadData(files , tmpObj){
 				tmpObj.doc_attachment[ allAttachParam[k] ] = files[i] ? files[i].filename : "";
 			}
 		};
-	};
+	};*/
 
 	return tmpObj;
 }
@@ -526,8 +531,6 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 		pay_req : "pay_status",
 	}
 
-	tmpObj[ statusKey[comeFrom] ] = [];
-
 	for (var i in tmpObj) {
 		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
 			try{
@@ -537,6 +540,10 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 			}
 		}
 	};
+
+	if( typeof tmpObj[ statusKey[comeFrom] ] == "undefined"){
+		tmpObj[ statusKey[comeFrom] ] = [];
+	}
 
 	var tmpUserId = tmpObj.user_id;
 	var newStatusObj = {
@@ -610,7 +617,11 @@ function changeActionStatus(req , res , callback){
 			iv_status : JSON.parse( rowData )
 		};
 
-		InvoiceService.updateInvoice(rowQuery , rowData , function(error , data){
+		var newQuery = {
+			$push : rowData
+		}
+
+		InvoiceService.updateInvoice(rowQuery , newQuery , function(error , data){
 			if(error){
 				return callback({error : error});
 			}
@@ -628,7 +639,11 @@ function changeActionStatus(req , res , callback){
 			po_status : JSON.parse( rowData )
 		};
 
-		poService.updatePO(rowQuery , rowData , function(error , data){
+		var newQuery = {
+			$push : rowData
+		}
+
+		poService.updatePO(rowQuery , newQuery , function(error , data){
 			if(error){
 				return callback({error : error});
 			}
@@ -646,7 +661,11 @@ function changeActionStatus(req , res , callback){
 			pay_status : JSON.parse( rowData )
 		};
 
-		payReqService.updatePayReq(rowQuery , rowData , function(error , data){
+		var newQuery = {
+			$push : rowData
+		}
+
+		payReqService.updatePayReq(rowQuery , newQuery , function(error , data){
 			if(error){
 				return callback({error : error});
 			}
