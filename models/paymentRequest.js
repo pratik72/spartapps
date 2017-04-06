@@ -39,6 +39,7 @@ var payReqSchema = new Schema({
 		status: String,
 		status_description : String,
 		status_changedBy: String,
+		distributeTo: String,
 		status_changeDate : String
 	}]
 });

@@ -502,13 +502,15 @@ function mergeInvoiceUploadData(files , tmpObj){
 	}
 
 	var tmpUserId = tmpObj.user_id;
+	var distUserId = tmpObj.vendor_selection.selected_by;
 	var newStatusObj = {
 		status : "pending",
 		status_changeDate : Date.now(),
+		distributeTo : distUserId,
 		status_changedBy : tmpUserId,
 		status_description : ""
 	}
-
+	
 	tmpObj[  invStutusKey  ].push(newStatusObj)
 
 	/*var allAttachParam = [ "invoice" , "PO" , "other_doc"];
@@ -546,10 +548,12 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 	}
 
 	var tmpUserId = tmpObj.user_id;
+	var distUserId = tmpObj.vendor_selection.selected_by;
 	var newStatusObj = {
 		status : "pending",
 		status_changeDate : Date.now(),
 		status_changedBy : tmpUserId,
+		distributeTo : distUserId,
 		status_description : ""
 	}
 

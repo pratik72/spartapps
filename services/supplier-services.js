@@ -14,6 +14,7 @@ exports.addSupplier = function(suppData , callback){
 				status: suppData.sa_status[0].status,
 				status_description : suppData.sa_status[0].status_description,
 				status_changedBy: suppData.sa_status[0].status_changedBy,
+				distributeTo: suppData.sa_status[0].distributeTo,
 				status_changeDate : suppData.sa_status[0].status_changeDate
 			}],
 			supplier_name_address: {

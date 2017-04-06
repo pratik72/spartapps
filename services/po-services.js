@@ -16,6 +16,7 @@ exports.addPO = function(poData , callback){
 				status: poData.po_status[0].status,
 				status_description : poData.po_status[0].status_description,
 				status_changedBy: poData.po_status[0].status_changedBy,
+				distributeTo: poData.po_status[0].distributeTo,
 				status_changeDate : poData.po_status[0].status_changeDate
 			}],
 			userName : poData.userName,

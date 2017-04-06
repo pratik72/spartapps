@@ -44,6 +44,7 @@ exports.addInvoice = function(invoiceData , callback){
 				status: invoiceData.iv_status[0].status,
 				status_description : invoiceData.iv_status[0].status_description,
 				status_changedBy: invoiceData.iv_status[0].status_changedBy,
+				distributeTo: invoiceData.iv_status[0].distributeTo,
 				status_changeDate : invoiceData.iv_status[0].status_changeDate
 			}]
 		});

@@ -166,6 +166,7 @@ var APP_CONSTANT = {
 			status: "",
 			status_description : "",
 			status_changedBy: "",
+			distributeTo : "",
 			status_changeDate : ""
 		},
 	},

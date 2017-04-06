@@ -42,6 +42,7 @@ exports.addPayReq = function(poData , callback){
 				status: poData.pay_status[0].status,
 				status_description : poData.pay_status[0].status_description,
 				status_changedBy: poData.pay_status[0].status_changedBy,
+				distributeTo: poData.pay_status[0].distributeTo,
 				status_changeDate : poData.pay_status[0].status_changeDate
 			}]
 		});

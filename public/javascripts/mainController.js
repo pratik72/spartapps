@@ -185,7 +185,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     		var arrUsers = [];
 
     		for (var i = 0; i < suppDatas.sa_status.length; i++) {
-    			arrUsers.push(suppDatas.sa_status[i].status_changedBy)
+    			if(i == 0){
+    				arrUsers.push(suppDatas.sa_status[i].status_changedBy);
+    			}
+    			arrUsers.push(suppDatas.sa_status[i].distributeTo);
     		}
     		
     		getUserDetails( arrUsers , function(udata){
@@ -210,21 +213,26 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     }
 
     function getTrailArray(udata , modalData){
-    	var tmpTrailArray = [];
 		var tmpSuppStatus = angular.copy( modalData );
+    	var tmpTrailArray = [];
 
 		for (var k = 0; k < tmpSuppStatus.length; k++) {
 			var tmpObj = []
 			for (var i = 0; i < udata.data.length; i++) {
-				if( tmpSuppStatus[k].status_changedBy == udata.data[i]._id ){
+				if( tmpSuppStatus[k].distributeTo == udata.data[i]._id ){
 					tmpObj = tmpSuppStatus[k]
 					tmpObj.UserName = udata.data[i].firstName +' '+udata.data[i].lastName;
 					tmpObj.role = udata.data[i].role;
+				}else if( k==0 && tmpSuppStatus[k].status_changedBy == udata.data[i]._id ){
+					tmpTrailArray[k] = angular.copy( tmpSuppStatus[k] )
+					tmpTrailArray[k].status = "created"
+					tmpTrailArray[k].UserName = angular.copy( udata.data[i].firstName ) +' '+ angular.copy( udata.data[i].lastName );
+					tmpTrailArray[k].role = angular.copy( udata.data[i].role );
 				}
-			}    			
-			tmpTrailArray[k] = tmpObj;
+			}
+			tmpTrailArray.push(tmpObj);
 		}
-
+		console.log(tmpTrailArray)
 		return tmpTrailArray;
     }
 
@@ -237,7 +245,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     		var arrUsers = [];
 
     		for (var i = 0; i < poDatas.po_status.length; i++) {
-    			arrUsers.push(poDatas.po_status[i].status_changedBy)
+    			if(i == 0){
+    				arrUsers.push(poDatas.po_status[i].status_changedBy);
+    			}
+    			arrUsers.push(poDatas.po_status[i].distributeTo);
     		}
 
     		getUserDetails( arrUsers , function(udata){
@@ -311,7 +322,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		    		var arrUsers = [];
 
 		    		for (var i = 0; i < invData.iv_status.length; i++) {
-		    			arrUsers.push(invData.iv_status[i].status_changedBy)
+		    			if(i == 0){
+		    				arrUsers.push(invData.iv_status[i].status_changedBy);
+		    			}
+		    			arrUsers.push(invData.iv_status[i].distributeTo);
 		    		}
 		    		
 		    		getUserDetails( arrUsers , function(udata){
@@ -464,8 +478,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     }
 
     var statusKey = {
-		po : "po_status",
+		purchaseOrd : "po_status",
 		supplier : "sa_status",
+		invoice : "iv_status",
 		pay_req : "pay_status",
 	}
 
@@ -511,6 +526,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
     	tempStatus.fieldSet.status = $scope.statusForm.updatedStatus;
     	tempStatus.fieldSet.status_description = $scope.statusForm.status_desc;
+    	tempStatus.fieldSet.distributeTo = tempStatus.row[ statusKey[ tempStatus.action ] ][0].status_changedBy;
     	tempStatus.fieldSet.status_changedBy = $scope.userDetails._id;
     	tempStatus.fieldSet.status_changeDate = new Date();
     	

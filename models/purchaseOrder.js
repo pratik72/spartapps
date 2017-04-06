@@ -12,6 +12,7 @@ var poSchema = new Schema({
 		status: String,
 		status_description : String,
 		status_changedBy: String,
+		distributeTo: String,
 		status_changeDate : String
 	}],
 	userName : String,
