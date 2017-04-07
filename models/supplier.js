@@ -71,6 +71,8 @@ var supplierSchema = new Schema({
 	}
 });
 
+supplierSchema.index({'$**': 'text'});
+
 var supplier = mongoose.model('supplier_dir' , supplierSchema);
 
 module.exports = {

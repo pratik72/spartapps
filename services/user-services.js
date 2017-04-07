@@ -21,6 +21,15 @@ exports.addUser = function(userData , callback){
 	});
 };
 
+exports.searchUserEs = function(searchStr, callback){
+	
+	User.find({$text: {$search: searchStr}})
+       .exec(function(err, docs) {
+			callback(err , docs)
+       });
+}
+
+
 exports.findUser = function(email, callback){
 	User.findOne({email : email.toLowerCase()} , function(error, user){
 		callback(error , user)

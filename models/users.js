@@ -22,7 +22,9 @@ userSchema.path('email').validate(function(value , callback) {
 		}
 		callback(!user)
 	})
-} , 'This email is already in use...!')
+} , 'This email is already in use...!');
+
+userSchema.index({'$**': 'text'});
 
 var User = mongoose.model('User' , userSchema);
 

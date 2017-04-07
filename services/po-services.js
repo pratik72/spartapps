@@ -62,6 +62,14 @@ exports.addPO = function(poData , callback){
 
 };
 
+exports.searchPOEs = function(searchStr, callback){
+	
+	purchase_Order.find({$text: {$search: searchStr}})
+       .exec(function(err, docs) {
+			callback(err , docs)
+       });
+}
+
 exports.findPO = function(po_id, callback){
 	var poIdParam = po_id || {};
 	

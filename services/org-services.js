@@ -30,6 +30,15 @@ exports.addOrganization = function(orgData , callback){
 	})
 };
 
+exports.searchOrgsEs = function(searchStr, callback){
+	
+	Organization.find({$text: {$search: searchStr}})
+       .exec(function(err, docs) {
+			callback(err , docs)
+       });
+}
+
+
 exports.findOrgs = function(orgid, callback){
 	var orgIdParam = orgid;
 	if(orgIdParam.length > 2){

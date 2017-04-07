@@ -22,6 +22,8 @@ var orgSchema = new Schema({
 	subscriptionId : String
 });
 
+orgSchema.index({'$**': 'text'});
+
 var Org = mongoose.model('Organizations' , orgSchema);
 
 module.exports = {

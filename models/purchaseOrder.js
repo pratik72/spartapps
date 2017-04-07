@@ -54,6 +54,8 @@ var poCountSchema = new Schema({
 	count : { type: Number, default: 1 }
 });
 
+poSchema.index({'$**': 'text'});
+
 var po = mongoose.model('purchase_order' , poSchema);
 var poCount = mongoose.model('poCounter' , poCountSchema);
 

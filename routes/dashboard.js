@@ -166,7 +166,6 @@ router.post('/getPOdetList', restrict , function(req, res, next) {
 
 //searchInAllTab
 router.post('/searchInAllTab', restrict , function(req, res, next) {
-	
 
 	uploadService.uploadFiles(req, res, null , function(uplErr){
 
@@ -175,15 +174,50 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 		}
 
 		var userOrgId = req.user.orgId;
-
+		var tabArea = req.body.searchTab;
 		var searchString = req.body.searchText;
-		InvoiceService.searchInvEs( searchString , function(error , suppData){
-			if(error){
-				console.log("PO Not Retrived" , error);
-				return res.json(error);
-			}
-	  		res.json(suppData);
-		});
+
+		console.log("tabArea--------" , tabArea);
+		console.log("searchString----------" , searchString);
+
+		switch(tabArea){
+			case 'invoice' :
+				InvoiceService.searchInvEs( searchString , function(error , suppData){
+					if(error){
+						console.log("Data Not Retrived" , error);
+						return res.json(error);
+					}
+			  		res.json(suppData);
+				});
+				break;
+			case 'pay_req' :
+				payReqService.searchPayReqEs( searchString , function(error , suppData){
+					if(error){
+						console.log("Data Not Retrived" , error);
+						return res.json(error);
+					}
+			  		res.json(suppData);
+				});
+				break;
+			case 'supplier' :
+				supplierService.searchSupplierEs( searchString , function(error , suppData){
+					if(error){
+						console.log("Data Not Retrived" , error);
+						return res.json(error);
+					}
+			  		res.json(suppData);
+				});
+				break;
+			case 'purchaseOrd' :
+				poService.searchPOEs( searchString , function(error , suppData){
+					if(error){
+						console.log("Data Not Retrived" , error);
+						return res.json(error);
+					}
+			  		res.json(suppData);
+				});
+				break;				
+		}
 	});
 });
 

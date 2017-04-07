@@ -168,16 +168,16 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     function setSearchTree(area , data) {
     	switch(area){
     		case "purchaseOrd" : 
-    			
+				$scope.poList = data;
     			break;
     		case "supplier" : 
-    			
+				$scope.supplierList = data;
     			break;
     		case "invoice" : 
 				$scope.invoiceList = data;
     			break;
     		case "pay_req" : 
-    			
+				$scope.payReqList = data;
     			break;
     	}
     }
@@ -637,8 +637,21 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    });
     }
 
-    $scope.resetSearch = function(){
-    	InvoiceTemplateLoadData();
+    $scope.resetSearch = function(area){
+    	switch(area){
+    		case "purchaseOrd" : 
+				POTemplateLoadData();
+    			break;
+    		case "supplier" : 
+				SupplierTemplateLoadData();
+    			break;
+    		case "invoice" : 
+    			InvoiceTemplateLoadData();
+    			break;
+    		case "pay_req" : 
+				FMTemplateLoadData();
+    			break;
+    	}
     }
 
     $scope.searchText = ""

@@ -44,6 +44,8 @@ var payReqSchema = new Schema({
 	}]
 });
 
+payReqSchema.index({'$**': 'text'});
+
 var payReq = mongoose.model('paymentRequest_list' , payReqSchema);
 
 module.exports = {

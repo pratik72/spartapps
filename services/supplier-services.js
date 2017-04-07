@@ -82,6 +82,14 @@ exports.addSupplier = function(suppData , callback){
 	});
 };
 
+exports.searchSupplierEs = function(searchStr, callback){
+	
+	Supplier.find({$text: {$search: searchStr}})
+       .exec(function(err, docs) {
+			callback(err , docs)
+       });
+}
+
 exports.findSupplier = function(supp_id, callback){
 	var suppIdParam = supp_id || {};
 	/*if(suppIdParam.length > 2){

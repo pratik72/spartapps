@@ -58,6 +58,14 @@ exports.addPayReq = function(poData , callback){
 
 };
 
+exports.searchPayReqEs = function(searchStr, callback){
+	
+	payment_request.find({$text: {$search: searchStr}})
+       .exec(function(err, docs) {
+			callback(err , docs)
+       });
+}
+
 exports.findPayReq = function(po_id, callback){
 	var poIdParam = po_id || {};
 	
