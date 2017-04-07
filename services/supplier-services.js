@@ -82,9 +82,9 @@ exports.addSupplier = function(suppData , callback){
 	});
 };
 
-exports.searchSupplierEs = function(searchStr, callback){
+exports.searchSupplierEs = function(searchStr, userOrgId ,callback){
 	
-	Supplier.find({$text: {$search: searchStr}})
+	Supplier.find({$text: {$search: searchStr} , orgId :userOrgId})
        .exec(function(err, docs) {
 			callback(err , docs)
        });

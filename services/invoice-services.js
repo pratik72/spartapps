@@ -67,9 +67,9 @@ exports.findInvoice = function(inv_id, callback){
 	})
 }
 
-exports.searchInvEs = function(searchStr, callback){
+exports.searchInvEs = function(searchStr, userOrgId , callback){
 	
-	Invoice.find({$text: {$search: searchStr}})
+	Invoice.find({$text: {$search: searchStr} , orgId :userOrgId})
        .exec(function(err, docs) {
 			callback(err , docs)
        });

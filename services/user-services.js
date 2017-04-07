@@ -21,9 +21,9 @@ exports.addUser = function(userData , callback){
 	});
 };
 
-exports.searchUserEs = function(searchStr, callback){
+exports.searchUserEs = function(searchStr, userOrgId, callback){
 	
-	User.find({$text: {$search: searchStr}})
+	User.find({$text: {$search: searchStr} , orgId :userOrgId})
        .exec(function(err, docs) {
 			callback(err , docs)
        });

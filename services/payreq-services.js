@@ -58,9 +58,9 @@ exports.addPayReq = function(poData , callback){
 
 };
 
-exports.searchPayReqEs = function(searchStr, callback){
+exports.searchPayReqEs = function(searchStr, userOrgId ,callback){
 	
-	payment_request.find({$text: {$search: searchStr}})
+	payment_request.find({$text: {$search: searchStr} , orgId :userOrgId})
        .exec(function(err, docs) {
 			callback(err , docs)
        });

@@ -62,9 +62,9 @@ exports.addPO = function(poData , callback){
 
 };
 
-exports.searchPOEs = function(searchStr, callback){
+exports.searchPOEs = function(searchStr, userOrgId, callback){
 	
-	purchase_Order.find({$text: {$search: searchStr}})
+	purchase_Order.find({$text: {$search: searchStr} , orgId :userOrgId})
        .exec(function(err, docs) {
 			callback(err , docs)
        });

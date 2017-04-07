@@ -30,9 +30,9 @@ exports.addOrganization = function(orgData , callback){
 	})
 };
 
-exports.searchOrgsEs = function(searchStr, callback){
+exports.searchOrgsEs = function(searchStr, userOrgId, callback){
 	
-	Organization.find({$text: {$search: searchStr}})
+	Organization.find({$text: {$search: searchStr} , orgId :userOrgId})
        .exec(function(err, docs) {
 			callback(err , docs)
        });

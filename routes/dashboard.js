@@ -177,12 +177,9 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 		var tabArea = req.body.searchTab;
 		var searchString = req.body.searchText;
 
-		console.log("tabArea--------" , tabArea);
-		console.log("searchString----------" , searchString);
-
 		switch(tabArea){
 			case 'invoice' :
-				InvoiceService.searchInvEs( searchString , function(error , suppData){
+				InvoiceService.searchInvEs( searchString , userOrgId , function(error , suppData){
 					if(error){
 						console.log("Data Not Retrived" , error);
 						return res.json(error);
@@ -191,7 +188,7 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 				});
 				break;
 			case 'pay_req' :
-				payReqService.searchPayReqEs( searchString , function(error , suppData){
+				payReqService.searchPayReqEs( searchString , userOrgId ,function(error , suppData){
 					if(error){
 						console.log("Data Not Retrived" , error);
 						return res.json(error);
@@ -200,7 +197,7 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 				});
 				break;
 			case 'supplier' :
-				supplierService.searchSupplierEs( searchString , function(error , suppData){
+				supplierService.searchSupplierEs( searchString , userOrgId ,function(error , suppData){
 					if(error){
 						console.log("Data Not Retrived" , error);
 						return res.json(error);
@@ -209,7 +206,7 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 				});
 				break;
 			case 'purchaseOrd' :
-				poService.searchPOEs( searchString , function(error , suppData){
+				poService.searchPOEs( searchString , userOrgId ,function(error , suppData){
 					if(error){
 						console.log("Data Not Retrived" , error);
 						return res.json(error);
