@@ -1,0 +1,59 @@
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header clearfix" data-background-color="green">
+                    <h4 class="title tab-title display-line">Track Payment</h4>
+                	
+				  	
+                </div>
+                <div class="card-content table-responsive clearfix">
+
+                	<div class="display-line">
+
+	                    <form class="navbar-form" role="search" ng-submit="trackAcrossPayment( this )" enctype="multipart/form-data">
+							<div class="form-group  is-empty">
+								<select ng-options="key as value for  (key , value) in searchAttr" ng-model="searchModel" required ng-change="searchAttrChange(this,'invoice')" class="form-control">
+			                      <option value="">--select attribute--</option>
+			                    </select>
+
+								<input type="text" class="form-control" placeholder="Search" ng-model="searchText" required>
+								<span class="material-input"  ></span>
+							<span class="material-input"></span></div>
+							<button type="submit" class="btn">
+								Track
+							</button>							
+						</form>
+
+                	</div>
+
+                	<div class="row">
+
+                		<div class="panel panel-default" ng-repeat="(key, item) in trackPaymentList">
+						  <div class="panel-heading">
+						    <h3 class="panel-title">{% item.tabName %}</h3>
+						  </div>
+						  <div class="panel-body">
+						    <div>
+						    	{% item.objId %} - {% item.userData %}
+						    </div>
+						    <div class="col-md-1 trackList" ng-repeat="itm in item.trails track by $index">
+		                        <a href="#" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
+		                          <div class="badge bg-info">{% $index+1 %}</div>
+		                          <div >{% itm.status %}</div>
+		                        </a>
+
+		                      </div>
+						  </div>
+						</div>
+                	</div>
+
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+        
+</div>

@@ -253,9 +253,12 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	resetPOModel();
     	$scope.isReadOnly = false;
     	if(poDatas){
+			$scope.poFormData = angular.copy(poDatas);
+
+			var selSuppObj = $scope.supplierForInvoice.filter(itm => itm._id == $scope.poFormData.supplierId);
+			$scope.suppModel = angular.copy(selSuppObj[0]);
 
     		var arrUsers = [];
-
     		for (var i = 0; i < poDatas.po_status.length; i++) {
     			if(i == 0){
     				arrUsers.push(poDatas.po_status[i].status_changedBy);
@@ -267,14 +270,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
     		getUserDetails( arrUsers , function(udata){
 				$scope.isReadOnly = true;
-				$scope.poFormData = angular.copy(poDatas);
 
 	    		$scope.poTrail = getTrailArray( udata , poDatas.po_status);
 
-				var selSuppObj = $scope.supplierForInvoice.filter(function(e){
-					return $scope.poFormData.supplierId == e._id
-				});
-				$scope.suppModel = selSuppObj[0];
+				
 				$scope.divisonModel = $scope.poFormData.vendor_selection.division;
 				
 				var selUser = $scope.notifyUser.filter(function(a){
@@ -673,6 +672,108 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    });
     }
 
+    $scope.trackAcrossPayment = function(obj , tabs){
+
+    	var sendKeys = new FormData();
+    	sendKeys.append( "searchTab" , tabs );
+    	sendKeys.append( "searchText" , obj.searchText );
+    	sendKeys.append( "searchKey" , obj.searchModel );
+    	
+    	common.asynCall({
+			url: PATH_NAME + APP_CONSTANT.SEARCH_TRACK_PAYMENT,
+			method: 'post',
+			param : sendKeys
+		}).then( function(resVal){
+			genarateTrackReport( resVal.data);
+	    }, function(error){
+	    	console.log(error);
+	    	alert("Data Not found")
+	    });
+    }
+
+    $scope.trackPaymentList = [];
+
+    $scope.A_keys = Object.keys
+    function genarateTrackReport(tData){
+    	//console.log(tData);
+
+    	var tmpData = [];
+    	for (var i = 0; i < tData.length; i++) {
+    		var akey = Object.keys(tData[i])[0]
+    		var aObj = tData[i][ akey ]
+
+    		var arrUsers = [];
+
+    		var tmpObj = [];
+		    tmpObj.originalObj = aObj;
+
+    		switch(akey){
+    			case 'invoice' :
+    				tmpObj.tabName = 'Invoice';
+    				tmpObj.objId = aObj.inv_no;
+    				tmpObj.userData = aObj.userName;
+    				tmpObj.statusType = 'iv_status';
+
+    				for (var k = 0; k < aObj.iv_status.length; k++) {
+		    			if(k == 0){
+		    				arrUsers.push(aObj.iv_status[k].status_changedBy);
+		    			}
+		    			arrUsers.push(aObj.iv_status[k].distributeTo);
+		    		}
+
+		    		tmpObj.AllUserId = arrUsers;
+    				break;
+    			case 'purchaseOrd' :
+    				tmpObj.tabName = 'Purchase Order';
+    				tmpObj.objId = aObj.PO_number;
+    				tmpObj.userData = aObj.userName;
+    				tmpObj.statusType = 'po_status';
+
+    				for (var k = 0; k < aObj.po_status.length; k++) {
+		    			if(k == 0){
+		    				arrUsers.push(aObj.po_status[k].status_changedBy);
+		    			}
+		    			arrUsers.push(aObj.po_status[k].distributeTo);
+		    		}
+
+		    		tmpObj.AllUserId = arrUsers;
+    				break;
+    			case 'supplier' :
+    				tmpObj.tabName = 'Supplier';
+    				tmpObj.objId = aObj.supplier_no;
+    				tmpObj.userData = aObj.userName;
+    				tmpObj.statusType = 'sa_status';
+
+    				for (var k = 0; k < aObj.sa_status.length; k++) {
+		    			if(k == 0){
+		    				arrUsers.push(aObj.sa_status[k].status_changedBy);
+		    			}
+		    			arrUsers.push(aObj.sa_status[k].distributeTo);
+		    		}
+
+		    		tmpObj.AllUserId = arrUsers;
+    				break;
+
+    		}
+    		tmpData.push(tmpObj);
+    	}
+
+    	getRepUserData(0);
+
+    	function getRepUserData(i){
+    		getUserDetails( tmpData[i].AllUserId , function(udata){
+    			tmpData[i].trails = getTrailArray( udata , tmpData[i].originalObj[ tmpData[i].statusType ]);
+    			i++;
+    			if(i < tmpData.length){
+    				getRepUserData(i);
+    			}else{
+    				$scope.trackPaymentList = tmpData;
+    			}
+	    	})
+    	}
+
+    }
+
 
     //Submit po form data
     $scope.poCreate = function(){
@@ -746,7 +847,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
 			$scope[ tmpKey ].supplier_name = supplierName;
     		$scope[ tmpKey ].supplierId = supplierId;
-
+    		$scope[ tmpKey ].supplier_Number =  e.suppModel.supplier_no;
     	}
     	customSelectOnChange(e, comeFrom);
     }
@@ -888,9 +989,15 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 				FMTemplateLoadData( callback );
 			}else if( templateName.indexOf('reports') > -1 ){
                 FMTemplateLoadData( callback );
+            }else if( templateName.indexOf('trackPayment') > -1 ){
+                TracPaymTemplateLoad( callback );
             }
 			
 		} , 300);
+    }
+
+    function TracPaymTemplateLoad(){
+
     }
 
     $scope.payReqList = [];
@@ -942,30 +1049,30 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	common.showLoader();
 
 		SupplierTemplateLoadData(function(){
-    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
-	    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
-	    	});
+			var tmpSuppList = $scope.supplierList.filter( obj => obj.sa_status[ obj.sa_status.length-1 ].status == "Accept");
+    		$scope.supplierForInvoice = angular.copy(tmpSuppList);
+
+	    	common.asynCall({
+				url: PATH_NAME+ APP_CONSTANT.GET_POLIST,
+				method:'post'
+			}).then( function(resVal){
+				$scope.poList = resVal.data
+				if(callback){
+					callback();
+				}
+				common.hideLoader();
+		    }, function(error){
+		    	console.log(error);
+		    });
     	});
     	
-    	common.asynCall({
-			url: PATH_NAME+ APP_CONSTANT.GET_POLIST,
-			method:'post'
-		}).then( function(resVal){
-			$scope.poList = resVal.data
-			if(callback){
-				callback();
-			}
-			common.hideLoader();
-	    }, function(error){
-	    	console.log(error);
-	    });
     }
 
     $scope.searchAttrChange = function(obj , tabs){
     	console.log(obj)
     }
 
-    $scope.searchAttr = angular.copy(APP_CONSTANT.INV_SEARCH_KEY);
+    $scope.searchAttr = angular.copy(APP_CONSTANT.TRACK_SEARCH_KEY);
 	$scope.invoiceList = [];
     function InvoiceTemplateLoadData(callback){
     	common.showLoader();
@@ -974,7 +1081,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			method:'post'
 		}).then( function(resVal){
 			$scope.invoiceList = resVal.data;
-			$scope.searchAttr = angular.copy(APP_CONSTANT.INV_SEARCH_KEY);
 			if(callback){
 				callback();
 			}

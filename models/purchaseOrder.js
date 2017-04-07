@@ -8,6 +8,7 @@ var poSchema = new Schema({
 	supplier_name : String,
 	PO_number : String,
 	supplierId : Schema.Types.ObjectId,
+	supplier_Number : String,
 	po_status : [{
 		status: String,
 		status_description : String,

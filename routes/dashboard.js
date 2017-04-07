@@ -9,6 +9,7 @@ var InvoiceService = require('../services/invoice-services');
 var userService = require('../services/user-services');
 var uploadService = require('../services/upload-services');
 var notify = require('../controls/notify-user');
+var search_util = require('../controls/searchUtil');
 
 var router = express.Router();
 
@@ -177,44 +178,30 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 		var tabArea = req.body.searchTab;
 		var searchString = req.body.searchText;
 
-		switch(tabArea){
-			case 'invoice' :
-				InvoiceService.searchInvEs( searchString , userOrgId , function(error , suppData){
-					if(error){
-						console.log("Data Not Retrived" , error);
-						return res.json(error);
-					}
-			  		res.json(suppData);
-				});
-				break;
-			case 'pay_req' :
-				payReqService.searchPayReqEs( searchString , userOrgId ,function(error , suppData){
-					if(error){
-						console.log("Data Not Retrived" , error);
-						return res.json(error);
-					}
-			  		res.json(suppData);
-				});
-				break;
-			case 'supplier' :
-				supplierService.searchSupplierEs( searchString , userOrgId ,function(error , suppData){
-					if(error){
-						console.log("Data Not Retrived" , error);
-						return res.json(error);
-					}
-			  		res.json(suppData);
-				});
-				break;
-			case 'purchaseOrd' :
-				poService.searchPOEs( searchString , userOrgId ,function(error , suppData){
-					if(error){
-						console.log("Data Not Retrived" , error);
-						return res.json(error);
-					}
-			  		res.json(suppData);
-				});
-				break;				
+		search_util.searchTabArea(tabArea , searchString , userOrgId , function(args){
+			res.json(args);
+		});
+
+	});
+});
+
+//getTrackPaymentReport
+router.post('/getTrackPaymentReport', restrict , function(req, res, next) {
+
+	uploadService.uploadFiles(req, res, null , function(uplErr){
+
+		if(uplErr){
+			res.json({error : "File not Uploaded..!"});	
 		}
+
+		var userOrgId = req.user.orgId;
+		var searchString = req.body.searchText;
+		var searchType = req.body.searchKey
+		var searchArray = [ searchType , searchString ];
+
+		search_util.searchTrackReport( searchArray , userOrgId , function(args){
+			res.json(args);
+		});
 	});
 });
 

@@ -73,10 +73,6 @@ img.ajax-loader-img {
     margin: 13px 0 0 0;
 }
 
-.form-group .form-control {
-    color: white;
-}
-
 .is-focused select.form-control{
     color: grey;
 }

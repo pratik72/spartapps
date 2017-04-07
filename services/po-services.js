@@ -11,6 +11,7 @@ exports.addPO = function(poData , callback){
 			orgName : poData.orgName,
 			supplier_name : poData.supplier_name,
 			supplierId : poData.supplierId,
+			supplier_Number : poData.supplier_Number,
 			PO_number : "PO"+poNum.count,
 			po_status : [{
 				status: poData.po_status[0].status,

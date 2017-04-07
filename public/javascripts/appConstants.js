@@ -18,21 +18,14 @@ var APP_CONSTANT = {
 	SEARCH_TAB : '/searchInAllTab',
 	GET_SUPPLIERS : '/getSupplierDetails',
 	GET_POLIST : '/getPOdetList',
+	SEARCH_TRACK_PAYMENT : '/getTrackPaymentReport',
 	GET_INVOICES : '/getInvoicesDetails',
-	INV_SEARCH_KEY :{
-		orgName : 'Organization Name',
-		userName : 'Username',
-		PO_number : 'PO Nu.',
+	TRACK_SEARCH_KEY :{
+		supplier_name : 'Supplier Name',
+		PO_number : 'PO No.',
 		bill_number : 'Bill No.',
-		Product_Nature : 'Product Nature',
-		HSN_Code : 'HSN Code',
-		Quantity : 'Quantity',
-		Rate : 'Rate',
-		Payment_due_date : 'Payment Due Date',
-		'vendor_selection.selected_by': 'Selected By',
-		'vendor_selection.division': 'Division',
-		'iv_status.status' : 'Status',
-		'iv_status.status_description' : 'Description'
+		PI_number : 'PI No.',
+		HSN_Code : 'HSN Code'
 	},
 	TEMPLATES : {
 		supplier : "supplier-template.html",
@@ -45,6 +38,7 @@ var APP_CONSTANT = {
 		purchaseOrdModel : "templates/purchaseOrdModel.html",
 		pay_req : "templates/finance-template.html",
 		reports : "templates/reports.html",
+		trackPayment : "templates/track-payment.html",
 		financeModel : "templates/financeModel.html",
 		ajaxloader : "ajax-loader.html"
 	},
