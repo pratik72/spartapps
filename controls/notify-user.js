@@ -40,7 +40,7 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 		var userData = tmpNotifyObj.userData;
 		var userName = userData.firstName + " " +userData.lastName;
 
-		var tmpSendTo = data.vendor_selection.selected_by;
+		var tmpSendTo = null;
 		var tmpSendBy = userData._id;
 
 		var tabAreaStr = "";
@@ -66,9 +66,11 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 			case "pay_req" : 
 				tabAreaStr = "audit";
 				tmpStatus = data.pay_status;
+				break;
 		}
 		
-		tmpStatus = tmpStatus[ tmpStatus.length -1] .status;
+		tmpSendTo = tmpStatus[ tmpStatus.length -1].distributeTo;
+		tmpStatus = tmpStatus[ tmpStatus.length -1].status;
 
 		switch(notifyType){
 			case 1 : //For Any Form createtion
@@ -82,7 +84,6 @@ function tabSpecificNotification(tmpNotifyObj ,next){
 			case 3 : //For Any Form Status Update
 				tmpTitle = tabAreaStr+" Request " + tmpStatus + " by " + userName;
 				tmpDesc = "Your " + tabAreaStr+ " Request " + tmpStatus + " by " + userName;
-				tmpSendTo = data.user_id;
 				break;
 		}
 		var noticeData = {

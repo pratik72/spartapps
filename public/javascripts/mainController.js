@@ -1,8 +1,9 @@
 var app = angular.module('spartapps', []);
 
-app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',function(common , $rootScope, $scope , $timeout) {
+app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout','$interval',function(common , $rootScope, $scope , $timeout , $interval) {
 	var PATH_NAME = APP_CONSTANT.PATH_NAME;
 	var allTemplates = APP_CONSTANT.TEMPLATES;
+	var ALL_NOTIFY_USERS = null;
 	var adminRights = {
 		"CEO" : "YYYYY",
 		"CFO" : "YYYYY",
@@ -14,7 +15,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		"Finance Controller" : "Y0Y0Y",
 		"Account Manager" : "Y0Y0Y",
 		"National Head" : "Y0Y0Y",
-		"Data Entry Ops" : "YY000"
+		"Data Entry Ops" : "YY000",
+		"Internal Auditor" : "Y0Y0Y"
 	}
 
 	$scope.orgDivision = ["Marketing","HR","Design","Procurement","Real Estate","Fianance" , "Operations"]
@@ -59,6 +61,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	$scope.isReadOnly = false;
 	$scope.hasEditSupplier = false;
 
+	//distUserDetails
+	$scope.notifyUser = [];
+
 	//Init To get Current User Details on load
 	common.asynCall({
 		url: PATH_NAME + APP_CONSTANT.GET_CURRENT_USR,
@@ -76,12 +81,20 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 				tmpIndex++;
 			};
 		}
+
+		getUserDetails(null , function(ndata){
+			var allTmpData = ndata.data;
+			ALL_NOTIFY_USERS = allTmpData;
+			$scope.notifyUser = allTmpData;
+		});
     }, function(error){
     	console.log(error);
     });
 
+
 	//notificationDetails
 	getNotifications();
+    $interval(getNotifications, 10000);
 
     function getNotifications(){
     	$scope.notifications = [];
@@ -94,12 +107,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    	console.log(error);
 	    });	
     }
-	
-	//distUserDetails
-	$scope.notifyUser = [];
-	getUserDetails(null , function(ndata){
-		$scope.notifyUser = ndata.data;
-	});
 
 	function getUserDetails(param, next){
 		var tmpformData = new FormData();;
@@ -190,6 +197,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     			}
     			arrUsers.push(suppDatas.sa_status[i].distributeTo);
     		}
+
+			$scope.notifyUser = angular.copy(ALL_NOTIFY_USERS);
     		
     		getUserDetails( arrUsers , function(udata){
 	    		$scope.isReadOnly = true;
@@ -207,6 +216,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
     		});
     	}else{
+
+    		var allTmpData = angular.copy(ALL_NOTIFY_USERS);
+			$scope.notifyUser = allTmpData.filter(itm => itm._id != $scope.userDetails._id);
+
     		$("#mySuppModal").modal('show');
     		$('.main-panel').scrollTop(0);
     	}    	
@@ -232,7 +245,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			}
 			tmpTrailArray.push(tmpObj);
 		}
-		console.log(tmpTrailArray)
 		return tmpTrailArray;
     }
 
@@ -250,6 +262,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     			}
     			arrUsers.push(poDatas.po_status[i].distributeTo);
     		}
+
+    		$scope.notifyUser = angular.copy(ALL_NOTIFY_USERS);
 
     		getUserDetails( arrUsers , function(udata){
 				$scope.isReadOnly = true;
@@ -274,35 +288,58 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    		$('.main-panel').scrollTop(0);	
     		});
     	}else{
+    		var allTmpData = angular.copy(ALL_NOTIFY_USERS);
+			$scope.notifyUser = allTmpData.filter(itm => itm._id != $scope.userDetails._id);
+
 	    	$("#myPOModal").modal('show');
 	    	$('.main-panel').scrollTop(0);
     	}
     }
 
     $scope.openPrePayment = function(preData){
-    	$("#myFinanceModal").modal('show');
-    	TMP_PI_AMOUNT = 0;
-    	$('.main-panel').scrollTop(0);
 
     	$scope.isReadOnly = false;
+    	
     	if(preData){
-    		$scope.isReadOnly = true;
+    		$scope.internalAuditUsers = angular.copy(ALL_NOTIFY_USERS);
+    		var arrUsers = [];
 
-    		$scope.payFormData = angular.copy(preData);
+    		for (var i = 0; i < preData.pay_status.length; i++) {
+    			if(i == 0){
+    				arrUsers.push(preData.pay_status[i].status_changedBy);
+    			}
+    			arrUsers.push(preData.pay_status[i].distributeTo);
+    		}
+    		
+    		getUserDetails( arrUsers , function(udata){
+	    		$scope.isReadOnly = true;
 
-    		var selPI = $scope.invoiceList.filter(function(a){
-				return $scope.payFormData.product_information.PI_id == a._id
+				$scope.payReqTrail = getTrailArray( udata , preData.pay_status);
+
+	    		$scope.payFormData = angular.copy(preData);
+
+	    		var selPI = $scope.invoiceList.filter(function(a){
+					return $scope.payFormData.product_information.PI_id == a._id
+				});
+
+				var selUser = $scope.internalAuditUsers.filter(function(a){
+					return $scope.payFormData.vendor_selection.selected_by == a._id
+				});
+
+				$scope.piModel = selPI[0];
+
+				$scope.selectedByUser = selUser[0];
+			    $scope.divisonModel = $scope.payFormData.vendor_selection.division;
+
+			    $("#myFinanceModal").modal('show');
+		    	TMP_PI_AMOUNT = 0;
+		    	$('.main-panel').scrollTop(0);
 			});
-
-			var selUser = $scope.notifyUser.filter(function(a){
-				return $scope.payFormData.vendor_selection.selected_by == a._id
-			});
-
-
-			$scope.piModel = selPI[0];
-
-			$scope.selectedByUser = selUser[0];
-		    $scope.divisonModel = $scope.payFormData.vendor_selection.division;
+    	}else{
+    		$scope.internalAuditUsers = angular.copy(ALL_NOTIFY_USERS).filter(item => item.role == 'Internal Auditor');
+    		$("#myFinanceModal").modal('show');
+	    	TMP_PI_AMOUNT = 0;
+	    	$('.main-panel').scrollTop(0);
     	}
     }
 
@@ -319,6 +356,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		    	});
 
 		    	if(invData){
+    				$scope.notifyUser = angular.copy(ALL_NOTIFY_USERS);
+
 		    		var arrUsers = [];
 
 		    		for (var i = 0; i < invData.iv_status.length; i++) {
@@ -340,6 +379,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			    			return obj._id == $scope.invoiceFormData.supplierId;
 			    		})
 
+			    		$scope.suppModel = angular.copy(tmpObj[0]);
+
 			    		var tmpPoObj = $scope.allActivePOs.filter(function(obj){
 			    			return obj._id == $scope.invoiceFormData.PO_id;
 			    		})
@@ -350,7 +391,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
 						$scope.selectedByUser = selUser[0];
 			    		$scope.ddPoModel = tmpPoObj[0];
-			    		$scope.suppModel = tmpObj[0];
 
 						$scope.divisonModel = $scope.invoiceFormData.vendor_selection.division;
 
@@ -359,6 +399,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		    		})
 
 		    	}else{
+		    		var allTmpData = angular.copy(ALL_NOTIFY_USERS);
+					$scope.notifyUser = allTmpData.filter(itm => itm._id != $scope.userDetails._id);
+
 		    		$("#myInvoiceModal").modal('show');
 		    		$('.main-panel').scrollTop(0);
 		    	}
@@ -529,6 +572,14 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	tempStatus.fieldSet.distributeTo = tempStatus.row[ statusKey[ tempStatus.action ] ][0].status_changedBy;
     	tempStatus.fieldSet.status_changedBy = $scope.userDetails._id;
     	tempStatus.fieldSet.status_changeDate = new Date();
+
+    	var allStatus = tempStatus.row[ statusKey[ tempStatus.action ] ];
+
+    	if(tempStatus.action == 'pay_req' && tempStatus.fieldSet.status == 'Accept' && allStatus[ allStatus.length-1 ].status == 'pending for Audit'){
+    		var cfoUsr = ALL_NOTIFY_USERS.filter(itm => itm.role == "CFO");
+    		tempStatus.fieldSet.distributeTo = cfoUsr[0]._id;
+    		tempStatus.fieldSet.status = 'pending for approval';
+    	}
     	
     	var tmpFormData = new FormData();    	
     	tmpFormData.append( "status" , JSON.stringify(tempStatus.fieldSet) );
@@ -788,7 +839,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			param:  tmpData
 		}).then( function(resVal){
 			$("#myFinanceModal").modal('hide');
-			$scope.changeDashBody("finance");
+			$scope.changeDashBody("pay_req");
 			common.hideLoader();
 	    }, function(error){
 	    	console.log(error);
@@ -834,7 +885,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	InvoiceTemplateLoadData(function(){
     		$scope.piModel = "";
     		$scope.invoiceList = $scope.invoiceList.filter(function(obj){
-	    		return obj.iv_status.status == "Accept";
+	    		return obj.iv_status[ obj.iv_status.length-1 ].status == "Accept";
 	    	});
     	});
 

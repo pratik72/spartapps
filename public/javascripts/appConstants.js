@@ -232,5 +232,6 @@ var APP_CONSTANT = {
 		{ name : "Account Manager"},
 		{ name : "Data Entry Ops"},
 		{ name : "National Head"},
+		{ name : "Internal Auditor"}
 	]
 }

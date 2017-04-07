@@ -176,8 +176,7 @@ router.post('/searchInAllTab', restrict , function(req, res, next) {
 
 		var userOrgId = req.user.orgId;
 
-		var searchString = req.body.searchText[1];
-
+		var searchString = req.body.searchText;
 		InvoiceService.searchInvEs( searchString , function(error , suppData){
 			if(error){
 				console.log("PO Not Retrived" , error);
@@ -533,6 +532,12 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 		pay_req : "pay_status",
 	}
 
+	var tmpStatus = 'pending';
+
+	if( comeFrom == 'pay_req' ){
+		tmpStatus = 'pending for Audit';
+	}
+
 	for (var i in tmpObj) {
 		if(typeof tmpObj[i] == 'string' && tmpObj[i] != "undefined" && tmpObj[i] != ""){
 			try{
@@ -550,7 +555,7 @@ function mergeSupplierUploadStatusData(files , tmpObj , comeFrom){
 	var tmpUserId = tmpObj.user_id;
 	var distUserId = tmpObj.vendor_selection.selected_by;
 	var newStatusObj = {
-		status : "pending",
+		status : tmpStatus,
 		status_changeDate : Date.now(),
 		status_changedBy : tmpUserId,
 		distributeTo : distUserId,

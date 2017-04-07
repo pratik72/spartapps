@@ -70,7 +70,6 @@ exports.findInvoice = function(inv_id, callback){
 exports.searchInvEs = function(searchStr, callback){
 	
 	Invoice.find({$text: {$search: searchStr}})
-       .limit(10)
        .exec(function(err, docs) {
 			callback(err , docs)
        });
