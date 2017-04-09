@@ -9,12 +9,12 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		"CFO" : "YYYYY",
 		"COO" : "YYYYY",
 		"Admin" : "YYYYY",
-		"Finance Head" : "Y0YY0",
-		"Regional Head" : "Y0Y0Y",
-		"Centre Head" : "Y0Y0Y",
-		"Finance Controller" : "Y0Y0Y",
-		"Account Manager" : "Y0Y0Y",
-		"National Head" : "Y0Y0Y",
+		"Finance Head" : "YYYY0",
+		"Regional Head" : "YYY0Y",
+		"Centre Head" : "YYY0Y",
+		"Finance Controller" : "YYY0Y",
+		"Account Manager" : "YYY0Y",
+		"National Head" : "YYY0Y",
 		"Data Entry Ops" : "YY000",
 		"Internal Auditor" : "Y0Y0Y"
 	}
@@ -350,9 +350,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    	resetInvoiceModel();
 	    	
 	    	getAllActivePO(function(){
-	    		$scope.supplierForInvoice = $scope.supplierList.filter(function(obj){
-		    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
-		    	});
+	    		
 
 		    	if(invData){
     				$scope.notifyUser = angular.copy(ALL_NOTIFY_USERS);
@@ -372,13 +370,16 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			    		$scope.invoiceFormData = angular.copy(invData);
 			    		$scope.invoiceFormData.isExpense = $scope.invoiceFormData.isExpense.toString();
 
+			    		$scope.supplierForInvoice = angular.copy($scope.supplierList).filter(function(obj){
+				    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
+				    	});
+
 	    				$scope.invoiceTrail = getTrailArray( udata , invData.iv_status);
 
-			    		var tmpObj = $scope.supplierList.filter(function(obj){
+			    		var tmpObj = angular.copy($scope.supplierForInvoice).filter(function(obj){
 			    			return obj._id == $scope.invoiceFormData.supplierId;
 			    		})
 
-			    		$scope.suppModel = angular.copy(tmpObj[0]);
 
 			    		var tmpPoObj = $scope.allActivePOs.filter(function(obj){
 			    			return obj._id == $scope.invoiceFormData.PO_id;
@@ -388,6 +389,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 							return $scope.invoiceFormData.vendor_selection.selected_by == a._id
 						});
 
+			    		$scope.suppModel = tmpObj[0];
 						$scope.selectedByUser = selUser[0];
 			    		$scope.ddPoModel = tmpPoObj[0];
 
@@ -527,7 +529,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	}
 
     $scope.openStatusModel = function(action , row , statusVal){
-    	if($scope.permissions.ApprvSupplierReq){
+    	var allStatus = row[statusKey[action] ];
+    	console.log(allStatus[ allStatus.length-1 ].distributeTo , $scope.userDetails._id);
+    	if($scope.permissions.ApprvSupplierReq && allStatus[ allStatus.length-1 ].distributeTo == $scope.userDetails._id){
     		$scope.initStatusData.action = action;
 	    	$scope.initStatusData.row = row;
 
@@ -696,7 +700,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     $scope.A_keys = Object.keys
     function genarateTrackReport(tData){
     	//console.log(tData);
-
+    	$scope.trackPaymentList = [];
     	var tmpData = [];
     	for (var i = 0; i < tData.length; i++) {
     		var akey = Object.keys(tData[i])[0]
@@ -768,6 +772,10 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     				getRepUserData(i);
     			}else{
     				$scope.trackPaymentList = tmpData;
+
+    				$timeout(function() {
+    					$('[data-toggle="tooltip"]').tooltip();
+    				}, 400);
     			}
 	    	})
     	}
@@ -997,7 +1005,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     }
 
     function TracPaymTemplateLoad(){
-
+    	$scope.trackPaymentList = [];
     }
 
     $scope.payReqList = [];

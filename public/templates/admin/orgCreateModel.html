@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div id="orgCreateModal" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -15,25 +15,44 @@
               <input type="text" class="form-control" id="orgName" name="orgName" required ng-model="orgFormData.orgName">
             </div>
             <div class="form-group">
-              <label for="ceoName">CEO Name:</label>
+              <label for="ceoName">Managing Director Name:</label>
               <input type="text" class="form-control" id="ceoName" name="ceoName" required ng-model="orgFormData.ceoName">
             </div>
+
+            <div class="form-group">
+              <label for="orgPAN">CIN:</label>
+              <input type="text" class="form-control" id="orgPAN" name="orgPAN" required ng-model="orgFormData.orgPAN">
+            </div>
+
             <div class="form-group">
               <label for="orgPAN">PAN:</label>
               <input type="text" class="form-control" id="orgPAN" name="orgPAN" required ng-model="orgFormData.orgPAN">
             </div>
+
             <div class="form-group">
-              <label for="orgGST">GST:</label>
-              <input type="text" class="form-control" id="orgGST" name="orgGST" required ng-model="orgFormData.orgGST">
+              <label for="orgPAN">Excise Registration No:</label>
+              <input type="text" class="form-control" id="orgPAN" name="orgPAN" required ng-model="orgFormData.orgPAN">
             </div>
+
             <div class="form-group">
               <label for="orgTIN">TIN:</label>
               <input type="text" class="form-control" id="orgTIN" name="orgTIN" required ng-model="orgFormData.orgTIN">
+            </div>
+
+            <div class="form-group">
+              <label for="orgGST">CST:</label>
+              <input type="text" class="form-control" id="orgGST" name="orgGST" required ng-model="orgFormData.orgGST">
             </div>
             <div class="form-group">
               <label for="service_tax_no">Service Tax No:</label>
               <input type="text" class="form-control" id="service_tax_no" name="service_tax_no" required ng-model="orgFormData.service_tax_no">
             </div>
+
+            <div class="form-group">
+              <label for="orgGST">GST:</label>
+              <input type="text" class="form-control" id="orgGST" name="orgGST" required ng-model="orgFormData.orgGST">
+            </div>
+
             <div class="form-group">
               <label for="export_import_regd_no">Export/Import Registration No: </label>
               <input type="text" class="form-control" id="export_import_regd_no" name="export_import_regd_no" required ng-model="orgFormData.export_import_regd_no">
@@ -42,6 +61,16 @@
               <label for="form_regd_no">Form Registration No:</label>
               <input type="text" class="form-control" id="form_regd_no" name="form_regd_no" required ng-model="orgFormData.form_regd_no">
             </div>
+
+            <div class="form-group">
+              <label for="export_import_regd_no">Website : </label>
+              <input type="text" class="form-control" id="export_import_regd_no" name="export_import_regd_no" required ng-model="orgFormData.export_import_regd_no">
+            </div>
+            <div class="form-group">
+              <label for="form_regd_no">Email :</label>
+              <input type="text" class="form-control" id="form_regd_no" name="form_regd_no" required ng-model="orgFormData.form_regd_no">
+            </div>
+
             <div class="form-group">
               <label for="orgAddr1">Organization Address 1:</label>
               <input type="text" class="form-control" id="orgAddr1" name="orgAddr1" required ng-model="orgFormData.orgAddr1">

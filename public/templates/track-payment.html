@@ -30,7 +30,7 @@
 
                 	<div class="row">
 
-                		<div class="panel panel-default" ng-repeat="(key, item) in trackPaymentList">
+                		<div ng-if="trackPaymentList.length > 0" class="panel panel-default" ng-repeat="(key, item) in trackPaymentList">
 						  <div class="panel-heading">
 						    <h3 class="panel-title">{% item.tabName %}</h3>
 						  </div>
@@ -39,7 +39,7 @@
 						    	{% item.objId %} - {% item.userData %}
 						    </div>
 						    <div class="col-md-1 trackList" ng-repeat="itm in item.trails track by $index">
-		                        <a href="#" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
+		                        <a href="#" data-toggle="tooltip" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
 		                          <div class="badge bg-info">{% $index+1 %}</div>
 		                          <div >{% itm.status %}</div>
 		                        </a>
@@ -47,6 +47,10 @@
 		                      </div>
 						  </div>
 						</div>
+
+						<div ng-if="trackPaymentList.length == 0">
+	                    	No Records found.!!
+	                    </div>
                 	</div>
 
                 </div>

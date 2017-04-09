@@ -44,9 +44,13 @@
                 <tr>
                   <td>Name of Supplier</td>
                   <td colspan="5">
-                    <select ng-options="item as ( item.supplier_no +' -- '+ item.supplier_name_address.supplier_name) for item in supplierForInvoice" ng-model="suppModel" required ng-change="suppChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-hide="isReadOnly" ng-options="item as ( item.supplier_no +' -- '+ item.supplier_name_address.supplier_name) for item in supplierForInvoice" ng-model="suppModel" required ng-change="suppChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select supplier--</option>
                     </select>
+
+                    <span ng-show="isReadOnly">
+                      {% suppModel.supplier_no%} - {% suppModel.supplier_name_address.supplier_name %}
+                    </span>
                   </td>
                 </tr>
                 

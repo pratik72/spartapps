@@ -52,6 +52,7 @@ exports.searchTrackReport = function( searchArray , userOrgId , callback){
 		"supplier_name" :  {tab :'supplier' , index : 1},
 		"PO_number" : {tab :'purchaseOrd', index : 2},
 		"HSN_Code" : {tab :'purchaseOrd', index : 2},
+		"bill_number" : {tab :'invoice', index : 3},
 		"PI_number" : {tab :"invoice", index : 3}
 	};
 
@@ -71,25 +72,36 @@ exports.searchTrackReport = function( searchArray , userOrgId , callback){
 		switch(revIndex){
 			case 1 : // search for Supplier
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data[0]){
+						tmpRevReport.push({ [stage.tab] : data[0] });
+					}
 					console.log('--1-----' , data);
 					rnext(data);
+					//forwardSearch(searchArray[1] , currStage , rnext);
 				});
 				break;
 			case 2 : // search for PO
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data[0]){
+						tmpRevReport.push({ [stage.tab] : data[0] });
+						revIndex--;
+						reverseSearch(data[0].supplier_Number , { tab : 'supplier'}, rnext);
+					}else{
+						rnext(data);
+					}
 					console.log('--2-----' , data);
-					revIndex--;
-					reverseSearch(data[0].supplier_Number , { tab : 'supplier'}, rnext);
 				});
 				break;
 			case 3 : // search for PI
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data[0]){
+						tmpRevReport.push({ [stage.tab] : data[0] });
+						revIndex--;
+						reverseSearch( data[0].PO_number , { tab : 'purchaseOrd' }, rnext);
+					}else{
+						rnext(data);
+					}
 					console.log('--3-----' , data);
-					revIndex--;
-					reverseSearch( data[0].PO_number , { tab : 'purchaseOrd' }, rnext);
 				});
 				break;
 		}
@@ -97,28 +109,38 @@ exports.searchTrackReport = function( searchArray , userOrgId , callback){
 	}
 
 	function forwardSearch( value , stage , rnext ){
-		switch(forwIndex){
-			case 1 :
+		switch(revIndex){
+			case 1 : // search for Supplier
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data[0]){
+						tmpRevReport.push({ [stage.tab] : data[0] });
+					}else{
+						rnext(data);
+					}
 					console.log('--1-----' , data);
-					rnext(data);
 				});
 				break;
-			case 2 :
+			case 2 : // search for PO
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data[0]){
+						tmpRevReport.push({ [stage.tab] : data[0] });
+						revIndex++;
+						reverseSearch(data[0].supplier_Number , { tab : 'supplier'}, rnext);
+					}else{
+						rnext(data);
+					}
 					console.log('--2-----' , data);
-					forwIndex++;
-					reverseSearch(data[0].supplier_Number , { tab : 'supplier'}, rnext);
 				});
 				break;
-			case 3 :
+			case 3 : // search for PI
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data[0]){
+						tmpRevReport.push({ [stage.tab] : data[0] });
+						revIndex++;
+						reverseSearch( data[0].PO_number , { tab : 'purchaseOrd' }, rnext);
+					}
+					rnext(data);
 					console.log('--3-----' , data);
-					forwIndex++;
-					reverseSearch( data[0].PO_number , { tab : 'purchaseOrd' }, rnext);
 				});
 				break;
 		}
