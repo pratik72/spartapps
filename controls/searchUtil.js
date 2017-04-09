@@ -68,40 +68,40 @@ exports.searchTrackReport = function( searchArray , userOrgId , callback){
 	});
 
 	function reverseSearch(value , stage , rnext){
+		var keyTypes = 1;
 
 		switch(revIndex){
 			case 1 : // search for Supplier
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					if(data[0]){
-						tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data.length > 0){
+						tmpRevReport = ForwCheckAndInsertData(tmpRevReport , data , stage.tab , keyTypes);
 					}
-					console.log('--1-----' , data);
-					rnext(data);
-					//forwardSearch(searchArray[1] , currStage , rnext);
+					console.log('--R1-----');
+					forwardSearch(searchArray[1] , currStage , rnext);
 				});
 				break;
 			case 2 : // search for PO
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					if(data[0]){
-						tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data.length > 0){
+						tmpRevReport = ForwCheckAndInsertData(tmpRevReport , data , stage.tab , keyTypes);
 						revIndex--;
 						reverseSearch(data[0].supplier_Number , { tab : 'supplier'}, rnext);
 					}else{
-						rnext(data);
+						forwardSearch(searchArray[1] , currStage , rnext);
 					}
-					console.log('--2-----' , data);
+					console.log('--R2-----');
 				});
 				break;
 			case 3 : // search for PI
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					if(data[0]){
-						tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data.length > 0){
+						tmpRevReport = ForwCheckAndInsertData(tmpRevReport , data , stage.tab , keyTypes);
 						revIndex--;
 						reverseSearch( data[0].PO_number , { tab : 'purchaseOrd' }, rnext);
 					}else{
-						rnext(data);
+						forwardSearch(searchArray[1] , currStage , rnext);
 					}
-					console.log('--3-----' , data);
+					console.log('--R3-----');
 				});
 				break;
 		}
@@ -109,41 +109,59 @@ exports.searchTrackReport = function( searchArray , userOrgId , callback){
 	}
 
 	function forwardSearch( value , stage , rnext ){
-		switch(revIndex){
+		var keyTypes = 0;
+		switch(forwIndex){
 			case 1 : // search for Supplier
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					if(data[0]){
-						tmpRevReport.push({ [stage.tab] : data[0] });
+					if(data.length > 0){
+						tmpRevReport = ForwCheckAndInsertData(tmpRevReport , data , stage.tab , keyTypes);
+						forwIndex++;
+						forwardSearch(data[0].PO_number , { tab : 'purchaseOrd'}, rnext);
 					}else{
 						rnext(data);
 					}
-					console.log('--1-----' , data);
+					console.log('--F1-----');
 				});
 				break;
 			case 2 : // search for PO
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					if(data[0]){
-						tmpRevReport.push({ [stage.tab] : data[0] });
-						revIndex++;
-						reverseSearch(data[0].supplier_Number , { tab : 'supplier'}, rnext);
+					if(data.length > 0){
+						tmpRevReport = ForwCheckAndInsertData(tmpRevReport , data , stage.tab , keyTypes);
+						forwIndex++;
+						forwardSearch(data[0].PO_number , { tab : 'invoice'}, rnext);
 					}else{
 						rnext(data);
 					}
-					console.log('--2-----' , data);
+					console.log('--F2-----');
 				});
 				break;
 			case 3 : // search for PI
 				self.searchTabArea( stage.tab , value , userOrgId , function(data){
-					if(data[0]){
-						tmpRevReport.push({ [stage.tab] : data[0] });
-						revIndex++;
-						reverseSearch( data[0].PO_number , { tab : 'purchaseOrd' }, rnext);
+					if(data.length > 0){
+						tmpRevReport = ForwCheckAndInsertData(tmpRevReport , data , stage.tab , keyTypes);
 					}
-					rnext(data);
-					console.log('--3-----' , data);
+					rnext(data);					
+					console.log('--F3-----' , data.length);
 				});
 				break;
 		}
 	}
 
+}
+
+
+function ForwCheckAndInsertData(retArray , allData , matchKey , type){
+
+	for (var i = 0; i < allData.length; i++) {
+		if(retArray.filter(its => its[ Object.keys(its)[0] ]._id.toString() == allData[i]._id.toString()  ).length == 0){
+
+			if(type == 1){//To Check Reverse or forward method
+				retArray.push({ [matchKey] : allData[i] });
+			}else{
+				retArray.unshift({ [matchKey] : allData[i] });
+			}
+		}
+	}
+
+	return retArray;
 }

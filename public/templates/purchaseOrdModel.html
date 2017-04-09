@@ -160,9 +160,11 @@
                   </td>
                   <td>Selected by</td>
                   <td>
-                    <select ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'po')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-hide="isReadOnly" ng-options="item as (item.firstName +' '+ item.lastName + ', ' + item.role) for item in notifyUser" ng-model="selectedByUser" required ng-change="selectedByChngUpdate(this , 'po')" class="form-control" ng-disabled="isReadOnly">
                       <option value="">--select User--</option>
                     </select>
+
+                    <span ng-show="isReadOnly">{% selectedByUser.firstName %} {% selectedByUser.lastName %} , {% selectedByUser.role %}</span>
                   </td>
                 </tr>
                 <tr>

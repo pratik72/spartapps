@@ -20,7 +20,7 @@
               <tbody>
 
                 <tr ng-hide="!isReadOnly">
-                  <th colspan="4">Trail</th>
+                  <th colspan="6">Trail</th>
                 </tr>
 
                 <tr ng-hide="!isReadOnly">
@@ -120,7 +120,7 @@
 
                   <td>Quantity</td>
                   <td>
-                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly" required ng-change="calculateInvAmount()">
+                    <input type="number" class="form-control" name="city" ng-model="invoiceFormData.Quantity" placeholder="Enter Quantity" ng-disabled="isReadOnly" required ng-change="checkQuantity(this);calculateInvAmount()">
                   </td>
                 </tr>
 

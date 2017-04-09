@@ -252,6 +252,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     $scope.openPurchaseOrd = function(poDatas){
     	resetPOModel();
     	$scope.isReadOnly = false;
+    	var allTmpData = angular.copy(ALL_NOTIFY_USERS);
+		$scope.notifyUser = allTmpData.filter(itm => itm._id != $scope.userDetails._id);
+
     	if(poDatas){
 			$scope.poFormData = angular.copy(poDatas);
 
@@ -279,7 +282,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 				var selUser = $scope.notifyUser.filter(function(a){
 					return $scope.poFormData.vendor_selection.selected_by == a._id
 				});
-				$scope.selectedByUser = selUser[0]
+				$scope.selectedByUser = angular.copy(selUser[0])
 
 				$scope.locationModel = $scope.poFormData.budgets_and_approvals.location;
 
@@ -287,8 +290,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    		$('.main-panel').scrollTop(0);	
     		});
     	}else{
-    		var allTmpData = angular.copy(ALL_NOTIFY_USERS);
-			$scope.notifyUser = allTmpData.filter(itm => itm._id != $scope.userDetails._id);
 
 	    	$("#myPOModal").modal('show');
 	    	$('.main-panel').scrollTop(0);
@@ -351,6 +352,9 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    	
 	    	getAllActivePO(function(){
 	    		
+	    		$scope.supplierForInvoice = angular.copy($scope.supplierList).filter(function(obj){
+		    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
+		    	});
 
 		    	if(invData){
     				$scope.notifyUser = angular.copy(ALL_NOTIFY_USERS);
@@ -370,9 +374,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			    		$scope.invoiceFormData = angular.copy(invData);
 			    		$scope.invoiceFormData.isExpense = $scope.invoiceFormData.isExpense.toString();
 
-			    		$scope.supplierForInvoice = angular.copy($scope.supplierList).filter(function(obj){
-				    		return obj.sa_status[ obj.sa_status.length-1 ].status == "Accept";
-				    	});
 
 	    				$scope.invoiceTrail = getTrailArray( udata , invData.iv_status);
 
@@ -408,6 +409,11 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		    	}
 	    	});
     	})
+    }
+
+    $scope.checkQuantity = function(obj){
+    	console.log(obj.invoiceFormData.Quantity)
+    	console.log($scope.ddPoModel)
     }
 
     $scope.calculatePoAmount = function(){
@@ -477,7 +483,6 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	$scope.payFormData.product_information.netAmount = strAmount.toFixed(2) || "0.00";
     }
 
-
     $scope.calculateInvAmount = function(){
     	var strQuantity = $scope.invoiceFormData.Quantity;
     	var strRate = $scope.invoiceFormData.Rate;
@@ -516,9 +521,13 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	    });
     }
 
-    $scope.enableToEdit = function(){
-    	$scope.isReadOnly = false;
-    	$scope.hasEditSupplier = true;
+    $scope.enableToEdit = function(obj){
+    	if(obj.user_id == $scope.userDetails._id){
+	    	$scope.isReadOnly = false;
+	    	$scope.hasEditSupplier = true;
+    	}else{
+    		alert("Sorry , You cann't edit..!");
+    	}
     }
 
     var statusKey = {
@@ -713,7 +722,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 
     		switch(akey){
     			case 'invoice' :
-    				tmpObj.tabName = 'Invoice';
+    				tmpObj.tabName = 'Payment Intimation';
     				tmpObj.objId = aObj.inv_no;
     				tmpObj.userData = aObj.userName;
     				tmpObj.statusType = 'iv_status';
@@ -832,13 +841,11 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     	switch(tabs){
     		case "invoice" :
     			if( !TMP_BACKUP["allActivePOs"] ){
-    				TMP_BACKUP["allActivePOs"] = $scope.allActivePOs;
+    				TMP_BACKUP["allActivePOs"] = angular.copy($scope.allActivePOs);
     			}
 
     			if(e.suppModel){
-					$scope.allActivePOs = $scope.allActivePOs.filter(function(obj){
-						return obj.supplierId == e.suppModel._id
-					});
+					$scope.allActivePOs = angular.copy( TMP_BACKUP["allActivePOs"] ).filter(obj => obj.supplierId == e.suppModel._id );
     			}else{
     				$scope.allActivePOs = TMP_BACKUP["allActivePOs"];
     			}

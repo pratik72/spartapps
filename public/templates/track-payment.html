@@ -30,23 +30,39 @@
 
                 	<div class="row">
 
-                		<div ng-if="trackPaymentList.length > 0" class="panel panel-default" ng-repeat="(key, item) in trackPaymentList">
-						  <div class="panel-heading">
-						    <h3 class="panel-title">{% item.tabName %}</h3>
-						  </div>
-						  <div class="panel-body">
-						    <div>
-						    	{% item.objId %} - {% item.userData %}
-						    </div>
-						    <div class="col-md-1 trackList" ng-repeat="itm in item.trails track by $index">
-		                        <a href="#" data-toggle="tooltip" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
-		                          <div class="badge bg-info">{% $index+1 %}</div>
-		                          <div >{% itm.status %}</div>
-		                        </a>
+                		<div class="col-md-12" ng-if="trackPaymentList.length > 0" ng-repeat="(key, item) in trackPaymentList">
+                			
+	                		<div class="panel" ng-class="{'panel-danger' : item.trails[item.trails.length-1].status != 'Accept' , 'panel-success' : item.trails[item.trails.length-1].status == 'Accept' }">
+							  <div class="panel-heading">
+							    <h3 class="panel-title">{% item.tabName %} - {% item.objId %}</h3>
+							  </div>
+							  <div class="panel-body">
 
-		                      </div>
-						  </div>
-						</div>
+							    <div>
+							    	{% item.tabName %} cretated by {% item.userData %}
+							    		<span> on date {% item.trails[item.trails.length-1].status_changeDate | date:"dd/MM/yyyy 'at' h:mma" %} and </span>
+
+							    		<span ng-if="item.trails[item.trails.length-1].status == 'Accept'">approved by </span>
+
+							    		<span ng-if="item.trails[item.trails.length-1].status == 'Accept'"> {% item.trails[item.trails.length-2].UserName %} </span>
+
+							    		<span ng-if="item.trails[item.trails.length-1].status != 'Accept'"> pending for Approval by </span>
+
+							    		<span ng-if="item.trails[item.trails.length-1].status != 'Accept'"> {% item.trails[item.trails.length-1].UserName %} </span>
+
+							    		<span> on date {% item.trails[item.trails.length-1].status_changeDate | date:"dd/MM/yyyy 'at' h:mma" %} </span>
+								</div>
+
+							    <!-- <div class="col-md-1 trackList" ng-repeat="itm in item.trails track by $index">
+			                        <a href="#" data-toggle="tooltip" class="thumbnail text-center bottom-zero" title="{% itm.UserName %} | {% itm.role %} | {% itm.status_changeDate | date:'dd/MM/yyyy' %}">
+			                          <div class="badge bg-info">{% $index+1 %}</div>
+			                          <div >{% itm.status %}</div>
+			                        </a>
+
+			                      </div> -->
+							  </div>
+							</div>
+                		</div>
 
 						<div ng-if="trackPaymentList.length == 0">
 	                    	No Records found.!!

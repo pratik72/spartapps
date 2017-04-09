@@ -8,7 +8,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Create Supplier</h4>
         <div class="pull-right" >
-          <button class="btn btn-success" ng-click="enableToEdit()" ng-show="isReadOnly">Edit</button>
+          <button class="btn btn-success" ng-click="enableToEdit(supplierFormData)" ng-show="isReadOnly">Edit</button>
 
           <span ng-if="supplierFormData.sa_status[ getStatusIndex( supplierFormData.sa_status) ].status == 'pending' && isReadOnly">
             <button class="btn btn-default" ng-click="openStatusModel('supplier' , supplierFormData , 'Accept')">Approve</button>

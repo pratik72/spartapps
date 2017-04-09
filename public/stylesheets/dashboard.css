@@ -236,6 +236,11 @@ box-shadow: none;
     border-top: 1px solid #e6e6e6 !important;
     margin: 0px 15px;
  }
+
+ .modal-header{
+    border-bottom: 1px solid #e6e6e6 !important;
+ }
+
  @media (min-width: 992px){
     .typo-line{
         padding-left: 140px;
