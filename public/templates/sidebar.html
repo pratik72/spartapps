@@ -2,27 +2,28 @@
 			
 	<div class="logo">
 		<a class="navbar-brand" href="#">Spartapps</a>
+        <div class="clearfix"></div>
 	</div>
 
 	<div class="sidebar-wrapper">
         <ul class="nav">
             <li ng-class="{ 'active': dashBody.indexOf('invoice') > -1 }">
-            	<a href="#" ng-click="changeDashBody('invoice')">Payment Intimation</a>
+            	<a href="#" ng-click="changeDashBody('invoice')"><i class="material-icons">payment</i>Payment Intimation</a>
             </li>
         	<li ng-class="{ 'active': dashBody.indexOf('purchase') > -1 }">
-        		<a href="#" ng-click="changeDashBody('purchaseOrd')">PO</a>
+        		<a href="#" ng-click="changeDashBody('purchaseOrd')"><i class="material-icons">bookmark_border</i>PO</a>
         	</li>
         	<li ng-class="{ 'active': dashBody.indexOf('supplier') > -1 }">
-        		<a href="#" ng-click="changeDashBody('supplier')">Supplier</a>
+        		<a href="#" ng-click="changeDashBody('supplier')"><i class="material-icons">supervisor_account</i>Supplier</a>
         	</li>
             <li ng-class="{ 'active': dashBody.indexOf('finance') > -1 }">
-                <a href="#" ng-click="changeDashBody('pay_req')">Finance</a>
+                <a href="#" ng-click="changeDashBody('pay_req')"><i class="material-icons">monetization_on</i>Finance</a>
             </li>
             <li ng-class="{ 'active': dashBody.indexOf('reports') > -1 }">
-                <a href="#" ng-click="changeDashBody('reports')">Reports</a>
+                <a href="#" ng-click="changeDashBody('reports')"><i class="material-icons">insert_drive_file</i>Reports</a>
             </li>
             <li ng-class="{ 'active': dashBody.indexOf('track') > -1 }">
-                <a href="#" ng-click="changeDashBody('trackPayment')">Track Payment</a>
+                <a href="#" ng-click="changeDashBody('trackPayment')"><i class="material-icons">pageview</i>Track Payment</a>
             </li>
         </ul>
 	</div>
