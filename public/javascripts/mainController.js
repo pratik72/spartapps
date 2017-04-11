@@ -412,8 +412,33 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     }
 
     $scope.checkQuantity = function(obj){
-    	console.log(obj.invoiceFormData.Quantity)
-    	console.log($scope.ddPoModel)
+    	var poScope = angular.element( $('#invPObox')[0] ).scope();
+    	var quantityScope = poScope && poScope.$parent.invoiceFormData;
+    	poScope = poScope && poScope.ddPoModel;
+
+    	var po_quantity = poScope && poScope.product_information.quantity;
+    	po_quantity = po_quantity && parseInt(po_quantity);
+
+    	var tmpPOs = angular.copy( TMP_BACKUP['piListAgainstPO'] );
+    	var createdQuantity = 0;
+    	for (var i = 0; i < tmpPOs.length; i++) {
+    		createdQuantity += parseInt( tmpPOs[i].Quantity );
+    	}
+
+    	if(createdQuantity >= po_quantity){
+    		quantityScope.Quantity = '';
+    		alert("You cann't create PO because all PI created aginst this PO. \n\nPlease create another PO");
+    		return;
+    	}else{
+    		po_quantity -= createdQuantity;
+    	}
+
+    	var selected_quantity = quantityScope.Quantity
+    	selected_quantity = selected_quantity && parseInt(selected_quantity);
+    	if( po_quantity && selected_quantity && po_quantity < selected_quantity){
+    		quantityScope.Quantity = '';
+    		alert('You can not enter quantity greater than PO. \n\nPlease enter again');
+    	}
     }
 
     $scope.calculatePoAmount = function(){
@@ -667,7 +692,7 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     }
 
     $scope.searchText = ""
-    $scope.searchTab = function(obj , tabs){
+    $scope.searchTab = function(obj , tabs , callback){
 
     	var sendKeys = new FormData();
     	sendKeys.append( "searchTab" , tabs );
@@ -678,7 +703,11 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 			method: 'post',
 			param : sendKeys
 		}).then( function(resVal){
-			setSearchTree( tabs , resVal.data);
+			if(callback){
+				callback(resVal.data);
+			}else{
+				setSearchTree( tabs , resVal.data);
+			}
 	    }, function(error){
 	    	console.log(error);
 	    	alert("Data Not found")
@@ -870,19 +899,28 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
     $scope.ddPoModel = "";
     $scope.invPoChngUpdate = function(e , comeFrom){
     	if(e.ddPoModel){
+    		TMP_BACKUP["piListAgainstPO"] = [];
 			var poNumber = e.ddPoModel.PO_number;
 			var poId = e.ddPoModel._id;
 			var tmpKey = FORM_MAPPING_KEY[ comeFrom ];
 
-			$scope[ tmpKey ].PO_number = poNumber;
-    		$scope[ tmpKey ].PO_id = poId;
+			$scope.searchTab( { searchText: poNumber } ,'invoice' , function(retData){
+				
+				$scope[ tmpKey ].PO_number = poNumber;
+	    		$scope[ tmpKey ].PO_id = poId;
 
-    		$scope[ tmpKey ].Quantity = e.ddPoModel.product_information.quantity;
-    		$scope[ tmpKey ].Rate = e.ddPoModel.product_information.rate;
+	    		//$scope[ tmpKey ].Quantity = e.ddPoModel.product_information.quantity;
+	    		$scope[ tmpKey ].Rate = e.ddPoModel.product_information.rate;
 
-    		$scope[ tmpKey ].HSN_Code = e.ddPoModel.product_information.HSN_Code;
-    		$scope[ tmpKey ].Product_Nature = e.ddPoModel.product_information.product_discreption;
-    		$scope.calculateInvAmount();
+	    		$scope[ tmpKey ].HSN_Code = e.ddPoModel.product_information.HSN_Code;
+	    		$scope[ tmpKey ].Product_Nature = e.ddPoModel.product_information.product_discreption;
+
+				TMP_BACKUP["piListAgainstPO"] = retData;
+				$scope.checkQuantity();
+				$scope.calculateInvAmount();
+			});
+
+    		
     	}
     }
 

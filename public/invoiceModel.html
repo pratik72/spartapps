@@ -72,7 +72,7 @@
                 <tr ng-if="invoiceFormData.isExpense == 'false'">
                   <td>PO No</td>
                   <td colspan="5">
-                    <select ng-options="item as item.PO_number for item in allActivePOs" ng-model="ddPoModel" required ng-change="invPoChngUpdate(this,'invoice')" class="form-control" ng-disabled="isReadOnly">
+                    <select ng-options="item as item.PO_number for item in allActivePOs" ng-model="ddPoModel" required ng-change="invPoChngUpdate(this,'invoice')" class="form-control" id="invPObox" ng-disabled="isReadOnly">
                       <option value="">--select po--</option>
                     </select>
                   </td>
