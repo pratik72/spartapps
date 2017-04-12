@@ -37,25 +37,11 @@ router.post('/userDetails', restrict , function(req, res, next) {
 router.post('/downloadRepors', restrict , function(req, res, next) {
 
 
-	PythonShell.run('po_reports.py', function (err) {
-		  if (err) throw err;
+	PythonShell.run('../reports/po_reports.py', function (err) {
+		  if (err) return res.json(err);
 		  console.log('finished');
-		  res.json( { usr: req.user} );
+		  res.json( { success : req.user} );
 		});
-
-	/*var pyshell = new PythonShell('po_reports.py');
-
-	pyshell.on('message', function (message) {
-	  // received a message sent from the Python script (a simple "print" statement) 
-	  console.log(message);
-	});
-	 
-	// end the input stream and allow the process to exit 
-	pyshell.end(function (err) {
-	  if (err) throw err;
-	  console.log('finished');
-	});
-*/
 	
 });
 
