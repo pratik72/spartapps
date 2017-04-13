@@ -9,7 +9,7 @@ var uploadService = require('../services/upload-services');
 router.get('/', restrict , function(req, res, next) {
 	var vm = {
 		title : 'Admin',
-		userName : req.user ? req.user.firstName : 'User'
+		userName : req.user ? req.user : 'User'
 	}
   res.render('admin', vm);
 });
@@ -56,7 +56,7 @@ router.post('/orgcreate', restrict , function(req, res, next) {
 
 //Get All Organization
 router.post('/getAllOrgList', restrict , function(req, res, next) {
-	var allOrg = {};
+	var allOrg = { _id : req.user.orgId };
 	orgService.findOrgs( allOrg, function(error , orgs){
 		if(error){
 			console.log("Data Not Retrived" , error);
@@ -69,7 +69,7 @@ router.post('/getAllOrgList', restrict , function(req, res, next) {
 
 //Get All Users
 router.post('/getAllUserList', restrict , function(req, res, next) {
-	var allUsers = {};
+	var allUsers = { orgId : req.user.orgId };
 	userService.findAllUsers( allUsers, function(error , result){
 		if(error){
 			console.log("Data Not Retrived" , error);

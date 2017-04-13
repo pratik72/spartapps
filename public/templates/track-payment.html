@@ -40,7 +40,7 @@
 
 							    <div>
 							    	{% item.tabName %} cretated by {% item.userData %}
-							    		<span> on date {% item.trails[item.trails.length-1].status_changeDate | date:"dd/MM/yyyy 'at' h:mma" %} and </span>
+							    		<span> on date {% item.trails[0].status_changeDate | date:"dd/MM/yyyy 'at' h:mma" %} and </span>
 
 							    		<span ng-if="item.trails[item.trails.length-1].status == 'Accept'">approved by </span>
 

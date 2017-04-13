@@ -5,18 +5,18 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 	var allTemplates = APP_CONSTANT.TEMPLATES;
 	var ALL_NOTIFY_USERS = null;
 	var adminRights = {
-		"CEO" : "YYYYY",
-		"CFO" : "YYYYY",
-		"COO" : "YYYYY",
-		"Admin" : "YYYYY",
-		"Finance Head" : "YYYY0",
-		"Regional Head" : "YYY0Y",
-		"Centre Head" : "YYY0Y",
-		"Finance Controller" : "YYY0Y",
-		"Account Manager" : "YYY0Y",
-		"National Head" : "YYY0Y",
-		"Data Entry Ops" : "YY000",
-		"Internal Auditor" : "Y0Y0Y"
+		"CEO" : "YYYYYY",
+		"CFO" : "YYYYYY",
+		"COO" : "YYYYYY",
+		"Admin" : "YYYYYY",
+		"Finance Head" : "YYYY00",
+		"Regional Head" : "YYY0Y0",
+		"Centre Head" : "YYY0Y0",
+		"Finance Controller" : "YYY0Y0",
+		"Account Manager" : "YYY0Y0",
+		"National Head" : "YYY0Y0",
+		"Data Entry Ops" : "YY0000",
+		"Internal Auditor" : "Y0Y0Y0"
 	}
 
 	$scope.orgDivision = ["Marketing","HR","Design","Procurement","Real Estate","Fianance" , "Operations"]
@@ -49,7 +49,8 @@ app.controller('mainController', ['common' , '$rootScope','$scope' , '$timeout',
 		"CreateInvoiceReq" : "",
 		"ApprvInvoiceReq" : "",
 		"ApprvFinanceReq" : "",
-		"ApprvSupplierReq" : ""
+		"ApprvSupplierReq" : "",
+		"isAdmin" : ""
 	};
 	
 	//Init Form data of madel
