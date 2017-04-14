@@ -5,7 +5,9 @@ from datetime import datetime as dt
 from openpyxl.styles import Font
 
 working_directory = os.getcwd()
-save_path = working_directory + "/Reports/PO Orders"
+save_path = working_directory + "\\Reports\\PO Orders"
+if not os.path.exists(save_path):
+    os.makedirs(save_path)
 client = MongoClient()
 db = client.spartadb
 po_collection = db.purchase_orders
